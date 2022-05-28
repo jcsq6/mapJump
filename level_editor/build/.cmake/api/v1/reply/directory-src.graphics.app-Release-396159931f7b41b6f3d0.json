@@ -8,7 +8,7 @@
 	"installers" : [],
 	"paths" : 
 	{
-		"build" : "src/simulate",
-		"source" : "src/simulate"
+		"build" : "src/graphics/app",
+		"source" : "src/graphics/app"
 	}
 }

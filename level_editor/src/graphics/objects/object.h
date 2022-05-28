@@ -1,20 +1,14 @@
 #pragma once
-#include <vector>
-
 #include "vec.h"
 
 #include "shaders.h"
-#include "application.h"
 
-namespace graphics
+GRAPHICS_BEG
+class object
 {
-    class object
-    {
-    public:
-        object(application &app) {}
-        
-        virtual ~object() = default;
+public:
+    virtual ~object() = default;
 
-        virtual void draw() const = 0;
-    };
-}
+    virtual void draw() const = 0;
+};
+GRAPHICS_END

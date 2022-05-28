@@ -10,7 +10,7 @@
 		"files" : 
 		[
 			"C:/dev/vcpkg/scripts/buildsystems/vcpkg.cmake",
-			"src/utils/CMakeLists.txt"
+			"src/graphics/CMakeLists.txt"
 		],
 		"nodes" : 
 		[
@@ -31,12 +31,12 @@
 			}
 		]
 	},
-	"id" : "utils::@f1b38b22aeb65474a6c5",
-	"name" : "utils",
+	"id" : "graphics::@51dde881cca20334ba54",
+	"name" : "graphics",
 	"paths" : 
 	{
-		"build" : "src/utils",
-		"source" : "src/utils"
+		"build" : "src/graphics",
+		"source" : "src/graphics"
 	},
 	"sourceGroups" : 
 	[
@@ -53,12 +53,12 @@
 	[
 		{
 			"backtrace" : 2,
-			"path" : "src/utils/debug.h",
+			"path" : "src/graphics/game_textures.h",
 			"sourceGroupIndex" : 0
 		},
 		{
 			"backtrace" : 2,
-			"path" : "src/utils/timer.h",
+			"path" : "src/graphics/button.h",
 			"sourceGroupIndex" : 0
 		}
 	],

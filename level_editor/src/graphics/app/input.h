@@ -2,10 +2,10 @@
 #include <map>
 #include "vec.h"
 
-class application;
+GRAPHICS_BEG
 
 class key
-{
+{    
     bool was_pressed;
     bool pressed;
 
@@ -35,14 +35,13 @@ class input
     mutable std::map<int, key> keys;
     mutable std::map<int, key> buttons;
     math::dvec2 pos;
-    application *app;
 
-    input(application *a) : pos{}, app{a} {}
+    input() = default;
 
 public:
-    static input *get_instance(application *app)
+    static input *get_instance()
     {
-        static input instance(app);
+        static input instance;
         return &instance;
     }
 
@@ -57,3 +56,5 @@ public:
     const key &get_key(int key_code) const;
     const key &get_mouse_button(int button_code) const;
 };
+
+GRAPHICS_END

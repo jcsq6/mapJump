@@ -10,7 +10,7 @@
 		"files" : 
 		[
 			"C:/dev/vcpkg/scripts/buildsystems/vcpkg.cmake",
-			"src/game/CMakeLists.txt"
+			"src/graphics/app/CMakeLists.txt"
 		],
 		"nodes" : 
 		[
@@ -31,12 +31,12 @@
 			}
 		]
 	},
-	"id" : "game::@237b513620d2b2ecc71d",
-	"name" : "game",
+	"id" : "app::@a5e6b7a98ca28350250d",
+	"name" : "app",
 	"paths" : 
 	{
-		"build" : "src/game",
-		"source" : "src/game"
+		"build" : "src/graphics/app",
+		"source" : "src/graphics/app"
 	},
 	"sourceGroups" : 
 	[
@@ -45,7 +45,8 @@
 			"sourceIndexes" : 
 			[
 				0,
-				1
+				1,
+				2
 			]
 		}
 	],
@@ -53,12 +54,17 @@
 	[
 		{
 			"backtrace" : 2,
-			"path" : "src/game/writer.h",
+			"path" : "src/graphics/app/application.h",
 			"sourceGroupIndex" : 0
 		},
 		{
 			"backtrace" : 2,
-			"path" : "src/game/defs.h",
+			"path" : "src/graphics/app/callback.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"path" : "src/graphics/app/input.h",
 			"sourceGroupIndex" : 0
 		}
 	],

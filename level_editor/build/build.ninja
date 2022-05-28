@@ -76,13 +76,13 @@ build rebuild_cache: phony CMakeFiles/rebuild_cache.util
 #############################################
 # Order-only phony target for level_editor
 
-build cmake_object_order_depends_target_level_editor: phony || src/game/game src/graphics/graphics src/graphics/objects/objects src/graphics/shaders/shaders src/graphics/text/text src/graphics/texture/texture src/math/math src/physics/physics src/simulate/simulate src/utils/utils
+build cmake_object_order_depends_target_level_editor: phony || src/editor/editor src/game/game src/graphics/app/app src/graphics/graphics src/graphics/objects/objects src/graphics/shaders/shaders src/graphics/text/text src/graphics/texture/texture src/math/math src/physics/physics src/utils/utils
 
 build src/CMakeFiles/level_editor.dir/main.cpp.obj: CXX_COMPILER__level_editor_Release C$:/Users/jcsqu/Dropbox/c++Dev/mapJump/level_editor/src/main.cpp || cmake_object_order_depends_target_level_editor
   DEFINES = -DGLEW_STATIC
   DEP_FILE = src\CMakeFiles\level_editor.dir\main.cpp.obj.d
   FLAGS = -O3 -DNDEBUG -O3 -std=gnu++17
-  INCLUDES = -IC:/Users/jcsqu/Dropbox/c++Dev/mapJump/level_editor/src/. -IC:/Users/jcsqu/Dropbox/c++Dev/mapJump/level_editor/src/utils/. -IC:/Users/jcsqu/Dropbox/c++Dev/mapJump/level_editor/src/physics/. -IC:/Users/jcsqu/Dropbox/c++Dev/mapJump/level_editor/src/math/. -IC:/Users/jcsqu/Dropbox/c++Dev/mapJump/level_editor/src/graphics/. -IC:/Users/jcsqu/Dropbox/c++Dev/mapJump/level_editor/src/graphics/texture/. -IC:/Users/jcsqu/Dropbox/c++Dev/mapJump/level_editor/src/graphics/shaders/. -IC:/Users/jcsqu/Dropbox/c++Dev/mapJump/level_editor/src/graphics/objects/. -IC:/Users/jcsqu/Dropbox/c++Dev/mapJump/level_editor/src/graphics/text/. -IC:/Users/jcsqu/Dropbox/c++Dev/mapJump/level_editor/src/game/. -IC:/Users/jcsqu/Dropbox/c++Dev/mapJump/level_editor/src/simulate/. -isystem C:/dev/vcpkg/installed/x64-mingw-static/include
+  INCLUDES = -IC:/Users/jcsqu/Dropbox/c++Dev/mapJump/level_editor/src/. -IC:/Users/jcsqu/Dropbox/c++Dev/mapJump/level_editor/src/utils/. -IC:/Users/jcsqu/Dropbox/c++Dev/mapJump/level_editor/src/physics/. -IC:/Users/jcsqu/Dropbox/c++Dev/mapJump/level_editor/src/math/. -IC:/Users/jcsqu/Dropbox/c++Dev/mapJump/level_editor/src/graphics/. -IC:/Users/jcsqu/Dropbox/c++Dev/mapJump/level_editor/src/graphics/texture/. -IC:/Users/jcsqu/Dropbox/c++Dev/mapJump/level_editor/src/graphics/shaders/. -IC:/Users/jcsqu/Dropbox/c++Dev/mapJump/level_editor/src/graphics/objects/. -IC:/Users/jcsqu/Dropbox/c++Dev/mapJump/level_editor/src/graphics/text/. -IC:/Users/jcsqu/Dropbox/c++Dev/mapJump/level_editor/src/graphics/app/. -IC:/Users/jcsqu/Dropbox/c++Dev/mapJump/level_editor/src/game/. -IC:/Users/jcsqu/Dropbox/c++Dev/mapJump/level_editor/src/editor/. -isystem C:/dev/vcpkg/installed/x64-mingw-static/include
   OBJECT_DIR = src\CMakeFiles\level_editor.dir
   OBJECT_FILE_DIR = src\CMakeFiles\level_editor.dir
 
@@ -94,7 +94,7 @@ build src/CMakeFiles/level_editor.dir/main.cpp.obj: CXX_COMPILER__level_editor_R
 #############################################
 # Link the executable src\level_editor.exe
 
-build src/level_editor.exe: CXX_EXECUTABLE_LINKER__level_editor_Release src/CMakeFiles/level_editor.dir/main.cpp.obj | C$:/dev/vcpkg/installed/x64-mingw-static/lib/libglew32.a C$:/dev/vcpkg/installed/x64-mingw-static/lib/libglfw3.a C$:/dev/vcpkg/installed/x64-mingw-static/lib/libfreetype.a C$:/dev/vcpkg/installed/x64-mingw-static/lib/libbz2.a C$:/dev/vcpkg/installed/x64-mingw-static/debug/lib/libpng.a C$:/dev/vcpkg/installed/x64-mingw-static/lib/libzlib.a C$:/dev/vcpkg/installed/x64-mingw-static/lib/libbrotlidec-static.a C$:/dev/vcpkg/installed/x64-mingw-static/lib/libbrotlicommon-static.a || src/game/game src/graphics/graphics src/graphics/objects/objects src/graphics/shaders/shaders src/graphics/text/text src/graphics/texture/texture src/math/math src/physics/physics src/simulate/simulate src/utils/utils
+build src/level_editor.exe: CXX_EXECUTABLE_LINKER__level_editor_Release src/CMakeFiles/level_editor.dir/main.cpp.obj | C$:/dev/vcpkg/installed/x64-mingw-static/lib/libglew32.a C$:/dev/vcpkg/installed/x64-mingw-static/lib/libglfw3.a C$:/dev/vcpkg/installed/x64-mingw-static/lib/libfreetype.a C$:/dev/vcpkg/installed/x64-mingw-static/lib/libbz2.a C$:/dev/vcpkg/installed/x64-mingw-static/debug/lib/libpng.a C$:/dev/vcpkg/installed/x64-mingw-static/lib/libzlib.a C$:/dev/vcpkg/installed/x64-mingw-static/lib/libbrotlidec-static.a C$:/dev/vcpkg/installed/x64-mingw-static/lib/libbrotlicommon-static.a || src/editor/editor src/game/game src/graphics/app/app src/graphics/graphics src/graphics/objects/objects src/graphics/shaders/shaders src/graphics/text/text src/graphics/texture/texture src/math/math src/physics/physics src/utils/utils
   FLAGS = -O3 -DNDEBUG
   LINK_FLAGS = -mwindows  -s
   LINK_LIBRARIES = -lopengl32  C:/dev/vcpkg/installed/x64-mingw-static/lib/libglew32.a  C:/dev/vcpkg/installed/x64-mingw-static/lib/libglfw3.a  -lopengl32  -lglu32  C:/dev/vcpkg/installed/x64-mingw-static/lib/libfreetype.a  C:/dev/vcpkg/installed/x64-mingw-static/lib/libbz2.a  C:/dev/vcpkg/installed/x64-mingw-static/debug/lib/libpng.a  C:/dev/vcpkg/installed/x64-mingw-static/lib/libzlib.a  C:/dev/vcpkg/installed/x64-mingw-static/lib/libbrotlidec-static.a  C:/dev/vcpkg/installed/x64-mingw-static/lib/libbrotlicommon-static.a  -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
@@ -411,6 +411,41 @@ build src/graphics/text/rebuild_cache: phony src/graphics/text/CMakeFiles/rebuil
 
 # =============================================================================
 # Write statements declared in CMakeLists.txt:
+# C:/Users/jcsqu/Dropbox/c++Dev/mapJump/level_editor/src/graphics/CMakeLists.txt
+# =============================================================================
+
+
+#############################################
+# Utility command for app
+
+build src/graphics/app/app: phony
+
+
+#############################################
+# Utility command for edit_cache
+
+build src/graphics/app/CMakeFiles/edit_cache.util: CUSTOM_COMMAND
+  COMMAND = cmd.exe /C "cd /D C:\Users\jcsqu\Dropbox\c++Dev\mapJump\level_editor\build\src\graphics\app && "C:\Program Files\CMake\bin\cmake-gui.exe" -SC:\Users\jcsqu\Dropbox\c++Dev\mapJump\level_editor -BC:\Users\jcsqu\Dropbox\c++Dev\mapJump\level_editor\build"
+  DESC = Running CMake cache editor...
+  pool = console
+  restat = 1
+
+build src/graphics/app/edit_cache: phony src/graphics/app/CMakeFiles/edit_cache.util
+
+
+#############################################
+# Utility command for rebuild_cache
+
+build src/graphics/app/CMakeFiles/rebuild_cache.util: CUSTOM_COMMAND
+  COMMAND = cmd.exe /C "cd /D C:\Users\jcsqu\Dropbox\c++Dev\mapJump\level_editor\build\src\graphics\app && "C:\Program Files\CMake\bin\cmake.exe" --regenerate-during-build -SC:\Users\jcsqu\Dropbox\c++Dev\mapJump\level_editor -BC:\Users\jcsqu\Dropbox\c++Dev\mapJump\level_editor\build"
+  DESC = Running CMake to regenerate build system...
+  pool = console
+  restat = 1
+
+build src/graphics/app/rebuild_cache: phony src/graphics/app/CMakeFiles/rebuild_cache.util
+
+# =============================================================================
+# Write statements declared in CMakeLists.txt:
 # C:/Users/jcsqu/Dropbox/c++Dev/mapJump/level_editor/src/CMakeLists.txt
 # =============================================================================
 
@@ -451,36 +486,40 @@ build src/game/rebuild_cache: phony src/game/CMakeFiles/rebuild_cache.util
 
 
 #############################################
-# Utility command for simulate
+# Utility command for editor
 
-build src/simulate/simulate: phony
+build src/editor/editor: phony
 
 
 #############################################
 # Utility command for edit_cache
 
-build src/simulate/CMakeFiles/edit_cache.util: CUSTOM_COMMAND
-  COMMAND = cmd.exe /C "cd /D C:\Users\jcsqu\Dropbox\c++Dev\mapJump\level_editor\build\src\simulate && "C:\Program Files\CMake\bin\cmake-gui.exe" -SC:\Users\jcsqu\Dropbox\c++Dev\mapJump\level_editor -BC:\Users\jcsqu\Dropbox\c++Dev\mapJump\level_editor\build"
+build src/editor/CMakeFiles/edit_cache.util: CUSTOM_COMMAND
+  COMMAND = cmd.exe /C "cd /D C:\Users\jcsqu\Dropbox\c++Dev\mapJump\level_editor\build\src\editor && "C:\Program Files\CMake\bin\cmake-gui.exe" -SC:\Users\jcsqu\Dropbox\c++Dev\mapJump\level_editor -BC:\Users\jcsqu\Dropbox\c++Dev\mapJump\level_editor\build"
   DESC = Running CMake cache editor...
   pool = console
   restat = 1
 
-build src/simulate/edit_cache: phony src/simulate/CMakeFiles/edit_cache.util
+build src/editor/edit_cache: phony src/editor/CMakeFiles/edit_cache.util
 
 
 #############################################
 # Utility command for rebuild_cache
 
-build src/simulate/CMakeFiles/rebuild_cache.util: CUSTOM_COMMAND
-  COMMAND = cmd.exe /C "cd /D C:\Users\jcsqu\Dropbox\c++Dev\mapJump\level_editor\build\src\simulate && "C:\Program Files\CMake\bin\cmake.exe" --regenerate-during-build -SC:\Users\jcsqu\Dropbox\c++Dev\mapJump\level_editor -BC:\Users\jcsqu\Dropbox\c++Dev\mapJump\level_editor\build"
+build src/editor/CMakeFiles/rebuild_cache.util: CUSTOM_COMMAND
+  COMMAND = cmd.exe /C "cd /D C:\Users\jcsqu\Dropbox\c++Dev\mapJump\level_editor\build\src\editor && "C:\Program Files\CMake\bin\cmake.exe" --regenerate-during-build -SC:\Users\jcsqu\Dropbox\c++Dev\mapJump\level_editor -BC:\Users\jcsqu\Dropbox\c++Dev\mapJump\level_editor\build"
   DESC = Running CMake to regenerate build system...
   pool = console
   restat = 1
 
-build src/simulate/rebuild_cache: phony src/simulate/CMakeFiles/rebuild_cache.util
+build src/editor/rebuild_cache: phony src/editor/CMakeFiles/rebuild_cache.util
 
 # =============================================================================
 # Target aliases.
+
+build app: phony src/graphics/app/app
+
+build editor: phony src/editor/editor
 
 build game: phony src/game/game
 
@@ -497,8 +536,6 @@ build objects: phony src/graphics/objects/objects
 build physics: phony src/physics/physics
 
 build shaders: phony src/graphics/shaders/shaders
-
-build simulate: phony src/simulate/simulate
 
 build text: phony src/graphics/text/text
 
@@ -521,7 +558,14 @@ build all: phony src/all
 #############################################
 # Folder: C:/Users/jcsqu/Dropbox/c++Dev/mapJump/level_editor/build/src
 
-build src/all: phony src/level_editor.exe src/utils/all src/physics/all src/math/all src/graphics/all src/game/all src/simulate/all
+build src/all: phony src/level_editor.exe src/utils/all src/physics/all src/math/all src/graphics/all src/game/all src/editor/all
+
+# =============================================================================
+
+#############################################
+# Folder: C:/Users/jcsqu/Dropbox/c++Dev/mapJump/level_editor/build/src/editor
+
+build src/editor/all: phony src/editor/editor
 
 # =============================================================================
 
@@ -535,7 +579,14 @@ build src/game/all: phony src/game/game
 #############################################
 # Folder: C:/Users/jcsqu/Dropbox/c++Dev/mapJump/level_editor/build/src/graphics
 
-build src/graphics/all: phony src/graphics/graphics src/graphics/texture/all src/graphics/shaders/all src/graphics/objects/all src/graphics/text/all
+build src/graphics/all: phony src/graphics/graphics src/graphics/texture/all src/graphics/shaders/all src/graphics/objects/all src/graphics/text/all src/graphics/app/all
+
+# =============================================================================
+
+#############################################
+# Folder: C:/Users/jcsqu/Dropbox/c++Dev/mapJump/level_editor/build/src/graphics/app
+
+build src/graphics/app/all: phony src/graphics/app/app
 
 # =============================================================================
 
@@ -582,13 +633,6 @@ build src/physics/all: phony src/physics/physics
 # =============================================================================
 
 #############################################
-# Folder: C:/Users/jcsqu/Dropbox/c++Dev/mapJump/level_editor/build/src/simulate
-
-build src/simulate/all: phony src/simulate/simulate
-
-# =============================================================================
-
-#############################################
 # Folder: C:/Users/jcsqu/Dropbox/c++Dev/mapJump/level_editor/build/src/utils
 
 build src/utils/all: phony src/utils/utils
@@ -600,14 +644,14 @@ build src/utils/all: phony src/utils/utils
 #############################################
 # Re-run CMake if any of its inputs changed.
 
-build build.ninja: RERUN_CMAKE | ../CMakeLists.txt ../src/CMakeLists.txt ../src/game/CMakeLists.txt ../src/graphics/CMakeLists.txt ../src/graphics/objects/CMakeLists.txt ../src/graphics/shaders/CMakeLists.txt ../src/graphics/text/CMakeLists.txt ../src/graphics/texture/CMakeLists.txt ../src/math/CMakeLists.txt ../src/physics/CMakeLists.txt ../src/simulate/CMakeLists.txt ../src/utils/CMakeLists.txt C$:/Program$ Files/CMake/share/cmake-3.23/Modules/CMakeCInformation.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/CMakeCXXInformation.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/CMakeCommonLanguageInclude.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/CMakeDependentOption.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/CMakeGenericSystem.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/CMakeInitializeConfigs.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/CMakeLanguageInformation.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/CMakePushCheckState.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/CMakeRCInformation.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/CMakeSystemSpecificInformation.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/CMakeSystemSpecificInitialize.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/CheckSymbolExists.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/Compiler/CMakeCommonCompilerMacros.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/Compiler/GNU-C.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/Compiler/GNU-CXX.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/Compiler/GNU.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/FindBZip2.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/FindFreetype.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/FindOpenGL.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/FindPNG.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/FindPackageHandleStandardArgs.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/FindPackageMessage.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/FindZLIB.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/Platform/Windows-GNU-C-ABI.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/Platform/Windows-GNU-C.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/Platform/Windows-GNU-CXX-ABI.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/Platform/Windows-GNU-CXX.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/Platform/Windows-GNU.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/Platform/Windows-windres.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/Platform/Windows.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/Platform/WindowsPaths.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/SelectLibraryConfigurations.cmake C$:/dev/vcpkg/installed/x64-mingw-static/share/freetype/vcpkg-cmake-wrapper.cmake C$:/dev/vcpkg/installed/x64-mingw-static/share/glew/CopyImportedTargetProperties.cmake C$:/dev/vcpkg/installed/x64-mingw-static/share/glew/glew-config.cmake C$:/dev/vcpkg/installed/x64-mingw-static/share/glew/glew-targets-debug.cmake C$:/dev/vcpkg/installed/x64-mingw-static/share/glew/glew-targets-release.cmake C$:/dev/vcpkg/installed/x64-mingw-static/share/glew/glew-targets.cmake C$:/dev/vcpkg/installed/x64-mingw-static/share/glew/vcpkg-cmake-wrapper.cmake C$:/dev/vcpkg/installed/x64-mingw-static/share/glfw3/glfw3Config.cmake C$:/dev/vcpkg/installed/x64-mingw-static/share/glfw3/glfw3ConfigVersion.cmake C$:/dev/vcpkg/installed/x64-mingw-static/share/glfw3/glfw3Targets-debug.cmake C$:/dev/vcpkg/installed/x64-mingw-static/share/glfw3/glfw3Targets-release.cmake C$:/dev/vcpkg/installed/x64-mingw-static/share/glfw3/glfw3Targets.cmake C$:/dev/vcpkg/installed/x64-mingw-static/share/zlib/vcpkg-cmake-wrapper.cmake C$:/dev/vcpkg/scripts/buildsystems/vcpkg.cmake CMakeCache.txt CMakeFiles/3.23.0-rc2/CMakeCCompiler.cmake CMakeFiles/3.23.0-rc2/CMakeCXXCompiler.cmake CMakeFiles/3.23.0-rc2/CMakeRCCompiler.cmake CMakeFiles/3.23.0-rc2/CMakeSystem.cmake
+build build.ninja: RERUN_CMAKE | ../CMakeLists.txt ../src/CMakeLists.txt ../src/editor/CMakeLists.txt ../src/game/CMakeLists.txt ../src/graphics/CMakeLists.txt ../src/graphics/app/CMakeLists.txt ../src/graphics/objects/CMakeLists.txt ../src/graphics/shaders/CMakeLists.txt ../src/graphics/text/CMakeLists.txt ../src/graphics/texture/CMakeLists.txt ../src/math/CMakeLists.txt ../src/physics/CMakeLists.txt ../src/utils/CMakeLists.txt C$:/Program$ Files/CMake/share/cmake-3.23/Modules/CMakeCInformation.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/CMakeCXXInformation.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/CMakeCommonLanguageInclude.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/CMakeDependentOption.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/CMakeGenericSystem.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/CMakeInitializeConfigs.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/CMakeLanguageInformation.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/CMakePushCheckState.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/CMakeRCInformation.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/CMakeSystemSpecificInformation.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/CMakeSystemSpecificInitialize.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/CheckSymbolExists.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/Compiler/CMakeCommonCompilerMacros.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/Compiler/GNU-C.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/Compiler/GNU-CXX.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/Compiler/GNU.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/FindBZip2.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/FindFreetype.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/FindOpenGL.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/FindPNG.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/FindPackageHandleStandardArgs.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/FindPackageMessage.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/FindZLIB.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/Platform/Windows-GNU-C-ABI.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/Platform/Windows-GNU-C.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/Platform/Windows-GNU-CXX-ABI.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/Platform/Windows-GNU-CXX.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/Platform/Windows-GNU.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/Platform/Windows-windres.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/Platform/Windows.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/Platform/WindowsPaths.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/SelectLibraryConfigurations.cmake C$:/dev/vcpkg/installed/x64-mingw-static/share/freetype/vcpkg-cmake-wrapper.cmake C$:/dev/vcpkg/installed/x64-mingw-static/share/glew/CopyImportedTargetProperties.cmake C$:/dev/vcpkg/installed/x64-mingw-static/share/glew/glew-config.cmake C$:/dev/vcpkg/installed/x64-mingw-static/share/glew/glew-targets-debug.cmake C$:/dev/vcpkg/installed/x64-mingw-static/share/glew/glew-targets-release.cmake C$:/dev/vcpkg/installed/x64-mingw-static/share/glew/glew-targets.cmake C$:/dev/vcpkg/installed/x64-mingw-static/share/glew/vcpkg-cmake-wrapper.cmake C$:/dev/vcpkg/installed/x64-mingw-static/share/glfw3/glfw3Config.cmake C$:/dev/vcpkg/installed/x64-mingw-static/share/glfw3/glfw3ConfigVersion.cmake C$:/dev/vcpkg/installed/x64-mingw-static/share/glfw3/glfw3Targets-debug.cmake C$:/dev/vcpkg/installed/x64-mingw-static/share/glfw3/glfw3Targets-release.cmake C$:/dev/vcpkg/installed/x64-mingw-static/share/glfw3/glfw3Targets.cmake C$:/dev/vcpkg/installed/x64-mingw-static/share/zlib/vcpkg-cmake-wrapper.cmake C$:/dev/vcpkg/scripts/buildsystems/vcpkg.cmake CMakeCache.txt CMakeFiles/3.23.0-rc2/CMakeCCompiler.cmake CMakeFiles/3.23.0-rc2/CMakeCXXCompiler.cmake CMakeFiles/3.23.0-rc2/CMakeRCCompiler.cmake CMakeFiles/3.23.0-rc2/CMakeSystem.cmake
   pool = console
 
 
 #############################################
 # A missing CMake input file is not an error.
 
-build ../CMakeLists.txt ../src/CMakeLists.txt ../src/game/CMakeLists.txt ../src/graphics/CMakeLists.txt ../src/graphics/objects/CMakeLists.txt ../src/graphics/shaders/CMakeLists.txt ../src/graphics/text/CMakeLists.txt ../src/graphics/texture/CMakeLists.txt ../src/math/CMakeLists.txt ../src/physics/CMakeLists.txt ../src/simulate/CMakeLists.txt ../src/utils/CMakeLists.txt C$:/Program$ Files/CMake/share/cmake-3.23/Modules/CMakeCInformation.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/CMakeCXXInformation.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/CMakeCommonLanguageInclude.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/CMakeDependentOption.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/CMakeGenericSystem.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/CMakeInitializeConfigs.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/CMakeLanguageInformation.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/CMakePushCheckState.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/CMakeRCInformation.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/CMakeSystemSpecificInformation.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/CMakeSystemSpecificInitialize.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/CheckSymbolExists.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/Compiler/CMakeCommonCompilerMacros.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/Compiler/GNU-C.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/Compiler/GNU-CXX.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/Compiler/GNU.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/FindBZip2.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/FindFreetype.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/FindOpenGL.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/FindPNG.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/FindPackageHandleStandardArgs.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/FindPackageMessage.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/FindZLIB.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/Platform/Windows-GNU-C-ABI.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/Platform/Windows-GNU-C.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/Platform/Windows-GNU-CXX-ABI.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/Platform/Windows-GNU-CXX.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/Platform/Windows-GNU.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/Platform/Windows-windres.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/Platform/Windows.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/Platform/WindowsPaths.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/SelectLibraryConfigurations.cmake C$:/dev/vcpkg/installed/x64-mingw-static/share/freetype/vcpkg-cmake-wrapper.cmake C$:/dev/vcpkg/installed/x64-mingw-static/share/glew/CopyImportedTargetProperties.cmake C$:/dev/vcpkg/installed/x64-mingw-static/share/glew/glew-config.cmake C$:/dev/vcpkg/installed/x64-mingw-static/share/glew/glew-targets-debug.cmake C$:/dev/vcpkg/installed/x64-mingw-static/share/glew/glew-targets-release.cmake C$:/dev/vcpkg/installed/x64-mingw-static/share/glew/glew-targets.cmake C$:/dev/vcpkg/installed/x64-mingw-static/share/glew/vcpkg-cmake-wrapper.cmake C$:/dev/vcpkg/installed/x64-mingw-static/share/glfw3/glfw3Config.cmake C$:/dev/vcpkg/installed/x64-mingw-static/share/glfw3/glfw3ConfigVersion.cmake C$:/dev/vcpkg/installed/x64-mingw-static/share/glfw3/glfw3Targets-debug.cmake C$:/dev/vcpkg/installed/x64-mingw-static/share/glfw3/glfw3Targets-release.cmake C$:/dev/vcpkg/installed/x64-mingw-static/share/glfw3/glfw3Targets.cmake C$:/dev/vcpkg/installed/x64-mingw-static/share/zlib/vcpkg-cmake-wrapper.cmake C$:/dev/vcpkg/scripts/buildsystems/vcpkg.cmake CMakeCache.txt CMakeFiles/3.23.0-rc2/CMakeCCompiler.cmake CMakeFiles/3.23.0-rc2/CMakeCXXCompiler.cmake CMakeFiles/3.23.0-rc2/CMakeRCCompiler.cmake CMakeFiles/3.23.0-rc2/CMakeSystem.cmake: phony
+build ../CMakeLists.txt ../src/CMakeLists.txt ../src/editor/CMakeLists.txt ../src/game/CMakeLists.txt ../src/graphics/CMakeLists.txt ../src/graphics/app/CMakeLists.txt ../src/graphics/objects/CMakeLists.txt ../src/graphics/shaders/CMakeLists.txt ../src/graphics/text/CMakeLists.txt ../src/graphics/texture/CMakeLists.txt ../src/math/CMakeLists.txt ../src/physics/CMakeLists.txt ../src/utils/CMakeLists.txt C$:/Program$ Files/CMake/share/cmake-3.23/Modules/CMakeCInformation.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/CMakeCXXInformation.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/CMakeCommonLanguageInclude.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/CMakeDependentOption.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/CMakeGenericSystem.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/CMakeInitializeConfigs.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/CMakeLanguageInformation.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/CMakePushCheckState.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/CMakeRCInformation.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/CMakeSystemSpecificInformation.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/CMakeSystemSpecificInitialize.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/CheckSymbolExists.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/Compiler/CMakeCommonCompilerMacros.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/Compiler/GNU-C.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/Compiler/GNU-CXX.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/Compiler/GNU.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/FindBZip2.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/FindFreetype.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/FindOpenGL.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/FindPNG.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/FindPackageHandleStandardArgs.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/FindPackageMessage.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/FindZLIB.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/Platform/Windows-GNU-C-ABI.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/Platform/Windows-GNU-C.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/Platform/Windows-GNU-CXX-ABI.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/Platform/Windows-GNU-CXX.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/Platform/Windows-GNU.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/Platform/Windows-windres.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/Platform/Windows.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/Platform/WindowsPaths.cmake C$:/Program$ Files/CMake/share/cmake-3.23/Modules/SelectLibraryConfigurations.cmake C$:/dev/vcpkg/installed/x64-mingw-static/share/freetype/vcpkg-cmake-wrapper.cmake C$:/dev/vcpkg/installed/x64-mingw-static/share/glew/CopyImportedTargetProperties.cmake C$:/dev/vcpkg/installed/x64-mingw-static/share/glew/glew-config.cmake C$:/dev/vcpkg/installed/x64-mingw-static/share/glew/glew-targets-debug.cmake C$:/dev/vcpkg/installed/x64-mingw-static/share/glew/glew-targets-release.cmake C$:/dev/vcpkg/installed/x64-mingw-static/share/glew/glew-targets.cmake C$:/dev/vcpkg/installed/x64-mingw-static/share/glew/vcpkg-cmake-wrapper.cmake C$:/dev/vcpkg/installed/x64-mingw-static/share/glfw3/glfw3Config.cmake C$:/dev/vcpkg/installed/x64-mingw-static/share/glfw3/glfw3ConfigVersion.cmake C$:/dev/vcpkg/installed/x64-mingw-static/share/glfw3/glfw3Targets-debug.cmake C$:/dev/vcpkg/installed/x64-mingw-static/share/glfw3/glfw3Targets-release.cmake C$:/dev/vcpkg/installed/x64-mingw-static/share/glfw3/glfw3Targets.cmake C$:/dev/vcpkg/installed/x64-mingw-static/share/zlib/vcpkg-cmake-wrapper.cmake C$:/dev/vcpkg/scripts/buildsystems/vcpkg.cmake CMakeCache.txt CMakeFiles/3.23.0-rc2/CMakeCCompiler.cmake CMakeFiles/3.23.0-rc2/CMakeCXXCompiler.cmake CMakeFiles/3.23.0-rc2/CMakeRCCompiler.cmake CMakeFiles/3.23.0-rc2/CMakeSystem.cmake: phony
 
 
 #############################################

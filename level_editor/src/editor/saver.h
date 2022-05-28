@@ -4,6 +4,10 @@
 #include <vector>
 #include "state.h"
 
+#include "macros.h"
+
+EDITOR_BEG
+
 class loader
 {
     std::vector<state> blocks;
@@ -11,7 +15,7 @@ class loader
     math::vec<double, 2> end;
 
 public:
-    loader() : blocks{}, spawn{}, end{content_dims - cube_size}
+    loader() : blocks{}, spawn{}, end{game::content_dims - game::cube_size}
     {
     }
 
@@ -75,3 +79,5 @@ public:
             file.write(reinterpret_cast<const char *>(&obj.file_obj), obj.file_obj.block_size());
     }
 };
+
+EDITOR_END

@@ -44,7 +44,7 @@ if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   include("C:/Users/jcsqu/Dropbox/c++Dev/mapJump/level_editor/build/src/math/cmake_install.cmake")
   include("C:/Users/jcsqu/Dropbox/c++Dev/mapJump/level_editor/build/src/graphics/cmake_install.cmake")
   include("C:/Users/jcsqu/Dropbox/c++Dev/mapJump/level_editor/build/src/game/cmake_install.cmake")
-  include("C:/Users/jcsqu/Dropbox/c++Dev/mapJump/level_editor/build/src/simulate/cmake_install.cmake")
+  include("C:/Users/jcsqu/Dropbox/c++Dev/mapJump/level_editor/build/src/editor/cmake_install.cmake")
 
 endif()
 

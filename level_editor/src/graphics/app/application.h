@@ -7,6 +7,8 @@
 #include "input.h"
 #include "callback.h"
 
+GRAPHICS_BEG
+
 class application
 {
     GLFWwindow *window;
@@ -36,6 +38,8 @@ class application
             throw std::runtime_error("Failed to initialize glew");
     }
 
+    static inline bool inited = false;
+
 public:
     template<typename... Ts>
     static void set_window_hints_true(Ts... hints)
@@ -52,7 +56,15 @@ public:
     static application *get_instance(const char *name, int width, int height)
     {
         static application instance(name, width, height);
+        inited = true;
         return &instance;
+    }
+
+    static application *get_instance()
+    {
+        if (!inited)
+            throw std::runtime_error("application not properly initialized");
+        return get_instance(nullptr, 0, 0);
     }
 
     GLFWwindow *get_window()
@@ -62,12 +74,12 @@ public:
 
     input *get_inputHandler()
     {
-        return input::get_instance(this);
+        return input::get_instance();
     }
 
     callback_handler *get_callbackManager()
     {
-        return callback_handler::get_instance(this);
+        return callback_handler::get_instance();
     }
 
     bool should_close() const
@@ -103,14 +115,14 @@ void input::update()
     for (auto &k : keys)
     {
         k.second.was_pressed = k.second.pressed;
-        k.second.pressed = glfwGetKey(app->get_window(), k.first) == GLFW_PRESS;
+        k.second.pressed = glfwGetKey(application::get_instance()->get_window(), k.first) == GLFW_PRESS;
     }
     for (auto &b : buttons)
     {
         b.second.was_pressed = b.second.pressed;
-        b.second.pressed = glfwGetMouseButton(app->get_window(), b.first) == GLFW_PRESS;
+        b.second.pressed = glfwGetMouseButton(application::get_instance()->get_window(), b.first) == GLFW_PRESS;
     }
-    glfwGetCursorPos(app->get_window(), &pos.x, &pos.y);
+    glfwGetCursorPos(application::get_instance()->get_window(), &pos.x, &pos.y);
 }
 
 void input::update_wait()
@@ -119,92 +131,94 @@ void input::update_wait()
     for (auto &k : keys)
     {
         k.second.was_pressed = k.second.pressed;
-        k.second.pressed = glfwGetKey(app->get_window(), k.first) == GLFW_PRESS;
+        k.second.pressed = glfwGetKey(application::get_instance()->get_window(), k.first) == GLFW_PRESS;
     }
     for (auto &b : buttons)
     {
         b.second.was_pressed = b.second.pressed;
-        b.second.pressed = glfwGetMouseButton(app->get_window(), b.first) == GLFW_PRESS;
+        b.second.pressed = glfwGetMouseButton(application::get_instance()->get_window(), b.first) == GLFW_PRESS;
     }
-    glfwGetCursorPos(app->get_window(), &pos.x, &pos.y);
+    glfwGetCursorPos(application::get_instance()->get_window(), &pos.x, &pos.y);
 }
 
 const key &input::get_key(int key_code) const
 {
     if (!keys.count(key_code))
-        keys[key_code].pressed = glfwGetKey(app->get_window(), key_code);
+        keys[key_code].pressed = glfwGetKey(application::get_instance()->get_window(), key_code);
     return keys[key_code];
 }
 
 const key &input::get_mouse_button(int button_code) const
 {
     if (!buttons.count(button_code))
-        buttons[button_code].pressed = glfwGetMouseButton(app->get_window(), button_code);
+        buttons[button_code].pressed = glfwGetMouseButton(application::get_instance()->get_window(), button_code);
     return buttons[button_code];
 }
 
 void callback_handler::set_windowsize(std::function<void(int, int)> callback)
 {
     windowsize = std::move(callback);
-    glfwSetWindowSizeCallback(app->get_window(), windowsize_callback);
+    glfwSetWindowSizeCallback(application::get_instance()->get_window(), windowsize_callback);
 }
 void callback_handler::set_framebuffer(std::function<void(int, int)> callback)
 {
     framebuffer = std::move(callback);
-    glfwSetFramebufferSizeCallback(app->get_window(), framebuffer_callback);
+    glfwSetFramebufferSizeCallback(application::get_instance()->get_window(), framebuffer_callback);
 }
 void callback_handler::set_contentscale(std::function<void(float, float)> callback)
 {
     contentscale = std::move(callback);
-    glfwSetWindowContentScaleCallback(app->get_window(), contentscale_callback);
+    glfwSetWindowContentScaleCallback(application::get_instance()->get_window(), contentscale_callback);
 }
 void callback_handler::set_windowpos(std::function<void(int, int)> callback)
 {
     windowpos = std::move(callback);
-    glfwSetWindowPosCallback(app->get_window(), windowpos_callback);
+    glfwSetWindowPosCallback(application::get_instance()->get_window(), windowpos_callback);
 }
 void callback_handler::set_windowminimize(std::function<void(int)> callback)
 {
     windowminimize = std::move(callback);
-    glfwSetWindowIconifyCallback(app->get_window(), windowminimize_callback);
+    glfwSetWindowIconifyCallback(application::get_instance()->get_window(), windowminimize_callback);
 }
 void callback_handler::set_windowmaximize(std::function<void(int)> callback)
 {
     windowmaximize = std::move(callback);
-    glfwSetWindowMaximizeCallback(app->get_window(), windowmaximize_callback);
+    glfwSetWindowMaximizeCallback(application::get_instance()->get_window(), windowmaximize_callback);
 }
 void callback_handler::set_windowfocus(std::function<void(int)> callback)
 {
     windowfocus = std::move(callback);
-    glfwSetWindowFocusCallback(app->get_window(), windowfocus_callback);
+    glfwSetWindowFocusCallback(application::get_instance()->get_window(), windowfocus_callback);
 }
 void callback_handler::set_key(std::function<void(int, int, int, int)> callback)
 {
     key = std::move(callback);
-    glfwSetKeyCallback(app->get_window(), key_callback);
+    glfwSetKeyCallback(application::get_instance()->get_window(), key_callback);
 }
 void callback_handler::set_character(std::function<void(int)> callback)
 {
     character = std::move(callback);
-    glfwSetCharCallback(app->get_window(), character_callback);
+    glfwSetCharCallback(application::get_instance()->get_window(), character_callback);
 }
 void callback_handler::set_cursor(std::function<void(double, double)> callback)
 {
     cursor = std::move(callback);
-    glfwSetCursorPosCallback(app->get_window(), cursor_callback);
+    glfwSetCursorPosCallback(application::get_instance()->get_window(), cursor_callback);
 }
 void callback_handler::set_enterexit(std::function<void(int)> callback)
 {
     enter = std::move(callback);
-    glfwSetCursorEnterCallback(app->get_window(), enter_callback);
+    glfwSetCursorEnterCallback(application::get_instance()->get_window(), enter_callback);
 }
 void callback_handler::set_mousebutton(std::function<void(int, int, int)> callback)
 {
     mouse_button = std::move(callback);
-    glfwSetMouseButtonCallback(app->get_window(), button_callback);
+    glfwSetMouseButtonCallback(application::get_instance()->get_window(), button_callback);
 }
 void callback_handler::set_scroll(std::function<void(double, double)> callback)
 {
     scroll = std::move(callback);
-    glfwSetScrollCallback(app->get_window(), scroll_callback);
+    glfwSetScrollCallback(application::get_instance()->get_window(), scroll_callback);
 }
+
+GRAPHICS_END

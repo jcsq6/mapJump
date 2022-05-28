@@ -27,9 +27,12 @@ C:/Users/jcsqu/Dropbox/c++Dev/mapJump/level_editor/build/src/graphics/objects/CM
 C:/Users/jcsqu/Dropbox/c++Dev/mapJump/level_editor/build/src/graphics/text/CMakeFiles/text.dir
 C:/Users/jcsqu/Dropbox/c++Dev/mapJump/level_editor/build/src/graphics/text/CMakeFiles/edit_cache.dir
 C:/Users/jcsqu/Dropbox/c++Dev/mapJump/level_editor/build/src/graphics/text/CMakeFiles/rebuild_cache.dir
+C:/Users/jcsqu/Dropbox/c++Dev/mapJump/level_editor/build/src/graphics/app/CMakeFiles/app.dir
+C:/Users/jcsqu/Dropbox/c++Dev/mapJump/level_editor/build/src/graphics/app/CMakeFiles/edit_cache.dir
+C:/Users/jcsqu/Dropbox/c++Dev/mapJump/level_editor/build/src/graphics/app/CMakeFiles/rebuild_cache.dir
 C:/Users/jcsqu/Dropbox/c++Dev/mapJump/level_editor/build/src/game/CMakeFiles/game.dir
 C:/Users/jcsqu/Dropbox/c++Dev/mapJump/level_editor/build/src/game/CMakeFiles/edit_cache.dir
 C:/Users/jcsqu/Dropbox/c++Dev/mapJump/level_editor/build/src/game/CMakeFiles/rebuild_cache.dir
-C:/Users/jcsqu/Dropbox/c++Dev/mapJump/level_editor/build/src/simulate/CMakeFiles/simulate.dir
-C:/Users/jcsqu/Dropbox/c++Dev/mapJump/level_editor/build/src/simulate/CMakeFiles/edit_cache.dir
-C:/Users/jcsqu/Dropbox/c++Dev/mapJump/level_editor/build/src/simulate/CMakeFiles/rebuild_cache.dir
+C:/Users/jcsqu/Dropbox/c++Dev/mapJump/level_editor/build/src/editor/CMakeFiles/editor.dir
+C:/Users/jcsqu/Dropbox/c++Dev/mapJump/level_editor/build/src/editor/CMakeFiles/edit_cache.dir
+C:/Users/jcsqu/Dropbox/c++Dev/mapJump/level_editor/build/src/editor/CMakeFiles/rebuild_cache.dir

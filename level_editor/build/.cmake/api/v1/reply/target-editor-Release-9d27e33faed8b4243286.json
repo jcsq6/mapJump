@@ -10,7 +10,7 @@
 		"files" : 
 		[
 			"C:/dev/vcpkg/scripts/buildsystems/vcpkg.cmake",
-			"src/graphics/CMakeLists.txt"
+			"src/editor/CMakeLists.txt"
 		],
 		"nodes" : 
 		[
@@ -31,12 +31,12 @@
 			}
 		]
 	},
-	"id" : "graphics::@51dde881cca20334ba54",
-	"name" : "graphics",
+	"id" : "editor::@01b63ccde04debc086b6",
+	"name" : "editor",
 	"paths" : 
 	{
-		"build" : "src/graphics",
-		"source" : "src/graphics"
+		"build" : "src/editor",
+		"source" : "src/editor"
 	},
 	"sourceGroups" : 
 	[
@@ -45,8 +45,7 @@
 			"sourceIndexes" : 
 			[
 				0,
-				1,
-				2
+				1
 			]
 		}
 	],
@@ -54,17 +53,12 @@
 	[
 		{
 			"backtrace" : 2,
-			"path" : "src/graphics/application.h",
+			"path" : "src/editor/saver.h",
 			"sourceGroupIndex" : 0
 		},
 		{
 			"backtrace" : 2,
-			"path" : "src/graphics/input.h",
-			"sourceGroupIndex" : 0
-		},
-		{
-			"backtrace" : 2,
-			"path" : "src/graphics/callback.h",
+			"path" : "src/editor/state.h",
 			"sourceGroupIndex" : 0
 		}
 	],

@@ -1,4 +1,8 @@
 #pragma once
+#include "macros.h"
+
+UTILITIES_BEG
+
 #ifdef _WIN32
 #include <Windows.h>
 #include <Shlobj.h>
@@ -70,3 +74,5 @@ bool save_file(std::string& path)
 #else
 
 #endif
+
+UTILITIES_END

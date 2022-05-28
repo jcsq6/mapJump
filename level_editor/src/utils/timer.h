@@ -1,6 +1,8 @@
 #pragma once
 #include <GLFW/glfw3.h>
+#include "macros.h"
 
+UTILITIES_BEG
 class timer
 {
     double beg;
@@ -66,3 +68,4 @@ public:
         return has_finished;
     }
 };
+UTILITIES_END

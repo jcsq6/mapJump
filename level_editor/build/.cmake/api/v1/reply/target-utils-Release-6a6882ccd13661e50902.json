@@ -10,7 +10,7 @@
 		"files" : 
 		[
 			"C:/dev/vcpkg/scripts/buildsystems/vcpkg.cmake",
-			"src/simulate/CMakeLists.txt"
+			"src/utils/CMakeLists.txt"
 		],
 		"nodes" : 
 		[
@@ -31,12 +31,12 @@
 			}
 		]
 	},
-	"id" : "simulate::@d0c81352177c154f4445",
-	"name" : "simulate",
+	"id" : "utils::@f1b38b22aeb65474a6c5",
+	"name" : "utils",
 	"paths" : 
 	{
-		"build" : "src/simulate",
-		"source" : "src/simulate"
+		"build" : "src/utils",
+		"source" : "src/utils"
 	},
 	"sourceGroups" : 
 	[
@@ -46,8 +46,7 @@
 			[
 				0,
 				1,
-				2,
-				3
+				2
 			]
 		}
 	],
@@ -55,22 +54,17 @@
 	[
 		{
 			"backtrace" : 2,
-			"path" : "src/simulate/handler.h",
+			"path" : "src/utils/debug.h",
 			"sourceGroupIndex" : 0
 		},
 		{
 			"backtrace" : 2,
-			"path" : "src/simulate/game_obj.h",
+			"path" : "src/utils/timer.h",
 			"sourceGroupIndex" : 0
 		},
 		{
 			"backtrace" : 2,
-			"path" : "src/simulate/player.h",
-			"sourceGroupIndex" : 0
-		},
-		{
-			"backtrace" : 2,
-			"path" : "src/simulate/simulate.h",
+			"path" : "src/utils/file_dialog.h",
 			"sourceGroupIndex" : 0
 		}
 	],

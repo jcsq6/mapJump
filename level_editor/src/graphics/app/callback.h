@@ -1,12 +1,12 @@
 #pragma once
 #include <functional>
 #include <GLFW/glfw3.h>
+#include "macros.h"
 
-class application;
+GRAPHICS_BEG
 
 class callback_handler
 {
-    application* app;
     std::function<void(int, int)> windowsize;
     std::function<void(int, int)> framebuffer;
     std::function<void(float, float)> contentscale;
@@ -21,11 +21,11 @@ class callback_handler
     std::function<void(int, int, int)> mouse_button;
     std::function<void(double, double)> scroll;
 
-    callback_handler(application* a) : app{a} {}
+    callback_handler() = default;
 public:
-    static callback_handler *get_instance(application *app)
+    static callback_handler *get_instance()
     {
-        static callback_handler instance(app);
+        static callback_handler instance;
         return &instance;
     }
 
@@ -54,54 +54,56 @@ public:
 private:
     static void windowsize_callback(GLFWwindow* window, int width, int height)
     {
-        get_instance(nullptr)->windowsize(width, height);
+        get_instance()->windowsize(width, height);
     }
     static void framebuffer_callback(GLFWwindow* window, int width, int height)
     {
-        get_instance(nullptr)->framebuffer(width, height);
+        get_instance()->framebuffer(width, height);
     }
     static void contentscale_callback(GLFWwindow* window, float xscale, float yscale)
     {
-        get_instance(nullptr)->contentscale(xscale, yscale);
+        get_instance()->contentscale(xscale, yscale);
     }
     static void windowpos_callback(GLFWwindow* window, int x, int y)
     {
-        get_instance(nullptr)->windowpos(x, y);
+        get_instance()->windowpos(x, y);
     }
     static void windowminimize_callback(GLFWwindow* window, int minimized)
     {
-        get_instance(nullptr)->windowminimize(minimized);
+        get_instance()->windowminimize(minimized);
     }
     static void windowmaximize_callback(GLFWwindow* window, int maximized)
     {
-        get_instance(nullptr)->windowmaximize(maximized);
+        get_instance()->windowmaximize(maximized);
     }
     static void windowfocus_callback(GLFWwindow* window, int focused)
     {
-        get_instance(nullptr)->windowfocus(focused);
+        get_instance()->windowfocus(focused);
     }
     static void key_callback(GLFWwindow *window, int _key, int scancode, int action, int mods)
     {
-        get_instance(nullptr)->key(_key, scancode, action, mods);
+        get_instance()->key(_key, scancode, action, mods);
     }
     static void character_callback(GLFWwindow* window, unsigned int codepoint)
     {
-        get_instance(nullptr)->character(codepoint);
+        get_instance()->character(codepoint);
     }
     static void cursor_callback(GLFWwindow* window, double x, double y)
     {
-        get_instance(nullptr)->cursor(x, y);
+        get_instance()->cursor(x, y);
     }
     static void enter_callback(GLFWwindow* window, int entered)
     {
-        get_instance(nullptr)->enter(entered);
+        get_instance()->enter(entered);
     }
     static void button_callback(GLFWwindow *window, int button, int action, int mods)
     {
-        get_instance(nullptr)->mouse_button(button, action, mods);
+        get_instance()->mouse_button(button, action, mods);
     }
     static void scroll_callback(GLFWwindow* window, double x, double y)
     {
-        get_instance(nullptr)->scroll(x, y);
+        get_instance()->scroll(x, y);
     }
 };
+
+GRAPHICS_END

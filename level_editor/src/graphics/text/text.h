@@ -71,15 +71,13 @@ struct library
 {
     static constexpr int height = 128;
 
-    library(application &app) :
-        program(),
-        array_object(),
-        point_buffer(),
-        text_buffer(),
-        chars{}
+    library() : program(),
+                                array_object(),
+                                point_buffer(),
+                                text_buffer(),
+                                chars{}
     {
-        math::vec2 text_coords[4]
-        {
+        math::vec2 text_coords[4]{
             {0, 1},
             {1, 1},
             {1, 0},
@@ -92,7 +90,7 @@ struct library
         };
 
         array_object.use();
-        
+
         point_buffer = graphics::make_buffer<vbo_target>();
         text_buffer = graphics::make_buffer<vbo_target>();
         text_buffer.attach_data(text_coords, GL_DYNAMIC_DRAW);
@@ -107,8 +105,8 @@ struct library
         FT_Face face;
         if (FT_New_Face(lib, "assets/arial.ttf", 0, &face))
             throw std::runtime_error("could not load font");
-        
-        //FT_New_Memory_Face(lib, reinterpret_cast<const FT_Byte *>(arial), std::size(arial), 0, &face)
+
+        // FT_New_Memory_Face(lib, reinterpret_cast<const FT_Byte *>(arial), std::size(arial), 0, &face)
 
         FT_Set_Pixel_Sizes(face, 0, height);
 
@@ -119,7 +117,7 @@ struct library
             if (FT_Load_Char(face, i, FT_LOAD_RENDER))
                 continue;
 
-            chars[i].texture.load(app, GL_RED, face->glyph->bitmap.buffer, face->glyph->bitmap.width, face->glyph->bitmap.rows);
+            chars[i].texture.load(GL_RED, face->glyph->bitmap.buffer, face->glyph->bitmap.width, face->glyph->bitmap.rows);
             chars[i].size = {face->glyph->bitmap.width, face->glyph->bitmap.rows};
             chars[i].offset = {face->glyph->bitmap_left, face->glyph->bitmap_top};
             chars[i].advance = face->glyph->advance.x;
@@ -140,73 +138,71 @@ struct library
     character chars[256];
 };
 
-library& get_library(application& app)
+library &get_library()
 {
-    static library lib(app);
+    static library lib;
     return lib;
 }
 
-namespace graphics
+GRAPHICS_BEG
+double text_width(std::string_view text, float height)
 {
-    double text_width(application& app, std::string_view text, float height)
-    {
-        library& lib = get_library(app);
+    library &lib = get_library();
 
-        float scale = height / lib.height;
+    float scale = height / lib.height;
 
-        double width = 0;
+    double width = 0;
 
-        for (auto c : text)
-            width += (lib.chars[c].advance >> 6);
-        return width * scale;
-    }
-    void print_text(application& app, std::string_view text, math::vec2 loc, float height, math::vec3 color, const math::mat<float, 4, 4>& ortho)
-    {
-        library& lib = get_library(app);
-
-        float scale = height / lib.height;
-
-        glEnable(GL_BLEND);
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-        glActiveTexture(GL_TEXTURE0);
-
-        lib.array_object.use();
-        lib.text_buffer.use();
-        lib.program.p.use();
-        lib.program.proj.send_uniform(ortho);
-        lib.program.text_color.send_uniform(color);
-
-        for (char c : text)
-        {
-            character& o = lib.chars[c];
-
-            float x = loc.x + o.offset.x * scale;
-            float y = loc.y - (o.size.y - o.offset.y) * scale;
-
-            float w = o.size.x * scale;
-            float h = o.size.y * scale;
-
-            math::vec2 verts[4]
-            {
-                {x, y},
-                {x + w, y},
-                {x + w, y + h},
-                {x, y + h},
-            };
-
-            o.texture.use();
-
-            lib.point_buffer.attach_data(verts, GL_DYNAMIC_DRAW);
-            lib.point_buffer.use();
-
-            glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
-
-            o.texture.quit();
-
-            loc.x += (o.advance >> 6) * scale;
-        }
-
-        lib.point_buffer.quit();
-        lib.array_object.quit();
-    }
+    for (auto c : text)
+        width += (lib.chars[c].advance >> 6);
+    return width * scale;
 }
+void print_text(std::string_view text, math::vec2 loc, float height, math::vec3 color, const math::mat<float, 4, 4> &ortho)
+{
+    library &lib = get_library();
+
+    float scale = height / lib.height;
+
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glActiveTexture(GL_TEXTURE0);
+
+    lib.array_object.use();
+    lib.text_buffer.use();
+    lib.program.p.use();
+    lib.program.proj.send_uniform(ortho);
+    lib.program.text_color.send_uniform(color);
+
+    for (char c : text)
+    {
+        character &o = lib.chars[c];
+
+        float x = loc.x + o.offset.x * scale;
+        float y = loc.y - (o.size.y - o.offset.y) * scale;
+
+        float w = o.size.x * scale;
+        float h = o.size.y * scale;
+
+        math::vec2 verts[4]{
+            {x, y},
+            {x + w, y},
+            {x + w, y + h},
+            {x, y + h},
+        };
+
+        o.texture.use();
+
+        lib.point_buffer.attach_data(verts, GL_DYNAMIC_DRAW);
+        lib.point_buffer.use();
+
+        glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+
+        o.texture.quit();
+
+        loc.x += (o.advance >> 6) * scale;
+    }
+
+    lib.point_buffer.quit();
+    lib.array_object.quit();
+}
+GRAPHICS_END
