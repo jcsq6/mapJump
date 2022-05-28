@@ -255,8 +255,7 @@ bool paused(application &app, const math::mat<float, 4, 4> &ortho, math::dvec2 &
                 return true;
             else if (simulate_button.hovered)
             {
-                if (game::simulate(app, ortho, world, spawn, end, texts) == 1)
-                    return true;
+                game::simulate(app, ortho, world, spawn, end, texts);
                 continue;
             }
             else if (return_button.hovered)
@@ -300,8 +299,11 @@ void editor(application &app, std::string_view name, const math::mat<float, 4, 4
     auto *callback_manager = app.get_callbackManager();
     auto *input_handler = app.get_inputHandler();
 
+    bool focused = true;
+
     callback_manager->set_scroll([&](double xscroll, double yscroll)
                                  { cur.file_obj.type = cur.file_obj.type + static_cast<int>(yscroll); });
+    callback_manager->set_windowfocus([&focused](int is_focused){ focused = is_focused; });
 
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -386,19 +388,24 @@ void editor(application &app, std::string_view name, const math::mat<float, 4, 4
 
         if (!spawn_grabbed && !end_grabbed && ((left_click.is_pressed() && left_initial) || (right_click.is_pressed() && right_initial)))
         {
-            auto it = find(objs, cur);
-            if (it != objs.end())
-                objs.erase(it);
+            do
+            {
+                auto it = find(objs, cur);
+                if (it != objs.end())
+                    objs.erase(it);
+                else
+                    break;
+            } while (true);
+        
             if (left_click.is_pressed())
                 objs.push_back(cur);
         }
 
-        if (escape.is_initialPress())
+        if (escape.is_initialPress() || !focused)
         {
             if (paused(app, ortho, mouse_pos, objs, spawn, end, txts))
                 break;
             left_initial = right_initial = false;
-            // remove old input
             continue;
         }
 

@@ -47,6 +47,10 @@ public:
     {
         return framebuffer;
     }
+    auto get_windowfocus() const
+    {
+        return windowfocus;
+    }
 private:
     static void windowsize_callback(GLFWwindow* window, int width, int height)
     {

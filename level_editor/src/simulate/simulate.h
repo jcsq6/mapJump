@@ -13,18 +13,43 @@
 
 namespace game
 {
-    int simulate(application &app, const math::mat<float, 4, 4> &ortho, const std::vector<state>& current, math::dvec2 spawn, math::dvec2 end, textures& texts)
+    void simulation_pause(application &app, const math::mat<float, 4, 4> &ortho)
+    {
+        auto *input_handler = app.get_inputHandler();
+
+        while (!app.should_close())
+        {
+            input_handler->update_wait();
+
+            if (glfwGetWindowAttrib(app.get_window(), GLFW_FOCUSED))
+                return;
+
+            glClearColor(148.f / 255, 200.f / 255, 238.f / 255, 1.f);
+            glClear(GL_COLOR_BUFFER_BIT);
+
+            graphics::print_text(app, "Paused",
+            {(content_dims.x - graphics::text_width(app, "Paused", 75)) / 2, (content_dims.y - 75) / 2},
+            75, {0, 0, 0}, ortho);
+
+            app.swap_buffers();
+        }
+    }
+    void simulate(application &app, const math::mat<float, 4, 4> &ortho, const std::vector<state>& current, math::dvec2 spawn, math::dvec2 end, textures& texts)
     {
         input *input_handler = app.get_inputHandler();
         callback_handler *callback_manager = app.get_callbackManager();
 
         bool reset_frame = false;
 
-        auto before = callback_manager->get_framebuffer();
+        auto before_framebuffer = callback_manager->get_framebuffer();
+        auto before_focus = callback_manager->get_windowfocus();
+
         callback_manager->set_framebuffer([&reset_frame](int width, int height)
                                           { glViewport(0, 0, width, height); reset_frame = true; });
+        callback_manager->set_windowfocus([&](int focused){ if (!focused) simulation_pause(app, ortho); });
         callback_manager->set_windowpos([&reset_frame](int x, int y)
                                         { reset_frame = true; });
+        
 
         const key &escape = input_handler->get_key(GLFW_KEY_ESCAPE);
         const key &a = input_handler->get_key(GLFW_KEY_A);
@@ -52,10 +77,7 @@ namespace game
             input_handler->update();
 
             if (escape.is_initialPress())
-            {
-                callback_manager->set_framebuffer(before);
-                return 0;
-            }
+                break;
 
             if (reset_frame)
             {
@@ -101,8 +123,8 @@ namespace game
 
             frame_timer.stop();
         }
-        callback_manager->set_framebuffer(before);
+        callback_manager->set_framebuffer(before_framebuffer);
+        callback_manager->set_windowfocus(before_focus);
         callback_manager->set_windowpos([](int, int){});
-        return 1;
     }
 }
