@@ -31,6 +31,9 @@ namespace game
         const key &d = input_handler->get_key(GLFW_KEY_D);
         const key &space = input_handler->get_key(GLFW_KEY_SPACE);
         const key &f3 = input_handler->get_key(GLFW_KEY_F3);
+        const key &left_shift = input_handler->get_key(GLFW_KEY_LEFT_SHIFT);
+        
+        const key &right_shift = input_handler->get_key(GLFW_KEY_RIGHT_SHIFT);
         const key &left_click = input_handler->get_mouse_button(GLFW_MOUSE_BUTTON_LEFT);
 
         bool show_fps = false;
@@ -75,6 +78,11 @@ namespace game
 
             if (space.is_initialPress())
                 world.player_jump();
+            
+            if (left_shift.is_pressed() || right_shift.is_pressed())
+                world.player_sneak();
+            else
+                world.stop_player_sneak();
 
             if (a.is_pressed())
                 world.move_player_left();

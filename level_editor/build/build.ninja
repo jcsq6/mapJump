@@ -12,7 +12,7 @@
 
 # =============================================================================
 # Project: level_editor
-# Configurations: Debug
+# Configurations: Release
 # =============================================================================
 
 #############################################
@@ -24,7 +24,7 @@ ninja_required_version = 1.5
 #############################################
 # Set configuration variable for custom commands.
 
-CONFIGURATION = Debug
+CONFIGURATION = Release
 # =============================================================================
 # Include auxiliary files.
 
@@ -78,10 +78,10 @@ build rebuild_cache: phony CMakeFiles/rebuild_cache.util
 
 build cmake_object_order_depends_target_level_editor: phony || src/game/game src/graphics/graphics src/graphics/objects/objects src/graphics/shaders/shaders src/graphics/text/text src/graphics/texture/texture src/math/math src/physics/physics src/simulate/simulate src/utils/utils
 
-build src/CMakeFiles/level_editor.dir/main.cpp.obj: CXX_COMPILER__level_editor_Debug C$:/Users/jcsqu/Dropbox/c++Dev/mapJump/level_editor/src/main.cpp || cmake_object_order_depends_target_level_editor
+build src/CMakeFiles/level_editor.dir/main.cpp.obj: CXX_COMPILER__level_editor_Release C$:/Users/jcsqu/Dropbox/c++Dev/mapJump/level_editor/src/main.cpp || cmake_object_order_depends_target_level_editor
   DEFINES = -DGLEW_STATIC
   DEP_FILE = src\CMakeFiles\level_editor.dir\main.cpp.obj.d
-  FLAGS = -g -g -std=gnu++17
+  FLAGS = -O3 -DNDEBUG -O3 -std=gnu++17
   INCLUDES = -IC:/Users/jcsqu/Dropbox/c++Dev/mapJump/level_editor/src/. -IC:/Users/jcsqu/Dropbox/c++Dev/mapJump/level_editor/src/utils/. -IC:/Users/jcsqu/Dropbox/c++Dev/mapJump/level_editor/src/physics/. -IC:/Users/jcsqu/Dropbox/c++Dev/mapJump/level_editor/src/math/. -IC:/Users/jcsqu/Dropbox/c++Dev/mapJump/level_editor/src/graphics/. -IC:/Users/jcsqu/Dropbox/c++Dev/mapJump/level_editor/src/graphics/texture/. -IC:/Users/jcsqu/Dropbox/c++Dev/mapJump/level_editor/src/graphics/shaders/. -IC:/Users/jcsqu/Dropbox/c++Dev/mapJump/level_editor/src/graphics/objects/. -IC:/Users/jcsqu/Dropbox/c++Dev/mapJump/level_editor/src/graphics/text/. -IC:/Users/jcsqu/Dropbox/c++Dev/mapJump/level_editor/src/game/. -IC:/Users/jcsqu/Dropbox/c++Dev/mapJump/level_editor/src/simulate/. -isystem C:/dev/vcpkg/installed/x64-mingw-static/include
   OBJECT_DIR = src\CMakeFiles\level_editor.dir
   OBJECT_FILE_DIR = src\CMakeFiles\level_editor.dir
@@ -94,12 +94,12 @@ build src/CMakeFiles/level_editor.dir/main.cpp.obj: CXX_COMPILER__level_editor_D
 #############################################
 # Link the executable src\level_editor.exe
 
-build src/level_editor.exe: CXX_EXECUTABLE_LINKER__level_editor_Debug src/CMakeFiles/level_editor.dir/main.cpp.obj | C$:/dev/vcpkg/installed/x64-mingw-static/debug/lib/libglew32d.a C$:/dev/vcpkg/installed/x64-mingw-static/debug/lib/libglfw3.a C$:/dev/vcpkg/installed/x64-mingw-static/debug/lib/libfreetyped.a C$:/dev/vcpkg/installed/x64-mingw-static/debug/lib/libbz2d.a C$:/dev/vcpkg/installed/x64-mingw-static/debug/lib/libpng16d.a C$:/dev/vcpkg/installed/x64-mingw-static/debug/lib/libzlibd.a C$:/dev/vcpkg/installed/x64-mingw-static/debug/lib/libbrotlidec-static.a C$:/dev/vcpkg/installed/x64-mingw-static/debug/lib/libbrotlicommon-static.a || src/game/game src/graphics/graphics src/graphics/objects/objects src/graphics/shaders/shaders src/graphics/text/text src/graphics/texture/texture src/math/math src/physics/physics src/simulate/simulate src/utils/utils
-  FLAGS = -g
-  LINK_FLAGS = -mwindows
-  LINK_LIBRARIES = -lopengl32  C:/dev/vcpkg/installed/x64-mingw-static/debug/lib/libglew32d.a  C:/dev/vcpkg/installed/x64-mingw-static/debug/lib/libglfw3.a  -lopengl32  -lglu32  C:/dev/vcpkg/installed/x64-mingw-static/debug/lib/libfreetyped.a  C:/dev/vcpkg/installed/x64-mingw-static/debug/lib/libbz2d.a  C:/dev/vcpkg/installed/x64-mingw-static/debug/lib/libpng16d.a  C:/dev/vcpkg/installed/x64-mingw-static/debug/lib/libzlibd.a  C:/dev/vcpkg/installed/x64-mingw-static/debug/lib/libbrotlidec-static.a  C:/dev/vcpkg/installed/x64-mingw-static/debug/lib/libbrotlicommon-static.a  -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
+build src/level_editor.exe: CXX_EXECUTABLE_LINKER__level_editor_Release src/CMakeFiles/level_editor.dir/main.cpp.obj | C$:/dev/vcpkg/installed/x64-mingw-static/lib/libglew32.a C$:/dev/vcpkg/installed/x64-mingw-static/lib/libglfw3.a C$:/dev/vcpkg/installed/x64-mingw-static/lib/libfreetype.a C$:/dev/vcpkg/installed/x64-mingw-static/lib/libbz2.a C$:/dev/vcpkg/installed/x64-mingw-static/debug/lib/libpng.a C$:/dev/vcpkg/installed/x64-mingw-static/lib/libzlib.a C$:/dev/vcpkg/installed/x64-mingw-static/lib/libbrotlidec-static.a C$:/dev/vcpkg/installed/x64-mingw-static/lib/libbrotlicommon-static.a || src/game/game src/graphics/graphics src/graphics/objects/objects src/graphics/shaders/shaders src/graphics/text/text src/graphics/texture/texture src/math/math src/physics/physics src/simulate/simulate src/utils/utils
+  FLAGS = -O3 -DNDEBUG
+  LINK_FLAGS = -mwindows  -s
+  LINK_LIBRARIES = -lopengl32  C:/dev/vcpkg/installed/x64-mingw-static/lib/libglew32.a  C:/dev/vcpkg/installed/x64-mingw-static/lib/libglfw3.a  -lopengl32  -lglu32  C:/dev/vcpkg/installed/x64-mingw-static/lib/libfreetype.a  C:/dev/vcpkg/installed/x64-mingw-static/lib/libbz2.a  C:/dev/vcpkg/installed/x64-mingw-static/debug/lib/libpng.a  C:/dev/vcpkg/installed/x64-mingw-static/lib/libzlib.a  C:/dev/vcpkg/installed/x64-mingw-static/lib/libbrotlidec-static.a  C:/dev/vcpkg/installed/x64-mingw-static/lib/libbrotlicommon-static.a  -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   OBJECT_DIR = src\CMakeFiles\level_editor.dir
-  POST_BUILD = cmd.exe /C "cd /D C:\Users\jcsqu\Dropbox\c++Dev\mapJump\level_editor\build\src && C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -noprofile -executionpolicy Bypass -file C:/dev/vcpkg/scripts/buildsystems/msbuild/applocal.ps1 -targetBinary C:/Users/jcsqu/Dropbox/c++Dev/mapJump/level_editor/build/src/level_editor.exe -installedDir C:/dev/vcpkg/installed/x64-mingw-static/debug/bin -OutVariable out"
+  POST_BUILD = cmd.exe /C "cd /D C:\Users\jcsqu\Dropbox\c++Dev\mapJump\level_editor\build\src && C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -noprofile -executionpolicy Bypass -file C:/dev/vcpkg/scripts/buildsystems/msbuild/applocal.ps1 -targetBinary C:/Users/jcsqu/Dropbox/c++Dev/mapJump/level_editor/build/src/level_editor.exe -installedDir C:/dev/vcpkg/installed/x64-mingw-static/bin -OutVariable out"
   PRE_LINK = cd .
   TARGET_FILE = src\level_editor.exe
   TARGET_IMPLIB = src\liblevel_editor.dll.a

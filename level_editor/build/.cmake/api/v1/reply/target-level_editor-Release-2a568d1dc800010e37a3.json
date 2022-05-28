@@ -15,6 +15,7 @@
 		[
 			"_add_executable",
 			"add_executable",
+			"target_link_options",
 			"target_link_libraries",
 			"set_property",
 			"include",
@@ -49,6 +50,12 @@
 			{
 				"command" : 2,
 				"file" : 1,
+				"line" : 18,
+				"parent" : 0
+			},
+			{
+				"command" : 3,
+				"file" : 1,
 				"line" : 25,
 				"parent" : 0
 			},
@@ -56,65 +63,65 @@
 				"file" : 2
 			},
 			{
-				"command" : 2,
+				"command" : 3,
 				"file" : 2,
 				"line" : 6,
-				"parent" : 4
-			},
-			{
-				"command" : 5,
-				"file" : 2,
-				"line" : 3,
-				"parent" : 4
-			},
-			{
-				"command" : 4,
-				"file" : 0,
-				"line" : 754,
-				"parent" : 6
-			},
-			{
-				"file" : 3,
-				"parent" : 7
-			},
-			{
-				"command" : 3,
-				"file" : 3,
-				"line" : 31,
-				"parent" : 8
-			},
-			{
-				"command" : 3,
-				"file" : 3,
-				"line" : 35,
-				"parent" : 8
-			},
-			{
-				"command" : 3,
-				"file" : 3,
-				"line" : 27,
-				"parent" : 8
-			},
-			{
-				"command" : 3,
-				"file" : 3,
-				"line" : 39,
-				"parent" : 8
-			},
-			{
-				"command" : 3,
-				"file" : 3,
-				"line" : 40,
-				"parent" : 8
+				"parent" : 5
 			},
 			{
 				"command" : 6,
+				"file" : 2,
+				"line" : 3,
+				"parent" : 5
+			},
+			{
+				"command" : 5,
+				"file" : 0,
+				"line" : 754,
+				"parent" : 7
+			},
+			{
+				"file" : 3,
+				"parent" : 8
+			},
+			{
+				"command" : 4,
+				"file" : 3,
+				"line" : 31,
+				"parent" : 9
+			},
+			{
+				"command" : 4,
+				"file" : 3,
+				"line" : 35,
+				"parent" : 9
+			},
+			{
+				"command" : 4,
+				"file" : 3,
+				"line" : 27,
+				"parent" : 9
+			},
+			{
+				"command" : 4,
+				"file" : 3,
+				"line" : 43,
+				"parent" : 9
+			},
+			{
+				"command" : 4,
+				"file" : 3,
+				"line" : 44,
+				"parent" : 9
+			},
+			{
+				"command" : 7,
 				"file" : 1,
 				"line" : 17,
 				"parent" : 0
 			},
 			{
-				"command" : 7,
+				"command" : 8,
 				"file" : 1,
 				"line" : 12,
 				"parent" : 0
@@ -127,11 +134,11 @@
 			"compileCommandFragments" : 
 			[
 				{
-					"fragment" : "-g"
+					"fragment" : "-O3 -DNDEBUG"
 				},
 				{
-					"backtrace" : 14,
-					"fragment" : "-g"
+					"backtrace" : 15,
+					"fragment" : "-O3"
 				},
 				{
 					"fragment" : "-std=gnu++17"
@@ -140,58 +147,58 @@
 			"defines" : 
 			[
 				{
-					"backtrace" : 3,
+					"backtrace" : 4,
 					"define" : "GLEW_STATIC"
 				}
 			],
 			"includes" : 
 			[
 				{
-					"backtrace" : 15,
+					"backtrace" : 16,
 					"path" : "C:/Users/jcsqu/Dropbox/c++Dev/mapJump/level_editor/src/."
 				},
 				{
-					"backtrace" : 3,
+					"backtrace" : 4,
 					"path" : "C:/Users/jcsqu/Dropbox/c++Dev/mapJump/level_editor/src/utils/."
 				},
 				{
-					"backtrace" : 3,
+					"backtrace" : 4,
 					"path" : "C:/Users/jcsqu/Dropbox/c++Dev/mapJump/level_editor/src/physics/."
 				},
 				{
-					"backtrace" : 3,
+					"backtrace" : 4,
 					"path" : "C:/Users/jcsqu/Dropbox/c++Dev/mapJump/level_editor/src/math/."
 				},
 				{
-					"backtrace" : 3,
+					"backtrace" : 4,
 					"path" : "C:/Users/jcsqu/Dropbox/c++Dev/mapJump/level_editor/src/graphics/."
 				},
 				{
-					"backtrace" : 3,
+					"backtrace" : 4,
 					"path" : "C:/Users/jcsqu/Dropbox/c++Dev/mapJump/level_editor/src/graphics/texture/."
 				},
 				{
-					"backtrace" : 3,
+					"backtrace" : 4,
 					"path" : "C:/Users/jcsqu/Dropbox/c++Dev/mapJump/level_editor/src/graphics/shaders/."
 				},
 				{
-					"backtrace" : 3,
+					"backtrace" : 4,
 					"path" : "C:/Users/jcsqu/Dropbox/c++Dev/mapJump/level_editor/src/graphics/objects/."
 				},
 				{
-					"backtrace" : 3,
+					"backtrace" : 4,
 					"path" : "C:/Users/jcsqu/Dropbox/c++Dev/mapJump/level_editor/src/graphics/text/."
 				},
 				{
-					"backtrace" : 3,
+					"backtrace" : 4,
 					"path" : "C:/Users/jcsqu/Dropbox/c++Dev/mapJump/level_editor/src/game/."
 				},
 				{
-					"backtrace" : 3,
+					"backtrace" : 4,
 					"path" : "C:/Users/jcsqu/Dropbox/c++Dev/mapJump/level_editor/src/simulate/."
 				},
 				{
-					"backtrace" : 3,
+					"backtrace" : 4,
 					"isSystem" : true,
 					"path" : "C:/dev/vcpkg/installed/x64-mingw-static/include"
 				}
@@ -214,44 +221,44 @@
 	"dependencies" : 
 	[
 		{
-			"backtrace" : 3,
+			"backtrace" : 4,
 			"id" : "utils::@f1b38b22aeb65474a6c5"
 		},
 		{
-			"backtrace" : 3,
-			"id" : "graphics::@51dde881cca20334ba54"
-		},
-		{
-			"backtrace" : 3,
+			"backtrace" : 4,
 			"id" : "texture::@5792948cc5c2cadd1df3"
 		},
 		{
-			"backtrace" : 3,
-			"id" : "math::@c3aed6c50cc997bcdd53"
+			"backtrace" : 4,
+			"id" : "graphics::@51dde881cca20334ba54"
 		},
 		{
-			"backtrace" : 3,
+			"backtrace" : 4,
 			"id" : "physics::@9d9790dbeb56549c3c94"
 		},
 		{
-			"backtrace" : 3,
+			"backtrace" : 4,
+			"id" : "math::@c3aed6c50cc997bcdd53"
+		},
+		{
+			"backtrace" : 4,
 			"id" : "game::@237b513620d2b2ecc71d"
 		},
 		{
-			"backtrace" : 3,
-			"id" : "objects::@bd48de062e6b1bef05e5"
-		},
-		{
-			"backtrace" : 3,
+			"backtrace" : 4,
 			"id" : "shaders::@6e42355e7c741ef61211"
 		},
 		{
-			"backtrace" : 3,
+			"backtrace" : 4,
 			"id" : "text::@0f2335d9757c8f0befb7"
 		},
 		{
-			"backtrace" : 3,
+			"backtrace" : 4,
 			"id" : "simulate::@d0c81352177c154f4445"
+		},
+		{
+			"backtrace" : 4,
+			"id" : "objects::@bd48de062e6b1bef05e5"
 		}
 	],
 	"id" : "level_editor::@145eef247bfb46b6828c",
@@ -260,7 +267,7 @@
 		"commandFragments" : 
 		[
 			{
-				"fragment" : "-g",
+				"fragment" : "-O3 -DNDEBUG",
 				"role" : "flags"
 			},
 			{
@@ -269,17 +276,22 @@
 			},
 			{
 				"backtrace" : 3,
+				"fragment" : "-s",
+				"role" : "flags"
+			},
+			{
+				"backtrace" : 4,
 				"fragment" : "-lopengl32",
 				"role" : "libraries"
 			},
 			{
-				"backtrace" : 3,
-				"fragment" : "C:\\dev\\vcpkg\\installed\\x64-mingw-static\\debug\\lib\\libglew32d.a",
+				"backtrace" : 4,
+				"fragment" : "C:\\dev\\vcpkg\\installed\\x64-mingw-static\\lib\\libglew32.a",
 				"role" : "libraries"
 			},
 			{
-				"backtrace" : 3,
-				"fragment" : "C:\\dev\\vcpkg\\installed\\x64-mingw-static\\debug\\lib\\libglfw3.a",
+				"backtrace" : 4,
+				"fragment" : "C:\\dev\\vcpkg\\installed\\x64-mingw-static\\lib\\libglfw3.a",
 				"role" : "libraries"
 			},
 			{
@@ -291,33 +303,33 @@
 				"role" : "libraries"
 			},
 			{
-				"backtrace" : 5,
-				"fragment" : "C:\\dev\\vcpkg\\installed\\x64-mingw-static\\debug\\lib\\libfreetyped.a",
-				"role" : "libraries"
-			},
-			{
-				"backtrace" : 9,
-				"fragment" : "C:\\dev\\vcpkg\\installed\\x64-mingw-static\\debug\\lib\\libbz2d.a",
+				"backtrace" : 6,
+				"fragment" : "C:\\dev\\vcpkg\\installed\\x64-mingw-static\\lib\\libfreetype.a",
 				"role" : "libraries"
 			},
 			{
 				"backtrace" : 10,
-				"fragment" : "C:\\dev\\vcpkg\\installed\\x64-mingw-static\\debug\\lib\\libpng16d.a",
+				"fragment" : "C:\\dev\\vcpkg\\installed\\x64-mingw-static\\lib\\libbz2.a",
 				"role" : "libraries"
 			},
 			{
 				"backtrace" : 11,
-				"fragment" : "C:\\dev\\vcpkg\\installed\\x64-mingw-static\\debug\\lib\\libzlibd.a",
+				"fragment" : "C:\\dev\\vcpkg\\installed\\x64-mingw-static\\debug\\lib\\libpng.a",
 				"role" : "libraries"
 			},
 			{
 				"backtrace" : 12,
-				"fragment" : "C:\\dev\\vcpkg\\installed\\x64-mingw-static\\debug\\lib\\libbrotlidec-static.a",
+				"fragment" : "C:\\dev\\vcpkg\\installed\\x64-mingw-static\\lib\\libzlib.a",
 				"role" : "libraries"
 			},
 			{
 				"backtrace" : 13,
-				"fragment" : "C:\\dev\\vcpkg\\installed\\x64-mingw-static\\debug\\lib\\libbrotlicommon-static.a",
+				"fragment" : "C:\\dev\\vcpkg\\installed\\x64-mingw-static\\lib\\libbrotlidec-static.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 14,
+				"fragment" : "C:\\dev\\vcpkg\\installed\\x64-mingw-static\\lib\\libbrotlicommon-static.a",
 				"role" : "libraries"
 			},
 			{

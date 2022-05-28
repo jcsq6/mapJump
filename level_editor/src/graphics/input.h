@@ -47,6 +47,7 @@ public:
     }
 
     void update();
+    void update_wait();
 
     math::dvec2 mouse_pos() const
     {

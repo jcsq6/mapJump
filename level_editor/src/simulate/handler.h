@@ -291,6 +291,16 @@ namespace game
             jump_buffered_countdown.start();
         }
 
+        void player_sneak()
+        {
+            user.set_is_sneaking(true);
+        }
+
+        void stop_player_sneak()
+        {
+            user.set_is_sneaking(false);
+        }
+
         void flip()
         {
             game_state = static_cast<handler_state>(!static_cast<bool>(game_state));

@@ -117,7 +117,7 @@ bool get_file(application &app, const math::mat<float, 4, 4> &ortho, math::dvec2
 
     while (!app.should_close())
     {
-        input_handler->update();
+        input_handler->update_wait();
 
         if (escape.is_initialPress())
             glfwSetWindowShouldClose(app.get_window(), true);
@@ -152,7 +152,7 @@ bool get_file(application &app, const math::mat<float, 4, 4> &ortho, math::dvec2
 
 void help(application &app, const math::mat<float, 4, 4> &ortho, math::dvec2 &mouse_pos)
 {
-    static button return_button(app, {content_dims.x / 2, content_dims.y - 75 * 13}, {800, 100}, "Return to pause menu", {0.0, 0.0, 0.0, .2});
+    static button return_button(app, {content_dims.x / 2, content_dims.y - 75 * 13.3}, {800, 100}, "Return to pause menu", {0.0, 0.0, 0.0, .2});
 
     auto *input_handler = app.get_inputHandler();
 
@@ -161,7 +161,7 @@ void help(application &app, const math::mat<float, 4, 4> &ortho, math::dvec2 &mo
 
     while (!app.should_close())
     {
-        input_handler->update();
+        input_handler->update_wait();
 
         return_button.get_hovered(mouse_pos);
 
@@ -207,6 +207,9 @@ void help(application &app, const math::mat<float, 4, 4> &ortho, math::dvec2 &mo
         graphics::print_text(app, "Auto saves every ten seconds",
             {(content_dims.x - graphics::text_width(app, "Auto saves every ten seconds", 50)) / 2, content_dims.y - 75 * 11},
             50, {0, 0, 0}, ortho);
+        graphics::print_text(app, "You can place/remove blocks without releasing the mouse button",
+            {(content_dims.x - graphics::text_width(app, "You can place/remove blocks without releasing the mouse button", 50)) / 2, content_dims.y - 75 * 12},
+            50, {0, 0, 0}, ortho);
 
         return_button.draw(ortho);
 
@@ -229,7 +232,7 @@ bool paused(application &app, const math::mat<float, 4, 4> &ortho, math::dvec2 &
 
     while (!app.should_close())
     {
-        input_handler->update();
+        input_handler->update_wait();
 
         if (escape.is_initialPress())
         {
@@ -244,11 +247,18 @@ bool paused(application &app, const math::mat<float, 4, 4> &ortho, math::dvec2 &
         if (left_click.is_initialPress())
         {
             if (help_button.hovered)
+            {
                 help(app, ortho, mouse_pos);
+                continue;
+            }
             else if (return_main_button.hovered)
                 return true;
-            else if (simulate_button.hovered && game::simulate(app, ortho, world, spawn, end, texts) == 1)
-                return true;
+            else if (simulate_button.hovered)
+            {
+                if (game::simulate(app, ortho, world, spawn, end, texts) == 1)
+                    return true;
+                continue;
+            }
             else if (return_button.hovered)
                 return false;
         }
@@ -317,11 +327,15 @@ void editor(application &app, std::string_view name, const math::mat<float, 4, 4
     bool spawn_grabbed = false;
     bool end_grabbed = false;
 
+    // protect from returning from sub-menus
+    bool left_initial = false;
+    bool right_initial = false;
+
     countdown auto_saver(10);
 
     while (!app.should_close())
     {
-        input_handler->update();
+        input_handler->update_wait();
 
         if (auto_saver.finished())
         {
@@ -349,7 +363,12 @@ void editor(application &app, std::string_view name, const math::mat<float, 4, 4
         if (s.is_initialPress() || down.is_initialPress())
             --cur.file_obj.col;
 
-        if (left_click.is_pressed())
+        if (left_click.is_initialPress())
+            left_initial = true;
+        if (right_click.is_initialPress())
+            right_initial = true;
+
+        if (left_click.is_pressed() && left_initial)
         {
             if (physics::collides_non_inclusive({spawn, cube_size}, {cur.file_obj.min, cube_size}))
             {
@@ -365,18 +384,22 @@ void editor(application &app, std::string_view name, const math::mat<float, 4, 4
             spawn_grabbed = end_grabbed = false;
         }
 
-        if (!spawn_grabbed && !end_grabbed && (left_click.is_initialPress() || right_click.is_initialPress()))
+        if (!spawn_grabbed && !end_grabbed && ((left_click.is_pressed() && left_initial) || (right_click.is_pressed() && right_initial)))
         {
             auto it = find(objs, cur);
             if (it != objs.end())
                 objs.erase(it);
-            if (left_click.is_initialPress())
+            if (left_click.is_pressed())
                 objs.push_back(cur);
         }
 
-        if (escape.is_initialPress() && paused(app, ortho, mouse_pos, objs, spawn, end, txts))
+        if (escape.is_initialPress())
         {
-            break;
+            if (paused(app, ortho, mouse_pos, objs, spawn, end, txts))
+                break;
+            left_initial = right_initial = false;
+            // remove old input
+            continue;
         }
 
         cur.update(txts, mouse_pos);

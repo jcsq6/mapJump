@@ -113,6 +113,22 @@ void input::update()
     glfwGetCursorPos(app->get_window(), &pos.x, &pos.y);
 }
 
+void input::update_wait()
+{
+    glfwWaitEvents();
+    for (auto &k : keys)
+    {
+        k.second.was_pressed = k.second.pressed;
+        k.second.pressed = glfwGetKey(app->get_window(), k.first) == GLFW_PRESS;
+    }
+    for (auto &b : buttons)
+    {
+        b.second.was_pressed = b.second.pressed;
+        b.second.pressed = glfwGetMouseButton(app->get_window(), b.first) == GLFW_PRESS;
+    }
+    glfwGetCursorPos(app->get_window(), &pos.x, &pos.y);
+}
+
 const key &input::get_key(int key_code) const
 {
     if (!keys.count(key_code))

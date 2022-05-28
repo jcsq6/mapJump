@@ -10,7 +10,7 @@
 					[
 						1
 					],
-					"jsonFile" : "directory-.-Debug-d0094a50bb2071803777.json",
+					"jsonFile" : "directory-.-Release-d0094a50bb2071803777.json",
 					"minimumCMakeVersion" : 
 					{
 						"string" : "3.8"
@@ -29,7 +29,7 @@
 						10,
 						11
 					],
-					"jsonFile" : "directory-src-Debug-c94b7c2814d5a21df52c.json",
+					"jsonFile" : "directory-src-Release-c94b7c2814d5a21df52c.json",
 					"minimumCMakeVersion" : 
 					{
 						"string" : "3.4"
@@ -44,7 +44,7 @@
 				},
 				{
 					"build" : "src/utils",
-					"jsonFile" : "directory-src.utils-Debug-63aae164cb9969211904.json",
+					"jsonFile" : "directory-src.utils-Release-63aae164cb9969211904.json",
 					"minimumCMakeVersion" : 
 					{
 						"string" : "3.4"
@@ -59,7 +59,7 @@
 				},
 				{
 					"build" : "src/physics",
-					"jsonFile" : "directory-src.physics-Debug-39dde9ecb2c868f2d34f.json",
+					"jsonFile" : "directory-src.physics-Release-39dde9ecb2c868f2d34f.json",
 					"minimumCMakeVersion" : 
 					{
 						"string" : "3.4"
@@ -74,7 +74,7 @@
 				},
 				{
 					"build" : "src/math",
-					"jsonFile" : "directory-src.math-Debug-32085ce2d0716527a3eb.json",
+					"jsonFile" : "directory-src.math-Release-32085ce2d0716527a3eb.json",
 					"minimumCMakeVersion" : 
 					{
 						"string" : "3.4"
@@ -96,7 +96,7 @@
 						8,
 						9
 					],
-					"jsonFile" : "directory-src.graphics-Debug-1d40f0fb835b98cce0ac.json",
+					"jsonFile" : "directory-src.graphics-Release-1d40f0fb835b98cce0ac.json",
 					"minimumCMakeVersion" : 
 					{
 						"string" : "3.4"
@@ -111,7 +111,7 @@
 				},
 				{
 					"build" : "src/graphics/texture",
-					"jsonFile" : "directory-src.graphics.texture-Debug-2b238c91474093169197.json",
+					"jsonFile" : "directory-src.graphics.texture-Release-2b238c91474093169197.json",
 					"minimumCMakeVersion" : 
 					{
 						"string" : "3.4"
@@ -126,7 +126,7 @@
 				},
 				{
 					"build" : "src/graphics/shaders",
-					"jsonFile" : "directory-src.graphics.shaders-Debug-e2012515f7223e97de9e.json",
+					"jsonFile" : "directory-src.graphics.shaders-Release-e2012515f7223e97de9e.json",
 					"minimumCMakeVersion" : 
 					{
 						"string" : "3.4"
@@ -141,7 +141,7 @@
 				},
 				{
 					"build" : "src/graphics/objects",
-					"jsonFile" : "directory-src.graphics.objects-Debug-0320bd1e527f8a1e2667.json",
+					"jsonFile" : "directory-src.graphics.objects-Release-0320bd1e527f8a1e2667.json",
 					"minimumCMakeVersion" : 
 					{
 						"string" : "3.4"
@@ -156,7 +156,7 @@
 				},
 				{
 					"build" : "src/graphics/text",
-					"jsonFile" : "directory-src.graphics.text-Debug-84b2a67152a31908f114.json",
+					"jsonFile" : "directory-src.graphics.text-Release-84b2a67152a31908f114.json",
 					"minimumCMakeVersion" : 
 					{
 						"string" : "3.4"
@@ -171,7 +171,7 @@
 				},
 				{
 					"build" : "src/game",
-					"jsonFile" : "directory-src.game-Debug-ed37d73a2506dd2b1df8.json",
+					"jsonFile" : "directory-src.game-Release-ed37d73a2506dd2b1df8.json",
 					"minimumCMakeVersion" : 
 					{
 						"string" : "3.4"
@@ -186,7 +186,7 @@
 				},
 				{
 					"build" : "src/simulate",
-					"jsonFile" : "directory-src.simulate-Debug-164b7137ea94ab6b94ff.json",
+					"jsonFile" : "directory-src.simulate-Release-164b7137ea94ab6b94ff.json",
 					"minimumCMakeVersion" : 
 					{
 						"string" : "3.4"
@@ -200,7 +200,7 @@
 					]
 				}
 			],
-			"name" : "Debug",
+			"name" : "Release",
 			"projects" : 
 			[
 				{
@@ -241,77 +241,77 @@
 				{
 					"directoryIndex" : 10,
 					"id" : "game::@237b513620d2b2ecc71d",
-					"jsonFile" : "target-game-Debug-56ac21dfcd8e4fe8010c.json",
+					"jsonFile" : "target-game-Release-56ac21dfcd8e4fe8010c.json",
 					"name" : "game",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 5,
 					"id" : "graphics::@51dde881cca20334ba54",
-					"jsonFile" : "target-graphics-Debug-7225b041c4b0df7af67e.json",
+					"jsonFile" : "target-graphics-Release-7225b041c4b0df7af67e.json",
 					"name" : "graphics",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 1,
 					"id" : "level_editor::@145eef247bfb46b6828c",
-					"jsonFile" : "target-level_editor-Debug-f8200f9dce1afc31474d.json",
+					"jsonFile" : "target-level_editor-Release-2a568d1dc800010e37a3.json",
 					"name" : "level_editor",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 4,
 					"id" : "math::@c3aed6c50cc997bcdd53",
-					"jsonFile" : "target-math-Debug-210201ad131a3b2c3301.json",
+					"jsonFile" : "target-math-Release-210201ad131a3b2c3301.json",
 					"name" : "math",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 8,
 					"id" : "objects::@bd48de062e6b1bef05e5",
-					"jsonFile" : "target-objects-Debug-3b5b4823267774063031.json",
+					"jsonFile" : "target-objects-Release-3b5b4823267774063031.json",
 					"name" : "objects",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 3,
 					"id" : "physics::@9d9790dbeb56549c3c94",
-					"jsonFile" : "target-physics-Debug-8f02288682f336ce1bf4.json",
+					"jsonFile" : "target-physics-Release-8f02288682f336ce1bf4.json",
 					"name" : "physics",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 7,
 					"id" : "shaders::@6e42355e7c741ef61211",
-					"jsonFile" : "target-shaders-Debug-ca0121a76400fcc7daf6.json",
+					"jsonFile" : "target-shaders-Release-ca0121a76400fcc7daf6.json",
 					"name" : "shaders",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 11,
 					"id" : "simulate::@d0c81352177c154f4445",
-					"jsonFile" : "target-simulate-Debug-77058c597d24e0af9c28.json",
+					"jsonFile" : "target-simulate-Release-77058c597d24e0af9c28.json",
 					"name" : "simulate",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 9,
 					"id" : "text::@0f2335d9757c8f0befb7",
-					"jsonFile" : "target-text-Debug-86c8a4eb58ad13a0ee9e.json",
+					"jsonFile" : "target-text-Release-86c8a4eb58ad13a0ee9e.json",
 					"name" : "text",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 6,
 					"id" : "texture::@5792948cc5c2cadd1df3",
-					"jsonFile" : "target-texture-Debug-2c9c9f528de7aee1f8d2.json",
+					"jsonFile" : "target-texture-Release-2c9c9f528de7aee1f8d2.json",
 					"name" : "texture",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 2,
 					"id" : "utils::@f1b38b22aeb65474a6c5",
-					"jsonFile" : "target-utils-Debug-4f46aeb8f7fe0f7dc8c4.json",
+					"jsonFile" : "target-utils-Release-4f46aeb8f7fe0f7dc8c4.json",
 					"name" : "utils",
 					"projectIndex" : 0
 				}

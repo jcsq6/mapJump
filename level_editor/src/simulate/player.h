@@ -31,16 +31,20 @@ namespace game
         static constexpr double jump_vel = 650;
         static constexpr double gravity = -1800;
         static constexpr double friction = .1;
+        static constexpr double sneak_scalar = .1;
+        static constexpr double sneak_jump_scalar = .8;
 
         // returns increment of velocity with respect to the location (air or ground)
         double dxvel()
         {
-            return max_xvel * (last_collision[down] ? ground_velocity_increment_scalar : air_velocity_increment_scalar);
+            return (max_xvel * (sneaking ? sneak_scalar : 1.0)) * (last_collision[down] ? ground_velocity_increment_scalar : air_velocity_increment_scalar);
         }
 
         double cur_max_xvel()
         {
-            return last_collision[down] ? max_xvel : max_air_xvel;
+            return last_collision[down] ?
+                    (max_xvel * (sneaking ? sneak_scalar : 1.0)) :
+                     max_air_xvel;
         }
     public:
         player() = default;
@@ -182,7 +186,7 @@ namespace game
             if (last_collision[down])
             {
                 resting = false;
-                player_particle.vel.y = jump_vel;
+                player_particle.vel.y = jump_vel * (sneaking ? sneak_jump_scalar : 1);
             }
             else if (m_wall_jump)
             {
