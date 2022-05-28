@@ -226,11 +226,15 @@
 		},
 		{
 			"backtrace" : 4,
-			"id" : "texture::@5792948cc5c2cadd1df3"
+			"id" : "graphics::@51dde881cca20334ba54"
 		},
 		{
 			"backtrace" : 4,
-			"id" : "graphics::@51dde881cca20334ba54"
+			"id" : "math::@c3aed6c50cc997bcdd53"
+		},
+		{
+			"backtrace" : 4,
+			"id" : "texture::@5792948cc5c2cadd1df3"
 		},
 		{
 			"backtrace" : 4,
@@ -238,7 +242,7 @@
 		},
 		{
 			"backtrace" : 4,
-			"id" : "math::@c3aed6c50cc997bcdd53"
+			"id" : "objects::@bd48de062e6b1bef05e5"
 		},
 		{
 			"backtrace" : 4,
@@ -250,15 +254,11 @@
 		},
 		{
 			"backtrace" : 4,
-			"id" : "text::@0f2335d9757c8f0befb7"
-		},
-		{
-			"backtrace" : 4,
 			"id" : "simulate::@d0c81352177c154f4445"
 		},
 		{
 			"backtrace" : 4,
-			"id" : "objects::@bd48de062e6b1bef05e5"
+			"id" : "text::@0f2335d9757c8f0befb7"
 		}
 	],
 	"id" : "level_editor::@145eef247bfb46b6828c",

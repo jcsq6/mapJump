@@ -7,15 +7,15 @@ void force_grid(math::dvec2& pos)
 {
     pos.x = std::floor(pos.x / cube_size.x) * cube_size.x;
     pos.y = std::floor(pos.y / cube_size.y) * cube_size.y;
+
     if (pos.x < 0)
         pos.x = 0;
-    else if (pos.x > content_dims.x - cube_size.x)
-        pos.x = content_dims.x - cube_size.x;
+    else if (pos.x > usable_area.x - cube_size.x)
+        pos.x = usable_area.x - cube_size.x;
     if (pos.y < 0)
         pos.y = 0;
-    else if (pos.y > content_dims.y - cube_size.y)
-        pos.y = content_dims.y - cube_size.y;
-    
+    else if (pos.y > usable_area.y - cube_size.y)
+        pos.y = usable_area.y - cube_size.y;
 }
 
 struct state

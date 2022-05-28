@@ -46,13 +46,40 @@ namespace game
         std::vector<block> neutral_blocks;
         block window_blocks[4];
 
-        bool check_for_collisions(block* beg, block* end) const
+        // returns true if player killed
+        bool check_intangible()
         {
+            std::vector<block>::iterator beg, end;
+            if (game_state == handler_state::blue)
+            {
+                beg = blue_blocks.begin();
+                end = blue_blocks.end();
+            }
+            else
+            {
+                beg = red_blocks.begin();
+                end = red_blocks.end();
+            }
+
+            bool collided = false;
+
             for (; beg != end; ++beg)
             {
                 if (physics::collides(beg->bound, user.bounding_box()))
-                    return true;
+                {
+                    collided = true;
+                    for (auto* obj : beg->sub_objs)
+                    {
+                        if (physics::collides(obj->bound, user.bounding_box()) && obj->type == block_type::spike)
+                        {
+                            reset();
+                            return true;
+                        }
+                    }
+                }
             }
+            if (!collided)
+                intangible = false;
             return false;
         }
 
@@ -116,12 +143,10 @@ namespace game
             }
             else
             {
-                if ((game_state == handler_state::blue && !check_for_collisions(blue_blocks.data(), blue_blocks.data() + blue_blocks.size())) ||
-                    (game_state == handler_state::red && !check_for_collisions(red_blocks.data(), red_blocks.data() + red_blocks.size())))
-                {
-                    intangible = false;
-                }
+                if (check_intangible())
+                    return;
             }
+
             resolve_block_collisions(neutral_blocks.data(), neutral_blocks.data() + neutral_blocks.size());
             resolve_block_collisions(window_blocks, window_blocks + std::size(window_blocks));
         }
