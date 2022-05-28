@@ -1,0 +1,7 @@
+[
+{
+  "directory": "C:/Users/jcsqu/Dropbox/c++Dev/mapJump/game/build",
+  "command": "C:\\dev\\msys2\\mingw64\\bin\\g++.exe -DGLEW_STATIC -IC:/Users/jcsqu/Dropbox/c++Dev/mapJump/game/src/utils/. -IC:/Users/jcsqu/Dropbox/c++Dev/mapJump/game/src/physics/. -IC:/Users/jcsqu/Dropbox/c++Dev/mapJump/game/src/math/. -IC:/Users/jcsqu/Dropbox/c++Dev/mapJump/game/src/graphics/. -IC:/Users/jcsqu/Dropbox/c++Dev/mapJump/game/src/graphics/texture/. -IC:/Users/jcsqu/Dropbox/c++Dev/mapJump/game/src/graphics/shaders/. -IC:/Users/jcsqu/Dropbox/c++Dev/mapJump/game/src/graphics/objects/. -IC:/Users/jcsqu/Dropbox/c++Dev/mapJump/game/src/graphics/text/. -IC:/Users/jcsqu/Dropbox/c++Dev/mapJump/game/src/game/. -isystem C:/dev/vcpkg/installed/x64-mingw-static/include -g -g -std=gnu++17 -o src\\CMakeFiles\\map_jumper.dir\\main.cpp.obj -c C:\\Users\\jcsqu\\Dropbox\\c++Dev\\mapJump\\game\\src\\main.cpp",
+  "file": "C:\\Users\\jcsqu\\Dropbox\\c++Dev\\mapJump\\game\\src\\main.cpp"
+}
+]

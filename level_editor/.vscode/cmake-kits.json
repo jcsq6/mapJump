@@ -1,0 +1,32 @@
+[
+  {
+    "name": "Ninja",
+    "toolchainFile": "C:/dev/vcpkg/scripts/buildsystems/vcpkg.cmake",
+    "compilers": {
+      "C": "C:\\dev\\msys2\\mingw64\\bin\\gcc.exe",
+      "CXX": "C:\\dev\\msys2\\mingw64\\bin\\g++.exe"
+    },
+    "preferredGenerator": {
+      "name": "Ninja"
+    },
+    "cmakeSettings": 
+    {
+      "VCPKG_TARGET_TRIPLET":"x64-mingw-static"
+    }
+  },
+  {
+    "name": "Visual Studio Community 2022 Release - amd64",
+    "visualStudio": "2343bafd",
+    "toolchainFile": "C:/dev/vcpkg/scripts/buildsystems/vcpkg.cmake",
+    "visualStudioArchitecture": "x64",
+    "preferredGenerator": {
+      "name": "Visual Studio 17 2022",
+      "platform": "x64",
+      "toolset": "host=x64"
+    },
+    "cmakeSettings": 
+    {
+      "VCPKG_TARGET_TRIPLET":"x64-windows-static"
+    }
+  }
+]
