@@ -1,13 +1,5 @@
 # ninja log v5
-2	4750	6754134301361776	src/CMakeFiles/level_editor.dir/main.cpp.obj	8e2c73fe9b3fc547
-4750	5372	6754134303411773	src/level_editor.exe	24f07a5f941bcab4
-3	6193	6754645957446556	src/CMakeFiles/level_editor.dir/main.cpp.obj	8e2c73fe9b3fc547
-6193	7208	6754645960256547	src/level_editor.exe	24f07a5f941bcab4
-3	4810	6754659842542651	src/CMakeFiles/level_editor.dir/main.cpp.obj	8e2c73fe9b3fc547
-4810	5431	6754659844632650	src/level_editor.exe	24f07a5f941bcab4
-2	4808	6754665645058171	src/CMakeFiles/level_editor.dir/main.cpp.obj	8e2c73fe9b3fc547
-4809	5458	6754665647208154	src/level_editor.exe	24f07a5f941bcab4
-3	4814	6754668011654364	src/CMakeFiles/level_editor.dir/main.cpp.obj	8e2c73fe9b3fc547
-4814	5430	6754668013764379	src/level_editor.exe	24f07a5f941bcab4
-3	4819	6754676670817555	src/CMakeFiles/level_editor.dir/main.cpp.obj	8e2c73fe9b3fc547
-4819	5430	6754676672887542	src/level_editor.exe	24f07a5f941bcab4
+3	2779	6754704637773793	src/CMakeFiles/level_editor.dir/main.cpp.obj	6c388a07020b2b6b
+2779	3769	6754704642673793	src/level_editor.exe	9715c6f12f439a9a
+3	4830	6754704924581572	src/CMakeFiles/level_editor.dir/main.cpp.obj	8e2c73fe9b3fc547
+4830	5451	6754704926741571	src/level_editor.exe	24f07a5f941bcab4

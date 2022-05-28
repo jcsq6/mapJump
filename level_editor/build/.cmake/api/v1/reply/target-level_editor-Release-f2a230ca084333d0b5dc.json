@@ -230,7 +230,7 @@
 		},
 		{
 			"backtrace" : 4,
-			"id" : "math::@c3aed6c50cc997bcdd53"
+			"id" : "physics::@9d9790dbeb56549c3c94"
 		},
 		{
 			"backtrace" : 4,
@@ -238,15 +238,11 @@
 		},
 		{
 			"backtrace" : 4,
-			"id" : "physics::@9d9790dbeb56549c3c94"
+			"id" : "math::@c3aed6c50cc997bcdd53"
 		},
 		{
 			"backtrace" : 4,
-			"id" : "objects::@bd48de062e6b1bef05e5"
-		},
-		{
-			"backtrace" : 4,
-			"id" : "game::@237b513620d2b2ecc71d"
+			"id" : "text::@0f2335d9757c8f0befb7"
 		},
 		{
 			"backtrace" : 4,
@@ -258,7 +254,11 @@
 		},
 		{
 			"backtrace" : 4,
-			"id" : "text::@0f2335d9757c8f0befb7"
+			"id" : "objects::@bd48de062e6b1bef05e5"
+		},
+		{
+			"backtrace" : 4,
+			"id" : "game::@237b513620d2b2ecc71d"
 		}
 	],
 	"id" : "level_editor::@145eef247bfb46b6828c",

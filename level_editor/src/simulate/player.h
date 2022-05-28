@@ -28,7 +28,7 @@ namespace game
         static constexpr double max_xvel = 800;
         static constexpr double ground_velocity_increment_scalar = .1;
         static constexpr double air_velocity_increment_scalar = .02;
-        static constexpr double jump_vel = 650;
+        static constexpr double jump_vel = 700;
         static constexpr double gravity = -1800;
         static constexpr double friction = .1;
         static constexpr double sneak_scalar = .1;
@@ -214,6 +214,8 @@ namespace game
                 {
                     // protect in case they fall off a ledge without jumping, otherwise they'd lose all horizontal velocity
                     max_air_xvel = std::abs(player_particle.vel.x);
+                    if (max_air_xvel < min_maxAirXvel)
+                        max_air_xvel = min_maxAirXvel;
                     // use friction on ground
                     player_particle.update(seconds, friction);
                 }
