@@ -34,6 +34,7 @@ namespace game
         math::vec<int, 2> window_size;
 
         player user;
+        bool intangible;
         countdown jump_buffered_countdown;
 
         std::vector<game_obj> blue_objs;
@@ -44,6 +45,16 @@ namespace game
         std::vector<block> red_blocks;
         std::vector<block> neutral_blocks;
         block window_blocks[4];
+
+        bool check_for_collisions(block* beg, block* end) const
+        {
+            for (; beg != end; ++beg)
+            {
+                if (physics::collides(beg->bound, user.bounding_box()))
+                    return true;
+            }
+            return false;
+        }
 
         void resolve_block_collisions(block* beg, block* end)
         {
@@ -96,10 +107,21 @@ namespace game
         {
             user.reset_flags();
 
-            if (game_state == handler_state::blue)
-                resolve_block_collisions(blue_blocks.data(), blue_blocks.data() + blue_blocks.size());
+            if (!intangible)
+            {
+                if (game_state == handler_state::blue)
+                    resolve_block_collisions(blue_blocks.data(), blue_blocks.data() + blue_blocks.size());
+                else
+                    resolve_block_collisions(red_blocks.data(), red_blocks.data() + red_blocks.size());
+            }
             else
-                resolve_block_collisions(red_blocks.data(), red_blocks.data() + red_blocks.size());
+            {
+                if ((game_state == handler_state::blue && !check_for_collisions(blue_blocks.data(), blue_blocks.data() + blue_blocks.size())) ||
+                    (game_state == handler_state::red && !check_for_collisions(red_blocks.data(), red_blocks.data() + red_blocks.size())))
+                {
+                    intangible = false;
+                }
+            }
             resolve_block_collisions(neutral_blocks.data(), neutral_blocks.data() + neutral_blocks.size());
             resolve_block_collisions(window_blocks, window_blocks + std::size(window_blocks));
         }
@@ -194,6 +216,7 @@ namespace game
             initial_position{},
             window_size{window_dimensions},
             user{0, 0, player_size.x, player_size.y},
+            intangible{false},
             jump_buffered_countdown{jump_buffer_countdown_time},
             blue_objs{}, red_objs{}, neutral_objs{},
             blue_blocks{}, red_blocks{}, neutral_blocks{},
@@ -304,6 +327,7 @@ namespace game
         void flip()
         {
             game_state = static_cast<handler_state>(!static_cast<bool>(game_state));
+            intangible = true;
         }
 
         void update(double seconds)
@@ -329,11 +353,6 @@ namespace game
         void draw(const math::mat<float, 4, 4>& projection)
         {
             texts.background.draw(math::identity(), math::identity(), projection);
-
-            {
-                auto pos = user.position();
-                texts.player_text.draw(math::translate<float>(pos.x, pos.y, 0), math::identity(), projection);
-            }
 
             // store corresponding texture object (either faded or not) depending on game handler_state
             graphics::texture_object* blue_cube_ptr;
@@ -407,6 +426,11 @@ namespace game
                 case block_type::spike:
                     obj.draw(projection, &texts.neutral_spike);
                 }
+            }
+
+            {
+                auto pos = user.position();
+                texts.player_text.draw(math::translate<float>(pos.x, pos.y, 0), math::identity(), projection);
             }
         }
     };

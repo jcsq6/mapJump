@@ -14,6 +14,7 @@ namespace physics
         return a.min.x <= b.max.x && a.max.x >= b.min.x &&
                a.min.y <= b.max.y && a.max.y >= b.min.y;
     }
+    
     bool is_inside(math::dvec2 pt, bounding_box a)
     {
         return pt.x >= a.min.x && pt.x <= a.max.x &&
