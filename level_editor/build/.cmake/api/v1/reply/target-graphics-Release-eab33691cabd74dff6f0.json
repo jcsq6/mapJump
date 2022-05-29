@@ -44,8 +44,7 @@
 			"name" : "Header Files",
 			"sourceIndexes" : 
 			[
-				0,
-				1
+				0
 			]
 		}
 	],
@@ -54,11 +53,6 @@
 		{
 			"backtrace" : 2,
 			"path" : "src/graphics/game_textures.h",
-			"sourceGroupIndex" : 0
-		},
-		{
-			"backtrace" : 2,
-			"path" : "src/graphics/button.h",
 			"sourceGroupIndex" : 0
 		}
 	],

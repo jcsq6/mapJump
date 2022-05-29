@@ -3,6 +3,7 @@
 #include "collision.h"
 #include "solid_object.h"
 #include "macros.h"
+#include "sizes.h"
 
 GRAPHICS_BEG
 struct button
@@ -21,14 +22,23 @@ struct button
                                                                                                  text_loc{center.x - graphics::text_width(text, .75 * dims.y) / 2, bound.min.y + .25 * dims.y},
                                                                                                  txt{text}, hovered{false}
     {
-        textre.attach_shape(bound.points());
+        textre.attach_shape(physics::bounding_box({}, dims).points());
         textre.set_color(back_color);
     }
 
-    void draw(const math::mat<float, 4, 4> &ortho)
+    void update_pos(math::dvec2 new_pos)
     {
-        textre.draw(math::identity(), math::identity(), ortho);
-        print_text(txt, text_loc, .75 * bound.dims().y, hovered ? hover_col : dormant_col, ortho);
+        // width / 2 - text_width
+        // 
+        bound.update_pos(new_pos);
+        auto dims = bound.dims();
+        text_loc = {(bound.max.x + bound.min.x) / 2 - graphics::text_width(txt, .75 * dims.y) / 2, bound.min.y + .25 * dims.y};
+    }
+
+    void draw()
+    {
+        textre.draw(math::translate<float>(bound.min.x, bound.min.y, 0), math::identity(), game::ortho);
+        print_text(txt, text_loc, .75 * bound.dims().y, hovered ? hover_col : dormant_col, game::ortho);
     }
 
     void get_hovered(math::dvec2 mouse_pos)

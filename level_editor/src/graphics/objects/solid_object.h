@@ -70,6 +70,16 @@ protected:
 
 public:
     solid_object() : size{-1} {}
+    solid_object(solid_object&& other) : point_buffer{std::move(other.point_buffer)}, size{other.size}, mv_mat{other.mv_mat}, projection_mat{other.projection_mat}, color{other.color} {}
+    solid_object& operator=(solid_object&& other)
+    {
+        point_buffer = std::move(other.point_buffer);
+        size = other.size;
+        mv_mat = other.mv_mat;
+        projection_mat = other.projection_mat;
+        color = other.color;
+        return *this;
+    }
     ~solid_object() = default;
 
     template <typename T>

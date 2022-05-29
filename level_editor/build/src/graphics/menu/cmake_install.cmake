@@ -1,4 +1,4 @@
-# Install script for directory: C:/Users/jcsqu/Dropbox/c++Dev/mapJump/level_editor/src/graphics
+# Install script for directory: C:/Users/jcsqu/Dropbox/c++Dev/mapJump/level_editor/src/graphics/menu
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -35,16 +35,5 @@ endif()
 # Set default install directory permissions.
 if(NOT DEFINED CMAKE_OBJDUMP)
   set(CMAKE_OBJDUMP "C:/dev/msys2/mingw64/bin/objdump.exe")
-endif()
-
-if(NOT CMAKE_INSTALL_LOCAL_ONLY)
-  # Include the install script for each subdirectory.
-  include("C:/Users/jcsqu/Dropbox/c++Dev/mapJump/level_editor/build/src/graphics/texture/cmake_install.cmake")
-  include("C:/Users/jcsqu/Dropbox/c++Dev/mapJump/level_editor/build/src/graphics/shaders/cmake_install.cmake")
-  include("C:/Users/jcsqu/Dropbox/c++Dev/mapJump/level_editor/build/src/graphics/objects/cmake_install.cmake")
-  include("C:/Users/jcsqu/Dropbox/c++Dev/mapJump/level_editor/build/src/graphics/text/cmake_install.cmake")
-  include("C:/Users/jcsqu/Dropbox/c++Dev/mapJump/level_editor/build/src/graphics/app/cmake_install.cmake")
-  include("C:/Users/jcsqu/Dropbox/c++Dev/mapJump/level_editor/build/src/graphics/menu/cmake_install.cmake")
-
 endif()
 

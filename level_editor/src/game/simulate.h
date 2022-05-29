@@ -2,7 +2,7 @@
 #include "timer.h"
 
 #include "handler.h"
-
+#include "text.h"
 #include "sizes.h"
 
 // #ifdef _WIN32
@@ -12,7 +12,7 @@
 // #endif
 
 GAME_BEG
-void simulation_pause(const math::mat<float, 4, 4> &ortho)
+void simulation_pause()
 {
     static graphics::application& app = *graphics::application::get_instance();
 
@@ -36,7 +36,7 @@ void simulation_pause(const math::mat<float, 4, 4> &ortho)
     }
 }
 
-void simulate(const math::mat<float, 4, 4> &ortho, const std::vector<editor::state> &current, math::dvec2 spawn, math::dvec2 end)
+void simulate(const std::vector<editor::state> &current, math::dvec2 spawn, math::dvec2 end)
 {
     static graphics::application& app = *graphics::application::get_instance();
 
@@ -51,7 +51,7 @@ void simulate(const math::mat<float, 4, 4> &ortho, const std::vector<editor::sta
     callback_manager->set_framebuffer([&reset_frame](int width, int height)
                                       { glViewport(0, 0, width, height); reset_frame = true; });
     callback_manager->set_windowfocus([&](int focused)
-                                      { if (!focused) simulation_pause(ortho); });
+                                      { if (!focused) simulation_pause(); });
     callback_manager->set_windowpos([&reset_frame](int x, int y)
                                     { reset_frame = true; });
 

@@ -26,8 +26,8 @@
 						3,
 						4,
 						5,
-						11,
-						12
+						12,
+						13
 					],
 					"jsonFile" : "directory-src-Release-c94b7c2814d5a21df52c.json",
 					"minimumCMakeVersion" : 
@@ -54,7 +54,7 @@
 					"source" : "src/utils",
 					"targetIndexes" : 
 					[
-						11
+						12
 					]
 				},
 				{
@@ -69,7 +69,7 @@
 					"source" : "src/physics",
 					"targetIndexes" : 
 					[
-						7
+						8
 					]
 				},
 				{
@@ -95,7 +95,8 @@
 						7,
 						8,
 						9,
-						10
+						10,
+						11
 					],
 					"jsonFile" : "directory-src.graphics-Release-1d40f0fb835b98cce0ac.json",
 					"minimumCMakeVersion" : 
@@ -122,7 +123,7 @@
 					"source" : "src/graphics/texture",
 					"targetIndexes" : 
 					[
-						10
+						11
 					]
 				},
 				{
@@ -137,7 +138,7 @@
 					"source" : "src/graphics/shaders",
 					"targetIndexes" : 
 					[
-						8
+						9
 					]
 				},
 				{
@@ -152,7 +153,7 @@
 					"source" : "src/graphics/objects",
 					"targetIndexes" : 
 					[
-						6
+						7
 					]
 				},
 				{
@@ -167,7 +168,7 @@
 					"source" : "src/graphics/text",
 					"targetIndexes" : 
 					[
-						9
+						10
 					]
 				},
 				{
@@ -183,6 +184,21 @@
 					"targetIndexes" : 
 					[
 						0
+					]
+				},
+				{
+					"build" : "src/graphics/menu",
+					"jsonFile" : "directory-src.graphics.menu-Release-f884381da6a50de47f14.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.4"
+					},
+					"parentIndex" : 5,
+					"projectIndex" : 0,
+					"source" : "src/graphics/menu",
+					"targetIndexes" : 
+					[
+						6
 					]
 				},
 				{
@@ -234,7 +250,8 @@
 						9,
 						10,
 						11,
-						12
+						12,
+						13
 					],
 					"name" : "level_editor",
 					"targetIndexes" : 
@@ -250,7 +267,8 @@
 						8,
 						9,
 						10,
-						11
+						11,
+						12
 					]
 				}
 			],
@@ -264,14 +282,14 @@
 					"projectIndex" : 0
 				},
 				{
-					"directoryIndex" : 12,
+					"directoryIndex" : 13,
 					"id" : "editor::@01b63ccde04debc086b6",
 					"jsonFile" : "target-editor-Release-9d27e33faed8b4243286.json",
 					"name" : "editor",
 					"projectIndex" : 0
 				},
 				{
-					"directoryIndex" : 11,
+					"directoryIndex" : 12,
 					"id" : "game::@237b513620d2b2ecc71d",
 					"jsonFile" : "target-game-Release-d2049397349aa0a47c7a.json",
 					"name" : "game",
@@ -280,14 +298,14 @@
 				{
 					"directoryIndex" : 5,
 					"id" : "graphics::@51dde881cca20334ba54",
-					"jsonFile" : "target-graphics-Release-f8c6f0f9d48605174bad.json",
+					"jsonFile" : "target-graphics-Release-eab33691cabd74dff6f0.json",
 					"name" : "graphics",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 1,
 					"id" : "level_editor::@145eef247bfb46b6828c",
-					"jsonFile" : "target-level_editor-Release-29b9c20248fe8c19bb0f.json",
+					"jsonFile" : "target-level_editor-Release-a0814718f86aed0d1fe2.json",
 					"name" : "level_editor",
 					"projectIndex" : 0
 				},
@@ -296,6 +314,13 @@
 					"id" : "math::@c3aed6c50cc997bcdd53",
 					"jsonFile" : "target-math-Release-210201ad131a3b2c3301.json",
 					"name" : "math",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 11,
+					"id" : "menu::@212ecbbed9eab996256a",
+					"jsonFile" : "target-menu-Release-7df879daefc30177126d.json",
+					"name" : "menu",
 					"projectIndex" : 0
 				},
 				{
