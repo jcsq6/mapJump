@@ -1,7 +1,0 @@
-[
-{
-  "directory": "C:/Users/jcsqu/Dropbox/c++Dev/mapJump/level_editor/build",
-  "command": "C:\\dev\\msys2\\mingw64\\bin\\g++.exe -DGLEW_STATIC -IC:/Users/jcsqu/Dropbox/c++Dev/mapJump/level_editor/src/. -IC:/Users/jcsqu/Dropbox/c++Dev/mapJump/level_editor/src/utils/. -IC:/Users/jcsqu/Dropbox/c++Dev/mapJump/level_editor/src/physics/. -IC:/Users/jcsqu/Dropbox/c++Dev/mapJump/level_editor/src/math/. -IC:/Users/jcsqu/Dropbox/c++Dev/mapJump/level_editor/src/graphics/. -IC:/Users/jcsqu/Dropbox/c++Dev/mapJump/level_editor/src/graphics/texture/. -IC:/Users/jcsqu/Dropbox/c++Dev/mapJump/level_editor/src/graphics/shaders/. -IC:/Users/jcsqu/Dropbox/c++Dev/mapJump/level_editor/src/graphics/objects/. -IC:/Users/jcsqu/Dropbox/c++Dev/mapJump/level_editor/src/graphics/text/. -IC:/Users/jcsqu/Dropbox/c++Dev/mapJump/level_editor/src/graphics/app/. -IC:/Users/jcsqu/Dropbox/c++Dev/mapJump/level_editor/src/graphics/menu/. -IC:/Users/jcsqu/Dropbox/c++Dev/mapJump/level_editor/src/game/. -IC:/Users/jcsqu/Dropbox/c++Dev/mapJump/level_editor/src/editor/. -isystem C:/dev/vcpkg/installed/x64-mingw-static/include -O3 -DNDEBUG -O3 -std=gnu++17 -o src\\CMakeFiles\\level_editor.dir\\main.cpp.obj -c C:\\Users\\jcsqu\\Dropbox\\c++Dev\\mapJump\\level_editor\\src\\main.cpp",
-  "file": "C:\\Users\\jcsqu\\Dropbox\\c++Dev\\mapJump\\level_editor\\src\\main.cpp"
-}
-]

@@ -1,0 +1,10 @@
+^C:\USERS\JCSQU\DROPBOX\C++DEV\MAPJUMP\BUILD\CMAKEFILES\405BE211532DADD61F5BD92745B434E8\GENERATE.STAMP.RULE
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/jcsqu/Dropbox/c++Dev/mapJump -BC:/Users/jcsqu/Dropbox/c++Dev/mapJump/build --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file C:/Users/jcsqu/Dropbox/c++Dev/mapJump/build/map_jumper.sln
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

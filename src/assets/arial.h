@@ -1,0 +1,1 @@
+extern unsigned char arial_data[1036584];

@@ -1,0 +1,76 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="C:\Users\jcsqu\Dropbox\c++Dev\mapJump\src\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\jcsqu\Dropbox\c++Dev\mapJump\src\collision.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\jcsqu\Dropbox\c++Dev\mapJump\src\game.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\jcsqu\Dropbox\c++Dev\mapJump\src\assets\arial.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\jcsqu\Dropbox\c++Dev\mapJump\src\assets\background.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\jcsqu\Dropbox\c++Dev\mapJump\src\assets\blue_cube.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\jcsqu\Dropbox\c++Dev\mapJump\src\assets\blue_cube_fade.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\jcsqu\Dropbox\c++Dev\mapJump\src\assets\blue_jump.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\jcsqu\Dropbox\c++Dev\mapJump\src\assets\blue_spike.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\jcsqu\Dropbox\c++Dev\mapJump\src\assets\blue_spike_fade.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\jcsqu\Dropbox\c++Dev\mapJump\src\assets\end_anchor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\jcsqu\Dropbox\c++Dev\mapJump\src\assets\neutral_cube.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\jcsqu\Dropbox\c++Dev\mapJump\src\assets\neutral_jump.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\jcsqu\Dropbox\c++Dev\mapJump\src\assets\neutral_spike.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\jcsqu\Dropbox\c++Dev\mapJump\src\assets\player_text.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\jcsqu\Dropbox\c++Dev\mapJump\src\assets\red_cube.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\jcsqu\Dropbox\c++Dev\mapJump\src\assets\red_cube_fade.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\jcsqu\Dropbox\c++Dev\mapJump\src\assets\red_jump.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\jcsqu\Dropbox\c++Dev\mapJump\src\assets\red_spike.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\jcsqu\Dropbox\c++Dev\mapJump\src\assets\red_spike_fade.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\jcsqu\Dropbox\c++Dev\mapJump\src\assets\spawn_anchor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\jcsqu\Dropbox\c++Dev\mapJump\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{BF63C7BF-37A0-3B13-8BC9-3D703B30CD7A}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
