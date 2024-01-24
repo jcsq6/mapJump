@@ -173,6 +173,10 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </ProjectReference>
+    <ProjectReference Include="C:\Users\jcsqu\Dropbox\c++Dev\mapJump\build\level_editor.vcxproj">
+      <Project>{3DB7C9A3-59D7-3E47-B8B7-67C601FF8EDF}</Project>
+      <Name>level_editor</Name>
+    </ProjectReference>
     <ProjectReference Include="C:\Users\jcsqu\Dropbox\c++Dev\mapJump\build\map_jumper.vcxproj">
       <Project>{5EC5A3B3-B37F-33AA-9989-38078EAB9501}</Project>
       <Name>map_jumper</Name>

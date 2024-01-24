@@ -7,7 +7,7 @@ Id flags:
 The output was:
 0
 MSBuild version 17.8.3+195e7f5a3 for .NET Framework
-Build started 1/20/2024 5:55:44 PM.
+Build started 1/24/2024 3:57:02 PM.
 
 Project "C:\Users\jcsqu\Dropbox\c++Dev\mapJump\build\CMakeFiles\3.23.0-rc2\CompilerIdC\CompilerIdC.vcxproj" on node 1 (default targets).
 PrepareForBuild:
@@ -44,7 +44,7 @@ Build succeeded.
     0 Warning(s)
     0 Error(s)
 
-Time Elapsed 00:00:01.12
+Time Elapsed 00:00:01.21
 
 
 Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "CompilerIdC.exe"
@@ -61,7 +61,7 @@ Id flags:
 The output was:
 0
 MSBuild version 17.8.3+195e7f5a3 for .NET Framework
-Build started 1/20/2024 5:55:45 PM.
+Build started 1/24/2024 3:57:03 PM.
 
 Project "C:\Users\jcsqu\Dropbox\c++Dev\mapJump\build\CMakeFiles\3.23.0-rc2\CompilerIdCXX\CompilerIdCXX.vcxproj" on node 1 (default targets).
 PrepareForBuild:
@@ -98,7 +98,7 @@ Build succeeded.
     0 Warning(s)
     0 Error(s)
 
-Time Elapsed 00:00:00.59
+Time Elapsed 00:00:00.66
 
 
 Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "CompilerIdCXX.exe"
@@ -110,40 +110,40 @@ The CXX compiler identification is MSVC, found in "C:/Users/jcsqu/Dropbox/c++Dev
 Detecting C compiler ABI info compiled with the following output:
 Change Dir: C:/Users/jcsqu/Dropbox/c++Dev/mapJump/build/CMakeFiles/CMakeTmp
 
-Run Build Command(s):C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe cmTC_61ec3.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:m && MSBuild version 17.8.3+195e7f5a3 for .NET Framework
+Run Build Command(s):C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe cmTC_6a670.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:m && MSBuild version 17.8.3+195e7f5a3 for .NET Framework
 
   Microsoft (R) C/C++ Optimizing Compiler Version 19.38.33130 for x64
   Copyright (C) Microsoft Corporation.  All rights reserved.
-  cl /c /Zi /W3 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\"Debug\"" /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_61ec3.dir\Debug\\" /Fd"cmTC_61ec3.dir\Debug\vc143.pdb" /external:W3 /Gd /TC /errorReport:queue "C:\Program Files\CMake\share\cmake-3.23\Modules\CMakeCCompilerABI.c"
+  cl /c /Zi /W3 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\"Debug\"" /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_6a670.dir\Debug\\" /Fd"cmTC_6a670.dir\Debug\vc143.pdb" /external:W3 /Gd /TC /errorReport:queue "C:\Program Files\CMake\share\cmake-3.23\Modules\CMakeCCompilerABI.c"
   CMakeCCompilerABI.c
-  cmTC_61ec3.vcxproj -> C:\Users\jcsqu\Dropbox\c++Dev\mapJump\build\CMakeFiles\CMakeTmp\Debug\cmTC_61ec3.exe
+  cmTC_6a670.vcxproj -> C:\Users\jcsqu\Dropbox\c++Dev\mapJump\build\CMakeFiles\CMakeTmp\Debug\cmTC_6a670.exe
 
 
 
 Detecting CXX compiler ABI info compiled with the following output:
 Change Dir: C:/Users/jcsqu/Dropbox/c++Dev/mapJump/build/CMakeFiles/CMakeTmp
 
-Run Build Command(s):C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe cmTC_c2d89.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:m && MSBuild version 17.8.3+195e7f5a3 for .NET Framework
+Run Build Command(s):C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe cmTC_fe495.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:m && MSBuild version 17.8.3+195e7f5a3 for .NET Framework
 
   Microsoft (R) C/C++ Optimizing Compiler Version 19.38.33130 for x64
   Copyright (C) Microsoft Corporation.  All rights reserved.
-  cl /c /Zi /W3 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\"Debug\"" /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /Fo"cmTC_c2d89.dir\Debug\\" /Fd"cmTC_c2d89.dir\Debug\vc143.pdb" /external:W3 /Gd /TP /errorReport:queue "C:\Program Files\CMake\share\cmake-3.23\Modules\CMakeCXXCompilerABI.cpp"
+  cl /c /Zi /W3 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\"Debug\"" /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /Fo"cmTC_fe495.dir\Debug\\" /Fd"cmTC_fe495.dir\Debug\vc143.pdb" /external:W3 /Gd /TP /errorReport:queue "C:\Program Files\CMake\share\cmake-3.23\Modules\CMakeCXXCompilerABI.cpp"
   CMakeCXXCompilerABI.cpp
-  cmTC_c2d89.vcxproj -> C:\Users\jcsqu\Dropbox\c++Dev\mapJump\build\CMakeFiles\CMakeTmp\Debug\cmTC_c2d89.exe
+  cmTC_fe495.vcxproj -> C:\Users\jcsqu\Dropbox\c++Dev\mapJump\build\CMakeFiles\CMakeTmp\Debug\cmTC_fe495.exe
 
 
 
 Determining if the BZ2_bzCompressInit exist passed with the following output:
 Change Dir: C:/Users/jcsqu/Dropbox/c++Dev/mapJump/build/CMakeFiles/CMakeTmp
 
-Run Build Command(s):C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe cmTC_265a4.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:m && MSBuild version 17.8.3+195e7f5a3 for .NET Framework
+Run Build Command(s):C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe cmTC_c44c4.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:m && MSBuild version 17.8.3+195e7f5a3 for .NET Framework
 
   Microsoft (R) C/C++ Optimizing Compiler Version 19.38.33130 for x64
   Copyright (C) Microsoft Corporation.  All rights reserved.
-  cl /c /I"C:\dev\vcpkg\installed\x64-windows-static\include" /Zi /W3 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\"Debug\"" /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_265a4.dir\Debug\\" /Fd"cmTC_265a4.dir\Debug\vc143.pdb" /external:W3 /Gd /TC /errorReport:queue C:\Users\jcsqu\Dropbox\c++Dev\mapJump\build\CMakeFiles\CMakeTmp\CheckSymbolExists.c
+  cl /c /I"C:\dev\vcpkg\installed\x64-windows-static\include" /Zi /W3 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\"Debug\"" /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_c44c4.dir\Debug\\" /Fd"cmTC_c44c4.dir\Debug\vc143.pdb" /external:W3 /Gd /TC /errorReport:queue C:\Users\jcsqu\Dropbox\c++Dev\mapJump\build\CMakeFiles\CMakeTmp\CheckSymbolExists.c
   CheckSymbolExists.c
-LINK : warning LNK4098: defaultlib 'LIBCMTD' conflicts with use of other libs; use /NODEFAULTLIB:library [C:\Users\jcsqu\Dropbox\c++Dev\mapJump\build\CMakeFiles\CMakeTmp\cmTC_265a4.vcxproj]
-  cmTC_265a4.vcxproj -> C:\Users\jcsqu\Dropbox\c++Dev\mapJump\build\CMakeFiles\CMakeTmp\Debug\cmTC_265a4.exe
+LINK : warning LNK4098: defaultlib 'LIBCMTD' conflicts with use of other libs; use /NODEFAULTLIB:library [C:\Users\jcsqu\Dropbox\c++Dev\mapJump\build\CMakeFiles\CMakeTmp\cmTC_c44c4.vcxproj]
+  cmTC_c44c4.vcxproj -> C:\Users\jcsqu\Dropbox\c++Dev\mapJump\build\CMakeFiles\CMakeTmp\Debug\cmTC_c44c4.exe
 
 
 File C:/Users/jcsqu/Dropbox/c++Dev/mapJump/build/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
