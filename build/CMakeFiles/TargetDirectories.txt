@@ -1,3 +1,0 @@
-C:/Users/jcsqu/Dropbox/c++Dev/mapJump/build/CMakeFiles/map_jumper.dir
-C:/Users/jcsqu/Dropbox/c++Dev/mapJump/build/CMakeFiles/ALL_BUILD.dir
-C:/Users/jcsqu/Dropbox/c++Dev/mapJump/build/CMakeFiles/ZERO_CHECK.dir
