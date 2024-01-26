@@ -2,120 +2,72 @@
 #define GL_INSTANCE_H
 
 #include "gl_object.h"
+#include "game_assets.h"
+#include "collision.h"
 
-#include <vector>
-#include <memory>
-#include <optional>
-#include <functional>
+static constexpr int pos_attribute = 0;
+static constexpr int text_pos_attribute = 1;
 
-class gl_controlled
+struct shapes
 {
-public:
-    gl_controlled() = default;
-    gl_controlled(const gl_controlled &) = delete;
-    gl_controlled &operator=(const gl_controlled &) = delete;
-
-    virtual bool has_data() const = 0;
-    virtual void destroy_data() = 0;
-    virtual ~gl_controlled() = default;
-};
-
-template <typename T>
-class gl_controlled_data : public gl_controlled
-{
-public:
-    // data is not constructed until get is called
-    gl_controlled_data(std::function<T()> construct_fun) : data{std::nullopt}, constructor{std::move(construct_fun)} {}
-
-    gl_controlled_data(const gl_controlled_data &) = delete;
-    gl_controlled_data &operator=(const gl_controlled_data &) = delete;
-
-    // checks if has data, if not, constructs
-    T &get()
+	const vao &square_vao() const
     {
-        if (!data)
-            data.emplace(constructor());
-        return *data;
+        return m_buffers.square_vao;
+    }
+	const vao &triangle_vao() const
+    {
+        return m_buffers.triangle_vao;
     }
 
-    // checks if has data, if not, constructs
-    const T &get() const
-    {
-        if (!data)
-            data.emplace(constructor());
-        return *data;
-    }
-
-    void destroy_data() override { data.reset(); }
-    bool has_data() const override { return data.has_value(); }
 private:
-    mutable std::optional<T> data;
-    std::function<T()> constructor;
+    friend class gl_instance;
+
+	shapes();
+
+    struct buffers
+    {
+        buffers();
+
+        vao square_vao;
+        vao triangle_vao;
+
+        vbo square_vbo;
+        vbo triangle_vbo;
+        vbo triangle_text_pos_vbo;
+        vbo square_text_pos_vbo;
+    };
+
+    buffers m_buffers;
 };
 
 class gl_instance
 {
 public:
-    static gl_instance &instance()
-    {
-        static gl_instance i;
-        return i;
-    }
+    gl_instance(int width, int height, const char *title);
 
     gl_instance(const gl_instance &) = delete;
     gl_instance& operator=(const gl_instance &) = delete;
 
-    ~gl_instance()
-    {
-        destroy_window();
-        glfwTerminate();
-    }
-
-    void register_data(std::unique_ptr<gl_controlled> &&data)
-    {
-        m_controlled.push_back(std::move(data));
-    }
-
-    void create_window(int width, int height, const char *title)
-    {
-        if (m_window.handle)
-            destroy_window();
-        m_window = window(width, height, title);
-    }
-
-    void destroy_window()
-    {
-        for (auto &controlled : m_controlled)
-            controlled->destroy_data();
-        m_window.~window();
-    }
-
-    window &get_window()
-    {
-        return m_window;
-    }
+    const window &get_window() const { return m_window; }
+    const shapes &get_shapes() const { return m_shapes; }
+    const shader &get_texture_program() const { return m_texture_program; }
+    const game_assets &get_assets() const { return m_assets; }
 
 private:
-    window m_window;
-    std::vector<std::unique_ptr<gl_controlled>> m_controlled;
-
-    gl_instance()
+    struct glfw_instance
     {
-        glfwInit();
-    }
+        glfw_instance() { glfwInit(); }
+        ~glfw_instance() { glfwTerminate(); }
+    };
+
+    glfw_instance m_glfw;
+    window m_window;
+    shapes m_shapes;
+    shader m_texture_program;
+    game_assets m_assets;
 };
 
-template <typename T, typename... Args>
-T construct_fun(Args&&... args) { return T(std::forward<Args>(args)...); }
-
-// constructs gl_controlled_data and attaches to a gl_instance
-template <typename T, typename... Args>
-gl_controlled_data<T>& construct_and_attach(Args&&... args)
-{
-    auto ptr = std::make_unique<gl_controlled_data<T>>(std::bind(construct_fun<T, Args...>, args...));
-    auto &res = *ptr;
-    gl_instance::instance().register_data(std::move(ptr));
-    return res;
-}
+const polygon &square();
+const polygon &triangle();
 
 #endif

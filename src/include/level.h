@@ -6,6 +6,7 @@
 #include <filesystem>
 
 #include "collision.h"
+#include "gl_instance.h"
 
 enum class color : char
 {
@@ -38,7 +39,7 @@ struct block
 	block(glm::ivec2 grid_loc, type _block_type, color _block_color, direction dir);
 
 	// assumes ortho has been set and text has been set
-	void draw(color active_color) const;
+	void draw(color active_color, const gl_instance &gl) const;
 
 	direction dir() const;
 
@@ -56,7 +57,7 @@ struct level
 
 	void construct_default();
 	// assumes ortho has been set and text has been set
-	void draw(color active_color) const;
+	void draw(color active_color, const gl_instance &gl) const;
 
 	void read_level(const std::filesystem::path &filename);
 	void write_level(const std::filesystem::path &filename);

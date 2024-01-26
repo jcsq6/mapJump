@@ -1,93 +1,7 @@
 #include "game.h"
 
-const gl_controlled_data<shader> &texture_program()
-{
-	static constexpr const char *vertex_shader = 
-		"#version 330 core\n" // vertex shader
-		"layout (location = 0) in vec2 pos;"
-		"layout (location = 1) in vec2 tex_coord;"
-		"uniform mat4 ortho;"
-		"uniform mat4 model;"
-		"out vec2 texture_coord;"
-		"void main(){"
-		"	gl_Position = ortho * model * vec4(pos, 0, 1);"
-		"	texture_coord = tex_coord;"
-		"}";
-
-	static constexpr const char *fragment_shader = 
-		"#version 330 core\n" // fragment shader
-		"uniform sampler2D text;"
-		"in vec2 texture_coord;"
-		"out vec4 frag_color;"
-		"void main(){\n"
-		"	frag_color = texture(text, texture_coord);"
-		"}";
-
-	static auto &program = construct_and_attach<shader>(vertex_shader, fragment_shader);
-	return program;
-}
-
-static const glm::vec2 square_pts[] = {{-.5f, -.5f}, {.5f, -.5f}, {.5f, .5f}, {-.5f, .5f}};
-static const glm::vec2 triangle_pts[] = {{-.5f, -.5f}, {.5f, -.5f}, {0, .5f}};
-
-shapes::shape_buffers::shape_buffers()
-{
-	// setup square vao
-	glBindVertexArray(square_vao.id);
-
-	// buffer square data
-	glBindBuffer(GL_ARRAY_BUFFER, square_vbo.id);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(square_pts), square_pts, GL_STATIC_DRAW);
-
-	glVertexAttribPointer(pos_attribute, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), nullptr);
-	glEnableVertexAttribArray(pos_attribute);
-
-	// buffer square texture coord data
-	float square_text_pos_data[4 * 2] = {
-		0, 0,
-		1, 0,
-		1, 1,
-		0, 1,
-	};
-
-	glBindBuffer(GL_ARRAY_BUFFER, square_text_pos_vbo.id);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(square_text_pos_data), square_text_pos_data, GL_STATIC_DRAW);
-
-	glVertexAttribPointer(text_pos_attribute, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), nullptr);
-	glEnableVertexAttribArray(text_pos_attribute);
-
-	// buffer triangle data
-	glBindBuffer(GL_ARRAY_BUFFER, triangle_vbo.id);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(triangle_pts), triangle_pts, GL_STATIC_DRAW);
-
-	// setup triangle vao
-	glBindVertexArray(triangle_vao.id);
-	glVertexAttribPointer(pos_attribute, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), nullptr);
-	glEnableVertexAttribArray(pos_attribute);
-	
-	// buffer triangle texture coord data
-	float triangle_text_pos_data[3 * 2] = {
-		0, 0,
-		1, 0,
-		.5, 1,
-	};
-
-	glBindBuffer(GL_ARRAY_BUFFER, triangle_text_pos_vbo.id);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(triangle_text_pos_data), triangle_text_pos_data, GL_STATIC_DRAW);
-
-	glVertexAttribPointer(text_pos_attribute, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), nullptr);
-	glEnableVertexAttribArray(text_pos_attribute);
-
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glBindVertexArray(0);
-}
-
-shapes::shapes() : square{std::begin(square_pts), std::end(square_pts)}, triangle{std::begin(triangle_pts), std::end(triangle_pts)}, buffers{construct_and_attach<shapes::shape_buffers>()}
-{
-}
-
 game::player_data::player_data() :
-	poly{shapes::instance().square, {}, {game::player_size, game::player_size}, 0},
+	poly{square(), {}, {game::player_size, game::player_size}, 0},
 	vel{0, 0}, accel{0, game::gravity}, angle_vel{0}, angle{0},
 	on_ground{false}, stopping_left{}, stopping_right{}, x_dir{0},
 	on_wall{0}, do_jump{false},
@@ -108,11 +22,11 @@ game::game(int target_width, int target_height, std::vector<level> &&_levels) : 
 }
 
 // assumes ortho has been set and text has been set
-void game::draw() const
+void game::draw(const gl_instance &gl) const
 {
-	const auto &assets = game_assets::instance().get();
-	const auto &program = texture_program().get();
-	const auto &_shapes = shapes::instance();
+	const auto &assets = gl.get_assets();
+	const auto &program = gl.get_texture_program();
+	const auto &_shapes = gl.get_shapes();
 
 	// print background
 	auto m = glm::scale(glm::translate(glm::mat4(1.f), {target_scale / 2.f, 0}), {target_scale, 0});
@@ -123,7 +37,7 @@ void game::draw() const
 	glBindVertexArray(_shapes.square_vao().id);
 	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
 
-	levels[cur_level].draw(is_blue ? color::blue : color::red);
+	levels[cur_level].draw(is_blue ? color::blue : color::red, gl);
 
 	m = model(player.poly.offset, player.poly.scale, player.angle);
 	glUniformMatrix4fv(glGetUniformLocation(program.id, "model"), 1, GL_FALSE, &m[0][0]);

@@ -20,8 +20,7 @@
 #include "spawn_anchor.h"
 #include "end_anchor.h"
 
-
-#include "gl_instance.h"
+#include "gl_object.h"
 
 struct game_assets
 {
@@ -43,15 +42,9 @@ struct game_assets
 	texture red_spike_fade;
 	texture spawn_anchor;
 
-	static const gl_controlled_data<game_assets> &instance()
-	{
-		static auto &ga = construct_and_attach<game_assets>();
-		return ga;
-	}
-
 private:
-	template <typename T, typename... Args>
-	friend T construct_fun(Args&&... args);
+
+	friend class gl_instance;
 
 	game_assets() :
 		background(GL_RGBA, background_data, background_width, background_height, background_channels),

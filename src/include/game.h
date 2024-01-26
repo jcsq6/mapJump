@@ -10,46 +10,6 @@
 #include <chrono>
 #include <filesystem>
 
-static constexpr int pos_attribute = 0;
-static constexpr int text_pos_attribute = 1;
-const gl_controlled_data<shader> &texture_program();
-
-struct shapes
-{
-	polygon square;
-	polygon triangle;
-
-	const vao &square_vao() const { return buffers.get().square_vao; }
-	const vao &triangle_vao() const { return buffers.get().triangle_vao; }
-
-	static const shapes &instance()
-	{
-		static shapes s;
-		return s;
-	}
-
-private:
-	shapes();
-
-	struct shape_buffers
-	{	
-		template <typename T, typename... Args>
-		friend T construct_fun(Args&&... args);
-
-		shape_buffers();
-
-		vao square_vao;
-		vao triangle_vao;
-
-		vbo square_vbo;
-		vbo triangle_vbo;
-		vbo triangle_text_pos_vbo;
-		vbo square_text_pos_vbo;
-	};
-
-	gl_controlled_data<shape_buffers> &buffers;
-};
-
 class game
 {
 public:
@@ -62,7 +22,7 @@ public:
 	game(int target_width, int target_height, std::vector<level> &&_levels);
 
 	// assumes ortho has been set and text has been set
-	void draw() const;
+	void draw(const gl_instance &gl) const;
 	void update(float dt);
 
 	void move_right() { ++player.x_dir; }

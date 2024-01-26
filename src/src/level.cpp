@@ -10,16 +10,15 @@
 
 block::block(glm::ivec2 grid_loc, type _block_type, color _block_color, direction dir) : block_type{_block_type}, block_color{_block_color}
 {	
-	const auto &_shapes = shapes::instance();
 	if (_block_type == block::type::spike)
 	{
 		poly.scale = {game::block_size, game::block_size / 2};
-		poly.poly = &_shapes.triangle;
+		poly.poly = &triangle();
 	}
 	else
 	{
 		poly.scale = {game::block_size, game::block_size};
-		poly.poly = &_shapes.square;
+		poly.poly = &square();
 	}
 
 	if (_block_type == block::type::spawn_anchor || _block_type == block::type::end_anchor)
@@ -53,8 +52,10 @@ block::block(glm::ivec2 grid_loc, type _block_type, color _block_color, directio
 	poly.offset = glm::vec2(grid_loc) * (float)game::block_size + poly_trans;
 }
 
-void block::draw(color active_color) const
+void block::draw(color active_color, const gl_instance &gl) const
 {
+	const auto &assets = gl.get_assets();
+
 	bool on = active_color == color::no_color || active_color == block_color || block_color == color::neutral;
 		
 	const texture *text;
@@ -66,79 +67,79 @@ void block::draw(color active_color) const
 		{
 		case color::blue:
 			if (on)
-				text = &game_assets::instance().get().blue_jump;
+				text = &assets.blue_jump;
 			else
-				text = &game_assets::instance().get().blue_cube_fade;
+				text = &assets.blue_cube_fade;
 			break;
 		case color::red:
 			if (on)
-				text = &game_assets::instance().get().red_jump;
+				text = &assets.red_jump;
 			else
-				text = &game_assets::instance().get().red_cube_fade;
+				text = &assets.red_cube_fade;
 			break;
 		case color::neutral: // for readability
 		default: // if no_color is somehow here, just do neutral
-			text = &game_assets::instance().get().neutral_jump;
+			text = &assets.neutral_jump;
 			break;
 		}
-		buff = &shapes::instance().square_vao();
+		buff = &gl.get_shapes().square_vao();
 		break;
 	case block::type::spike:
 		switch (block_color)
 		{
 		case color::blue:
 			if (on)
-				text = &game_assets::instance().get().blue_spike;
+				text = &assets.blue_spike;
 			else
-				text = &game_assets::instance().get().blue_spike_fade;
+				text = &assets.blue_spike_fade;
 			break;
 		case color::red:
 			if (on)
-				text = &game_assets::instance().get().red_spike;
+				text = &assets.red_spike;
 			else
-				text = &game_assets::instance().get().red_spike_fade;
+				text = &assets.red_spike_fade;
 			break;
 		case color::neutral: // for readability
 		default: // if no_color is somehow here, just do neutral
-			text = &game_assets::instance().get().neutral_spike;
+			text = &assets.neutral_spike;
 			break;
 		}
-		buff = &shapes::instance().triangle_vao();
+		buff = &gl.get_shapes().triangle_vao();
 		break;
 	case block::type::normal:
 		switch (block_color)
 		{
 		case color::blue:
 			if (on)
-				text = &game_assets::instance().get().blue_cube;
+				text = &assets.blue_cube;
 			else
-				text = &game_assets::instance().get().blue_cube_fade;
+				text = &assets.blue_cube_fade;
 			break;
 		case color::red:
 			if (on)
-				text = &game_assets::instance().get().red_cube;
+				text = &assets.red_cube;
 			else
-				text = &game_assets::instance().get().red_cube_fade;
+				text = &assets.red_cube_fade;
 			break;
 		case color::neutral: // for readability
 		default: // if no_color is somehow here, just do neutral
-			text = &game_assets::instance().get().neutral_cube;
+			text = &assets.neutral_cube;
 			break;
 		}
-		buff = &shapes::instance().square_vao();
+		buff = &gl.get_shapes().square_vao();
 		break;
 	case block::type::spawn_anchor:
-		text = &game_assets::instance().get().spawn_anchor;
-		buff = &shapes::instance().square_vao();
+		text = &assets.spawn_anchor;
+		buff = &gl.get_shapes().square_vao();
 		break;
 	case block::type::end_anchor:
-		text = &game_assets::instance().get().end_anchor;
-		buff = &shapes::instance().square_vao();
+		text = &assets.end_anchor;
+		buff = &gl.get_shapes().square_vao();
 		break;
 	}
 
 	auto m = model(poly.offset, poly.scale, poly.angle);
-	glUniformMatrix4fv(glGetUniformLocation(texture_program().get().id, "model"), 1, GL_FALSE, &m[0][0]);
+	glUniformMatrix4fv(glGetUniformLocation(gl.get_texture_program().id, "model"), 1, GL_FALSE, &m[0][0]);
 
 	glBindTexture(GL_TEXTURE_2D, text->id);
 
@@ -160,8 +161,8 @@ direction block::dir() const
 
 void level::construct_default()
 {
-	start = {1, 1};
-	end = {game::map_width - 2, 1};
+	start = glm::ivec2{1, 1};
+	end = glm::ivec2{game::map_width - 2, 1};
 	blue_starts = true;
 
 	// top and bottom wall
@@ -179,10 +180,10 @@ void level::construct_default()
 	}
 }
 
-void level::draw(color active_color) const
+void level::draw(color active_color, const gl_instance &gl) const
 {
 	for (const auto &b : blocks)
-		b.draw(active_color);
+		b.draw(active_color, gl);
 }
 
 const std::string header_tag = "MapJumpLevelFile";

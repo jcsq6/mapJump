@@ -76,8 +76,7 @@ int main()
 		{
 			std::cout << "Select file...\n";
 
-			// path needs to be freed (I checked source)
-			char *path = tinyfd_openFileDialog("Select Level", cwd.c_str(), 1, &filter, "Level file", 0);
+			const char *path = tinyfd_openFileDialog("Select Level", cwd.c_str(), 1, &filter, "Level file", 0);
 			if (!path)
 			{
 				std::cout << "Cancelling...\n";
@@ -94,7 +93,6 @@ int main()
 				try
 				{
 					l.read_level(filename);
-					free(path);
 					break;
 				}
 				catch (const std::runtime_error &e)
@@ -103,7 +101,6 @@ int main()
 				}
 			}
 
-			free(path);
 			continue; // if it got here, it failed
 		}
 		case 3:
@@ -187,7 +184,6 @@ int main()
 			const char *tmp;
 			while (true)
 			{
-				// no need to free from saveFileDialog (I checked source)
 				tmp = tinyfd_saveFileDialog("Save Level", cwd.c_str(), 1, &filter, "Level File");
 				if (!tmp)
 				{
@@ -240,7 +236,7 @@ void mouse_pos_interp(glm::dvec2 window_min, glm::dvec2 window_max, glm::dvec2 t
 // loc is location on target screen
 auto find_block(level &l, glm::vec2 loc)
 {
-	polygon_view poly(shapes::instance().square, loc, {1, 1}, 0);
+	polygon_view poly(square(), loc, {1, 1}, 0);
 	auto it = l.blocks.begin();
 	for (; it < l.blocks.end(); ++it)
 		if (collides(poly, it->poly))
@@ -270,9 +266,9 @@ void run_level_editor(level &l, bool &has_spawn, bool &has_end)
 {
 	auto ortho = glm::ortho<float>(0, (float)target_width, 0, (float)target_height, -1, 1);
 
-	gl_instance::instance().create_window(target_width, target_height, "Level Editor");
-	window &win = gl_instance::instance().get_window();
-	const auto &program = texture_program().get();
+	gl_instance gl(target_width, target_height, "Level Editor");
+	const window &win = gl.get_window();
+	const auto &program = gl.get_texture_program();
 
 	glfwSetScrollCallback(win.handle, scroll_callback);
 	glfwSetWindowSizeCallback(win.handle, window_size_callback);
@@ -408,15 +404,13 @@ void run_level_editor(level &l, bool &has_spawn, bool &has_end)
 		glActiveTexture(GL_TEXTURE0);
 		glUniform1i(glGetUniformLocation(program.id, "text"), 0);
 
-		l.draw(color::no_color);
+		l.draw(color::no_color, gl);
 		if (has_spawn)
-			spawn_anchor.draw(color::no_color);
+			spawn_anchor.draw(color::no_color, gl);
 		if (has_end)
-			end_anchor.draw(color::no_color);
-		current_block.draw(color::no_color);
+			end_anchor.draw(color::no_color, gl);
+		current_block.draw(color::no_color, gl);
 
 		glfwSwapBuffers(win.handle);
 	}
-
-	gl_instance::instance().destroy_window();
 }

@@ -38,9 +38,9 @@ int run_game(std::vector<level> &&levels)
 	constexpr int target_fps = 60;
 	constexpr auto target_frame_duration = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::duration<double>(1.0 / target_fps));
 
-	gl_instance::instance().create_window(target_width, target_height, "Map Jumper");
-    window &win = gl_instance::instance().get_window();
-	const auto &program = texture_program().get();
+	gl_instance gl(target_width, target_height, "Map Jumper");
+    const window &win = gl.get_window();
+	const auto &program = gl.get_texture_program();
 
 	glfwSetFramebufferSizeCallback(win.handle, framebuffer_size_callback);
 
@@ -84,7 +84,7 @@ int run_game(std::vector<level> &&levels)
 
 		glActiveTexture(GL_TEXTURE0);
 		glUniform1i(glGetUniformLocation(program.id, "text"), 0);
-		my_game.draw();
+		my_game.draw(gl);
 
 		glfwSwapBuffers(win.handle);
 
@@ -96,8 +96,6 @@ int run_game(std::vector<level> &&levels)
 			while (std::chrono::steady_clock::now() - start < sleep_time);
 		}
 	}
-
-	gl_instance::instance().destroy_window();
 
     return 0;
 }
