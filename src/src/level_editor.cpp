@@ -272,7 +272,7 @@ void run_level_editor(level &l, bool &has_spawn, bool &has_end)
 
 	glfwSetScrollCallback(win.handle, scroll_callback);
 	glfwSetWindowSizeCallback(win.handle, window_size_callback);
-	glfwSetFramebufferSizeCallback(win.handle, framebuffer_size_callback);
+	glfwSetFramebufferSizeCallback(win.handle, gl_instance::framebuffer_size_callback);
 
 	glfwGetWindowSize(win.handle, &window_size.x, &window_size.y);
 
@@ -285,6 +285,32 @@ void run_level_editor(level &l, bool &has_spawn, bool &has_end)
 
 	block spawn_anchor(l.start, block::type::spawn_anchor, {}, {});
 	block end_anchor(l.end, block::type::end_anchor, {}, {});
+
+	block current_block;
+
+	auto draw = [&]()
+	{
+		glClearColor(1, 1, 1, 1);
+		glClear(GL_COLOR_BUFFER_BIT);
+
+		// set uniforms
+		glUseProgram(program.id);
+		glUniformMatrix4fv(glGetUniformLocation(program.id, "ortho"), 1, GL_FALSE, &ortho[0][0]);
+
+		glActiveTexture(GL_TEXTURE0);
+		glUniform1i(glGetUniformLocation(program.id, "text"), 0);
+
+		l.draw(color::no_color, gl);
+		if (has_spawn)
+			spawn_anchor.draw(color::no_color, gl);
+		if (has_end)
+			end_anchor.draw(color::no_color, gl);
+		current_block.draw(color::no_color, gl);
+
+		glfwSwapBuffers(win.handle);
+	};
+
+	gl.register_draw_function(draw);
 
 	key left_click;
 	key right_click;
@@ -314,13 +340,15 @@ void run_level_editor(level &l, bool &has_spawn, bool &has_end)
 		glm::dvec2 mouse_pos;
 		glfwGetCursorPos(win.handle, &mouse_pos.x, &mouse_pos.y);
 
-		mouse_pos_interp({0, window_size.y}, {window_size.x, 0}, {0, 0}, {target_width, target_height}, mouse_pos);
+		glm::ivec2 min = gl.viewport_min();
+		glm::ivec2 size = gl.viewport_size();
+		mouse_pos_interp({min.x, min.y + size.y}, {min.x + size.x, min.y}, {0, 0}, {target_width, target_height}, mouse_pos);
 
 		glm::ivec2 grid_pos{mouse_pos / (double)game::block_size};
 
-		block current_block(grid_pos, current_type, current_color, current_dir);
+		current_block = block(grid_pos, current_type, current_color, current_dir);
 
-		if (left_click.is_initial_press())
+		if (left_click.is_initial_press() && grid_pos.x >= 0 && grid_pos.x < game::map_width && grid_pos.y >= 0 && grid_pos.y < game::map_height)
 		{
 			if (grid_pos == l.start)
 				has_spawn = false;
@@ -328,9 +356,14 @@ void run_level_editor(level &l, bool &has_spawn, bool &has_end)
 				has_end = false;
 			else
 			{
-				auto it = find_block(l, current_block.poly.offset);
-				if (it != l.blocks.end())
-					l.blocks.erase(it);
+				while (true)
+				{
+					auto it = find_block(l, current_block.poly.offset);
+					if (it != l.blocks.end())
+						l.blocks.erase(it);
+					else
+						break;
+				}
 			}
 
 			if (current_type == block::type::spawn_anchor)
@@ -355,8 +388,17 @@ void run_level_editor(level &l, bool &has_spawn, bool &has_end)
 				has_spawn = false;
 			else if (grid_pos == l.end)
 				has_end = false;
-			else if (auto it = find_block(l, current_block.poly.offset); it != l.blocks.end())
-				l.blocks.erase(it);
+			else
+			{
+				while (true)
+				{
+					auto it = find_block(l, current_block.poly.offset);
+					if (it != l.blocks.end())
+						l.blocks.erase(it);
+					else
+						break;
+				}
+			}
 		}
 		
 		if (pick_block.is_initial_press())
@@ -394,23 +436,6 @@ void run_level_editor(level &l, bool &has_spawn, bool &has_end)
 		if (angle_left.is_initial_press())
 			current_dir = static_cast<direction>((static_cast<char>(current_dir) + 3) % 4);
 
-		glClearColor(1, 1, 1, 1);
-		glClear(GL_COLOR_BUFFER_BIT);
-
-		// set uniforms
-		glUseProgram(program.id);
-		glUniformMatrix4fv(glGetUniformLocation(program.id, "ortho"), 1, GL_FALSE, &ortho[0][0]);
-
-		glActiveTexture(GL_TEXTURE0);
-		glUniform1i(glGetUniformLocation(program.id, "text"), 0);
-
-		l.draw(color::no_color, gl);
-		if (has_spawn)
-			spawn_anchor.draw(color::no_color, gl);
-		if (has_end)
-			end_anchor.draw(color::no_color, gl);
-		current_block.draw(color::no_color, gl);
-
-		glfwSwapBuffers(win.handle);
+		draw();
 	}
 }

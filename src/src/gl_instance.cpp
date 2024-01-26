@@ -80,8 +80,47 @@ static constexpr const char *fragment_shader =
 	"	frag_color = texture(text, texture_coord);"
 	"}";
 
-gl_instance::gl_instance(int width, int height, const char *title) : m_glfw(), m_window(width, height, title), m_shapes(), m_texture_program(vertex_shader, fragment_shader), m_assets()
+gl_instance::gl_instance(int width, int height, const char *title) : m_glfw(), m_window(width, height, title), m_shapes(), m_texture_program(vertex_shader, fragment_shader), m_assets(), m_min{}, m_size{width, height}
 {
+	glfwSetWindowUserPointer(m_window.handle, this);
+}
+
+void gl_instance::framebuffer_size_callback(GLFWwindow* window, int width, int height)
+{
+	int leftover_width = width % aspect_ratio_x;
+	int leftover_height = height % aspect_ratio_y;
+
+	int new_width = width - leftover_width;
+	int new_height = height - leftover_height;
+
+	int height_from_keep_x = new_width * aspect_ratio_y / aspect_ratio_x;
+	int width_from_keep_y = height * aspect_ratio_x / aspect_ratio_y;
+
+	int diff_x = new_width - width_from_keep_y;
+	int diff_y = new_height - height_from_keep_x;
+
+	// keep height
+	if (diff_y < diff_x)
+	{
+		new_width = width_from_keep_y;
+		leftover_width = width - new_width;
+	}
+	// keep width
+	else
+	{
+		new_height = height_from_keep_x;
+		leftover_height = height - new_height;
+	}
+
+    glViewport(leftover_width / 2, leftover_height / 2, new_width, new_height);
+
+	gl_instance *owner = static_cast<gl_instance *>(glfwGetWindowUserPointer(window));
+	if (owner->m_draw)
+		owner->m_draw();
+	owner->m_min.x = leftover_width / 2;
+	owner->m_min.y = leftover_height / 2;
+	owner->m_size.x = new_width;
+	owner->m_size.y = new_height;
 }
 
 const polygon &square()

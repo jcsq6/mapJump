@@ -35,6 +35,8 @@ struct block
 		end_anchor,
 	};
 
+	block() = default;
+
 	// dir is direction the block is facing
 	block(glm::ivec2 grid_loc, type _block_type, color _block_color, direction dir);
 

@@ -1,36 +1,6 @@
 #include "run_game.h"
 #include "utility.h"
 
-void framebuffer_size_callback(GLFWwindow* window, int width, int height)
-{
-	int leftover_width = width % aspect_ratio_x;
-	int leftover_height = height % aspect_ratio_y;
-
-	int new_width = width - leftover_width;
-	int new_height = height - leftover_height;
-
-	int height_from_keep_x = new_width * aspect_ratio_y / aspect_ratio_x;
-	int width_from_keep_y = height * aspect_ratio_x / aspect_ratio_y;
-
-	int diff_x = new_width - width_from_keep_y;
-	int diff_y = new_height - height_from_keep_x;
-
-	// keep height
-	if (diff_y < diff_x)
-	{
-		new_width = width_from_keep_y;
-		leftover_width = width - new_width;
-	}
-	// keep width
-	else
-	{
-		new_height = height_from_keep_x;
-		leftover_height = height - new_height;
-	}
-
-    glViewport(leftover_width / 2, leftover_height / 2, new_width, new_height);
-}
-
 int run_game(std::vector<level> &&levels)
 {
 	auto ortho = glm::ortho<float>(0, (float)target_width, 0, (float)target_height, -1, 1);
@@ -42,12 +12,30 @@ int run_game(std::vector<level> &&levels)
     const window &win = gl.get_window();
 	const auto &program = gl.get_texture_program();
 
-	glfwSetFramebufferSizeCallback(win.handle, framebuffer_size_callback);
+	glfwSetFramebufferSizeCallback(win.handle, gl_instance::framebuffer_size_callback);
 
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	game my_game(target_width, target_height, std::move(levels));
+
+	auto draw = [&]()
+	{
+		glClearColor(1, 1, 1, 1);
+		glClear(GL_COLOR_BUFFER_BIT);
+
+		// set uniforms
+		glUseProgram(program.id);
+		glUniformMatrix4fv(glGetUniformLocation(program.id, "ortho"), 1, GL_FALSE, &ortho[0][0]);
+
+		glActiveTexture(GL_TEXTURE0);
+		glUniform1i(glGetUniformLocation(program.id, "text"), 0);
+		my_game.draw(gl);
+
+		glfwSwapBuffers(win.handle);
+	};
+
+	gl.register_draw_function(draw);
 
 	key space;
     key left_click;
@@ -75,18 +63,7 @@ int run_game(std::vector<level> &&levels)
 
 		my_game.update(1.f / target_fps);
 
-		glClearColor(1, 1, 1, 1);
-		glClear(GL_COLOR_BUFFER_BIT);
-
-		// set uniforms
-		glUseProgram(program.id);
-		glUniformMatrix4fv(glGetUniformLocation(program.id, "ortho"), 1, GL_FALSE, &ortho[0][0]);
-
-		glActiveTexture(GL_TEXTURE0);
-		glUniform1i(glGetUniformLocation(program.id, "text"), 0);
-		my_game.draw(gl);
-
-		glfwSwapBuffers(win.handle);
+		draw();
 
 		auto frame_duration = std::chrono::steady_clock::now() - frame_begin;
 		if (frame_duration < target_frame_duration)
