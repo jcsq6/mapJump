@@ -1,6 +1,36 @@
 #include "run_game.h"
 #include "utility.h"
 
+void framebuffer_size_callback(GLFWwindow* window, int width, int height)
+{
+	int leftover_width = width % aspect_ratio_x;
+	int leftover_height = height % aspect_ratio_y;
+
+	int new_width = width - leftover_width;
+	int new_height = height - leftover_height;
+
+	int height_from_keep_x = new_width * aspect_ratio_y / aspect_ratio_x;
+	int width_from_keep_y = height * aspect_ratio_x / aspect_ratio_y;
+
+	int diff_x = new_width - width_from_keep_y;
+	int diff_y = new_height - height_from_keep_x;
+
+	// keep height
+	if (diff_y < diff_x)
+	{
+		new_width = width_from_keep_y;
+		leftover_width = width - new_width;
+	}
+	// keep width
+	else
+	{
+		new_height = height_from_keep_x;
+		leftover_height = height - new_height;
+	}
+
+    glViewport(leftover_width / 2, leftover_height / 2, new_width, new_height);
+}
+
 int run_game(std::vector<level> &&levels)
 {
 	auto ortho = glm::ortho<float>(0, (float)target_width, 0, (float)target_height, -1, 1);
@@ -8,9 +38,11 @@ int run_game(std::vector<level> &&levels)
 	constexpr int target_fps = 60;
 	constexpr auto target_frame_duration = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::duration<double>(1.0 / target_fps));
 
-	gl_instance::instance().create_window(window_width, window_height, "Map Jumper");
+	gl_instance::instance().create_window(target_width, target_height, "Map Jumper");
     window &win = gl_instance::instance().get_window();
 	const auto &program = texture_program().get();
+
+	glfwSetFramebufferSizeCallback(win.handle, framebuffer_size_callback);
 
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);

@@ -8,25 +8,7 @@
 #include <limits>
 #include <thread>
 
-#include <nfd.h>
-
-void mouse_pos_interp(glm::dvec2 window_min, glm::dvec2 window_max, glm::dvec2 target_min, glm::dvec2 target_max, glm::dvec2 &mouse_pos)
-{
-	mouse_pos.x = (target_max.x - target_min.x) / (window_max.x - window_min.x) * (mouse_pos.x - window_min.x) + target_min.x;
-	double y = window_max.y - mouse_pos.y;
-	mouse_pos.y = (target_max.y - target_min.y) / (window_max.y - window_min.y) * (y - window_min.y) + target_min.y;
-}
-
-// loc is location on target screen
-auto find_block(level &l, glm::vec2 loc)
-{
-	polygon_view poly(shapes::instance().square, loc, {1, 1}, 0);
-	auto it = l.blocks.begin();
-	for (; it < l.blocks.end(); ++it)
-		if (collides(poly, it->poly))
-			return it;
-	return it;
-}
+#include <tinyfiledialogs.h>
 
 bool yes_no(const std::string &prompt)
 {
@@ -55,6 +37,8 @@ void run_level_editor(level &l, bool &has_spawn, bool &has_end);
 int main()
 {
 	std::string cwd = std::filesystem::current_path().string();
+	cwd += '/';
+	const char *const filter = "*.lvl";
 	while (true)
 	{
 		std::cout << "Options:\n"
@@ -92,11 +76,14 @@ int main()
 		{
 			std::cout << "Select file...\n";
 
-			nfdchar_t *tmp = nullptr;
-			nfdresult_t result = NFD_OpenDialog("lvl", cwd.c_str(), &tmp);
-			if (result != NFD_OKAY)
+			// path needs to be freed (I checked source)
+			char *path = tinyfd_openFileDialog("Select Level", cwd.c_str(), 1, &filter, "Level file", 0);
+			if (!path)
+			{
+				std::cout << "Cancelling...\n";
 				continue;
-			filename = tmp;
+			}
+			filename = path;
 
 			if (!std::filesystem::exists(filename))
 				std::cout << "File not found.\n";
@@ -107,14 +94,17 @@ int main()
 				try
 				{
 					l.read_level(filename);
+					free(path);
 					break;
 				}
 				catch (const std::runtime_error &e)
 				{
-					std::cout << e.what() << '\n';
+					std::cout << "Failed to read level: " << e.what() << '\n';
 				}
 			}
-			break;
+
+			free(path);
+			continue; // if it got here, it failed
 		}
 		case 3:
 			std::cout << "\nLevel Editor Instructions\n"
@@ -194,12 +184,14 @@ int main()
 		// if they created a level
 		if (option == 1)
 		{
-			nfdchar_t *tmp = nullptr;
+			const char *tmp;
 			while (true)
 			{
-				nfdresult_t result = NFD_SaveDialog("lvl", cwd.c_str(), &tmp);
-				if (result != NFD_OKAY)
+				// no need to free from saveFileDialog (I checked source)
+				tmp = tinyfd_saveFileDialog("Save Level", cwd.c_str(), 1, &filter, "Level File");
+				if (!tmp)
 				{
+					std::cout << "Failed...\n";
 					if (!yes_no("Try again"))
 					{
 						save = false;
@@ -219,17 +211,17 @@ int main()
 				try
 				{
 					l.write_level(filename);
-					std::cout << "Successfully saved level " << filename << "\n";
+					std::cout << "Successfully saved level " << filename.filename() << "\n";
 					break;
 				}
 				catch(const std::exception& e)
 				{
-					std::cout << "Failed to save level " << filename << ": " << e.what() << '\n';
+					std::cout << "Failed to save level " << filename.filename() << ": " << e.what() << '\n';
 					if (yes_no("Try again"))
 					{
 						using namespace std::chrono_literals;
-						std::cout << "Waiting 10 seconds...\n";
-						std::this_thread::sleep_for(10s);
+						std::cout << "Waiting 5 seconds...\n";
+						std::this_thread::sleep_for(5s);
 						continue;
 					}
 					else
@@ -237,6 +229,23 @@ int main()
 				}
 			}
 	}
+}
+
+void mouse_pos_interp(glm::dvec2 window_min, glm::dvec2 window_max, glm::dvec2 target_min, glm::dvec2 target_max, glm::dvec2 &mouse_pos)
+{
+	mouse_pos.x = (target_max.x - target_min.x) / (window_max.x - window_min.x) * (mouse_pos.x - window_min.x) + target_min.x;
+	mouse_pos.y = (target_max.y - target_min.y) / (window_max.y - window_min.y) * (mouse_pos.y - window_min.y) + target_min.y;
+}
+
+// loc is location on target screen
+auto find_block(level &l, glm::vec2 loc)
+{
+	polygon_view poly(shapes::instance().square, loc, {1, 1}, 0);
+	auto it = l.blocks.begin();
+	for (; it < l.blocks.end(); ++it)
+		if (collides(poly, it->poly))
+			return it;
+	return it;
 }
 
 block::type current_type;
@@ -249,15 +258,27 @@ void scroll_callback(GLFWwindow *window, double xoffset, double yoffset)
 	current_type = static_cast<block::type>(next);
 }
 
+glm::ivec2 window_size;
+
+void window_size_callback(GLFWwindow* window, int width, int height)
+{
+	window_size.x = width;
+	window_size.y = height;
+}
+
 void run_level_editor(level &l, bool &has_spawn, bool &has_end)
 {
 	auto ortho = glm::ortho<float>(0, (float)target_width, 0, (float)target_height, -1, 1);
 
-	gl_instance::instance().create_window(window_width, window_height, "Level Editor");
+	gl_instance::instance().create_window(target_width, target_height, "Level Editor");
 	window &win = gl_instance::instance().get_window();
 	const auto &program = texture_program().get();
 
 	glfwSetScrollCallback(win.handle, scroll_callback);
+	glfwSetWindowSizeCallback(win.handle, window_size_callback);
+	glfwSetFramebufferSizeCallback(win.handle, framebuffer_size_callback);
+
+	glfwGetWindowSize(win.handle, &window_size.x, &window_size.y);
 
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -296,7 +317,8 @@ void run_level_editor(level &l, bool &has_spawn, bool &has_end)
 
 		glm::dvec2 mouse_pos;
 		glfwGetCursorPos(win.handle, &mouse_pos.x, &mouse_pos.y);
-		mouse_pos_interp({0, 0}, {window_width, window_height}, {0, 0}, {target_width, target_height}, mouse_pos);
+
+		mouse_pos_interp({0, window_size.y}, {window_size.x, 0}, {0, 0}, {target_width, target_height}, mouse_pos);
 
 		glm::ivec2 grid_pos{mouse_pos / (double)game::block_size};
 

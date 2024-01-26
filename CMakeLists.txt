@@ -19,7 +19,7 @@ find_package(glew REQUIRED)
 find_package(glm CONFIG REQUIRED)
 find_package(Freetype REQUIRED)
 
-add_subdirectory(dep/nativefiledialog)
+add_subdirectory(dep/tinyfiledialogs)
 
 target_link_libraries(map_jumper PUBLIC OpenGL::GL GLEW::GLEW glfw Freetype::Freetype glm::glm)
-target_link_libraries(level_editor PUBLIC OpenGL::GL GLEW::GLEW glfw Freetype::Freetype glm::glm nfd)
+target_link_libraries(level_editor PUBLIC OpenGL::GL GLEW::GLEW glfw Freetype::Freetype glm::glm tinyfiledialogs)
