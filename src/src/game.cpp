@@ -1,6 +1,4 @@
 #include "game.h"
-#include <map>
-#include <regex>
 
 const gl_controlled_data<shader> &texture_program()
 {
@@ -29,14 +27,17 @@ const gl_controlled_data<shader> &texture_program()
 	return program;
 }
 
-shapes::shapes() : square{{glm::vec2{-.5f, -.5f}, {.5f, -.5f}, {.5f, .5f}, {-.5f, .5f}}}, triangle{{glm::vec2{-.5f, -.5f}, {.5f, -.5f}, {0, .5f}}}
+static const glm::vec2 square_pts[] = {{-.5f, -.5f}, {.5f, -.5f}, {.5f, .5f}, {-.5f, .5f}};
+static const glm::vec2 triangle_pts[] = {{-.5f, -.5f}, {.5f, -.5f}, {0, .5f}};
+
+shapes::shape_buffers::shape_buffers()
 {
 	// setup square vao
 	glBindVertexArray(square_vao.id);
 
 	// buffer square data
 	glBindBuffer(GL_ARRAY_BUFFER, square_vbo.id);
-	glBufferData(GL_ARRAY_BUFFER, 4 * sizeof(glm::vec2), &(*square.begin()), GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(square_pts), square_pts, GL_STATIC_DRAW);
 
 	glVertexAttribPointer(pos_attribute, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), nullptr);
 	glEnableVertexAttribArray(pos_attribute);
@@ -57,7 +58,7 @@ shapes::shapes() : square{{glm::vec2{-.5f, -.5f}, {.5f, -.5f}, {.5f, .5f}, {-.5f
 
 	// buffer triangle data
 	glBindBuffer(GL_ARRAY_BUFFER, triangle_vbo.id);
-	glBufferData(GL_ARRAY_BUFFER, 3 * sizeof(glm::vec2), &(*triangle.begin()), GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(triangle_pts), triangle_pts, GL_STATIC_DRAW);
 
 	// setup triangle vao
 	glBindVertexArray(triangle_vao.id);
@@ -81,8 +82,12 @@ shapes::shapes() : square{{glm::vec2{-.5f, -.5f}, {.5f, -.5f}, {.5f, .5f}, {-.5f
 	glBindVertexArray(0);
 }
 
+shapes::shapes() : square{std::begin(square_pts), std::end(square_pts)}, triangle{std::begin(triangle_pts), std::end(triangle_pts)}, buffers{construct_and_attach<shapes::shape_buffers>()}
+{
+}
+
 game::player_data::player_data() :
-	poly{shapes::instance().get().square, {}, {game::player_size, game::player_size}, 0},
+	poly{shapes::instance().square, {}, {game::player_size, game::player_size}, 0},
 	vel{0, 0}, accel{0, game::gravity}, angle_vel{0}, angle{0},
 	on_ground{false}, stopping_left{}, stopping_right{}, x_dir{0},
 	on_wall{0}, do_jump{false},
@@ -90,82 +95,9 @@ game::player_data::player_data() :
 {
 }
 
-game::game(int target_width, int target_height, const std::filesystem::path &level_location) : target_scale{target_width, target_height}
+game::game(int target_width, int target_height, std::vector<level> &&_levels) : target_scale{target_width, target_height}, levels{std::move(_levels)}
 {
-	auto status = std::filesystem::status(level_location);
-	if (status.type() == std::filesystem::file_type::regular)
-	{
-		level new_level;
-		try
-		{
-			new_level.read_level(level_location);
-		}
-		catch(const std::exception& e)
-		{
-			std::cerr << e.what() << '\n';
-			new_level.construct_default();
-		}
-		levels.push_back(std::move(new_level));
-	}
-	else if (status.type() == std::filesystem::file_type::directory)
-	{
-		static std::regex name_pattern("\\S*_(\\d*).lvl");
-		std::map<unsigned int, level> level_map;
-		for (const auto &entry : std::filesystem::directory_iterator{level_location})
-		{
-			if (!entry.is_regular_file())
-				continue;
-
-			auto path = entry.path();
-			auto path_str = path.string();
-
-			unsigned int index;
-			std::smatch match;
-			if (std::regex_match(path_str, match, name_pattern))
-			{
-				try
-				{
-					index = std::stoul(match[1].str());
-				}
-				catch(...)
-				{
-					std::cerr << '"' << path << "\": Incorrect file name format\n";
-					continue;
-				}
-				
-			}
-			else
-			{
-				std::cerr << '"' << path << "\": Incorrect file name format\n";
-			}
-
-			level new_level;
-			try
-			{
-				new_level.read_level(path);
-			}
-			catch(const std::exception& e)
-			{
-				std::cerr << '"' << path << "\": " << e.what() << '\n';
-				continue;
-			}
-
-			level_map.emplace(index, std::move(new_level));
-		}
-
-		if (level_map.empty())
-		{
-			level new_level;
-			new_level.construct_default();
-			levels.push_back(std::move(new_level));
-		}
-		else
-		{
-			for (auto &lvl : level_map)
-				levels.push_back(std::move(lvl.second));
-		}
-	}
-	else
+	if (levels.empty())
 	{
 		level new_level;
 		new_level.construct_default();
@@ -180,7 +112,7 @@ void game::draw() const
 {
 	const auto &assets = game_assets::instance().get();
 	const auto &program = texture_program().get();
-	const auto &_shapes = shapes::instance().get();
+	const auto &_shapes = shapes::instance();
 
 	// print background
 	auto m = glm::scale(glm::translate(glm::mat4(1.f), {target_scale / 2.f, 0}), {target_scale, 0});
@@ -188,7 +120,7 @@ void game::draw() const
 
 	glBindTexture(GL_TEXTURE_2D, assets.background.id);
 
-	glBindVertexArray(_shapes.square_vao.id);
+	glBindVertexArray(_shapes.square_vao().id);
 	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
 
 	levels[cur_level].draw(is_blue ? color::blue : color::red);
@@ -198,7 +130,7 @@ void game::draw() const
 
 	glBindTexture(GL_TEXTURE_2D, assets.player_text.id);
 
-	glBindVertexArray(_shapes.square_vao.id);
+	glBindVertexArray(_shapes.square_vao().id);
 	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
 }
 
@@ -384,7 +316,7 @@ void game::update(float dt)
 	if (!was_on_ground && player.on_ground)
 		player.accel.x *= air_accel_divisor;
 	
-	// if it's gone one full rotation
+	// if it's gone 90 degrees
 	if (std::abs(player.angle) >= glm::pi<float>() / 2)
 	{
 		if (player.on_ground)
@@ -441,7 +373,7 @@ void game::load_level(std::size_t level)
 {
 	auto &l = levels[level];
 	cur_level = level;
-	player.poly.offset = glm::vec2(l.start) * glm::vec2(block_size, block_size);
+	player.poly.offset = (glm::vec2(l.start) + glm::vec2(.5, .5)) * glm::vec2(block_size, block_size);
 	is_blue = l.blue_starts;
 	collisions.reserve(l.blocks.size());
 }
@@ -457,6 +389,6 @@ void game::reset_level()
 	player.on_ground = false;
 	player.stopping_left = player.stopping_right = false;
 	player.x_dir = 0;
-	player.poly.offset = glm::vec2(l.start) * glm::vec2(block_size, block_size);
+	player.poly.offset = (glm::vec2(l.start) + glm::vec2(.5, .5)) * glm::vec2(block_size, block_size);
 	player.angle = 0;
 }

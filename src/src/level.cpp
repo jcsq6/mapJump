@@ -4,9 +4,13 @@
 #include <fstream>
 #include <stdexcept>
 
+#include <regex>
+
+#include <map>
+
 block::block(glm::ivec2 grid_loc, type _block_type, color _block_color, direction dir) : block_type{_block_type}, block_color{_block_color}
 {	
-	const auto &_shapes = shapes::instance().get();
+	const auto &_shapes = shapes::instance();
 	if (_block_type == block::type::spike)
 	{
 		poly.scale = {game::block_size, game::block_size / 2};
@@ -16,6 +20,12 @@ block::block(glm::ivec2 grid_loc, type _block_type, color _block_color, directio
 	{
 		poly.scale = {game::block_size, game::block_size};
 		poly.poly = &_shapes.square;
+	}
+
+	if (_block_type == block::type::spawn_anchor || _block_type == block::type::end_anchor)
+	{
+		block_color = color::no_color;
+		dir = direction::up;
 	}
 
 	glm::vec2 poly_trans;
@@ -71,7 +81,7 @@ void block::draw(color active_color) const
 			text = &game_assets::instance().get().neutral_jump;
 			break;
 		}
-		buff = &shapes::instance().get().square_vao;
+		buff = &shapes::instance().square_vao();
 		break;
 	case block::type::spike:
 		switch (block_color)
@@ -93,7 +103,7 @@ void block::draw(color active_color) const
 			text = &game_assets::instance().get().neutral_spike;
 			break;
 		}
-		buff = &shapes::instance().get().triangle_vao;
+		buff = &shapes::instance().triangle_vao();
 		break;
 	case block::type::normal:
 		switch (block_color)
@@ -115,7 +125,15 @@ void block::draw(color active_color) const
 			text = &game_assets::instance().get().neutral_cube;
 			break;
 		}
-		buff = &shapes::instance().get().square_vao;
+		buff = &shapes::instance().square_vao();
+		break;
+	case block::type::spawn_anchor:
+		text = &game_assets::instance().get().spawn_anchor;
+		buff = &shapes::instance().square_vao();
+		break;
+	case block::type::end_anchor:
+		text = &game_assets::instance().get().end_anchor;
+		buff = &shapes::instance().square_vao();
 		break;
 	}
 
@@ -143,7 +161,7 @@ direction block::dir() const
 void level::construct_default()
 {
 	start = {1, 1};
-	end = {game::map_width - 1, 1};
+	end = {game::map_width - 2, 1};
 	blue_starts = true;
 
 	// top and bottom wall
@@ -226,6 +244,9 @@ void level::read_level(const std::filesystem::path &filename)
 		if (!in.read(reinterpret_cast<char *>(&temp), sizeof(temp)))
 			throw std::runtime_error("Invalid file");
 
+		if (temp == start || temp == end)
+			continue;
+
 		blocks.emplace_back(temp, block_type, block_color, dir);
 	}
 }
@@ -267,4 +288,88 @@ void level::write_level(const std::filesystem::path &filename)
 		temp = b.poly.offset / glm::vec2(game::block_size, game::block_size);
 		out.write(reinterpret_cast<const char *>(&temp), sizeof(temp));
 	}
+}
+
+std::vector<level> get_levels(const std::filesystem::path &location)
+{
+	std::vector<level> levels;
+
+	auto status = std::filesystem::status(location);
+	// read singular level
+	if (status.type() == std::filesystem::file_type::regular)
+	{
+		level new_level;
+		try
+		{
+			new_level.read_level(location);
+		}
+		catch(const std::exception& e)
+		{
+			std::cout << "Couldn't read level " << location << ": " << e.what() << '\n';
+			new_level.construct_default();
+		}
+		levels.push_back(std::move(new_level));
+	}
+	// read multiple levels in order _n
+	else if (status.type() == std::filesystem::file_type::directory)
+	{
+		static std::regex name_pattern("\\S*_(\\d*).lvl");
+		std::map<unsigned int, level> level_map;
+		for (const auto &entry : std::filesystem::directory_iterator{location})
+		{
+			if (!entry.is_regular_file())
+				continue;
+
+			auto path = entry.path();
+			auto path_str = path.string();
+
+			unsigned int index;
+			if (std::smatch match; std::regex_match(path_str, match, name_pattern))
+			{
+				try
+				{
+					index = std::stoul(match[1].str());
+				}
+				catch(...)
+				{
+					std::cout << '"' << path << "\": Incorrect file name format\n";
+					continue;
+				}
+				
+			}
+			else
+			{
+				std::cout << '"' << path << "\": Incorrect file name format\n";
+				continue;
+			}
+
+			level new_level;
+			try
+			{
+				new_level.read_level(path);
+			}
+			catch(const std::exception& e)
+			{
+				std::cout << "Couldn't read level " << location << ": " << e.what() << '\n';
+				continue;
+			}
+
+			level_map.emplace(index, std::move(new_level));
+		}
+
+		if (level_map.empty())
+		{
+			level new_level;
+			new_level.construct_default();
+			levels.push_back(std::move(new_level));
+		}
+		else
+		{
+			levels.reserve(level_map.size());
+			for (auto &lvl : level_map)
+				levels.push_back(std::move(lvl.second));
+		}
+	}
+
+	return levels;
 }

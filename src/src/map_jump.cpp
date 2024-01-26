@@ -6,5 +6,5 @@
 
 int main()
 {
-	return run_game("levels");
+	return run_game(get_levels("levels"));
 }

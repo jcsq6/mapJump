@@ -1,7 +1,7 @@
 #include "run_game.h"
 #include "utility.h"
 
-int run_game(const std::filesystem::path &location)
+int run_game(std::vector<level> &&levels)
 {
 	auto ortho = glm::ortho<float>(0, (float)target_width, 0, (float)target_height, -1, 1);
 
@@ -15,7 +15,7 @@ int run_game(const std::filesystem::path &location)
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	game my_game(target_width, target_height, location);
+	game my_game(target_width, target_height, std::move(levels));
 
 	key space;
     key left_click;

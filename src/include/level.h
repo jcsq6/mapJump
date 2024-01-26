@@ -30,6 +30,8 @@ struct block
 		normal,
 		jump,
 		spike,
+		spawn_anchor,
+		end_anchor,
 	};
 
 	// dir is direction the block is facing
@@ -59,4 +61,8 @@ struct level
 	void read_level(const std::filesystem::path &filename);
 	void write_level(const std::filesystem::path &filename);
 };
+
+// pass in directory to level_location to load multiple levels, or a single file to load one level
+// the levels in a directory must be of the format "levelName_*levelNumber*.lvl". level numbers are sorted by *levelNumber*
+std::vector<level> get_levels(const std::filesystem::path &location);
 #endif

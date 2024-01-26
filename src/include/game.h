@@ -18,25 +18,36 @@ struct shapes
 {
 	polygon square;
 	polygon triangle;
-	vao square_vao;
-	vao triangle_vao;
 
-	static const gl_controlled_data<shapes> &instance()
+	const vao &square_vao() const { return buffers.get().square_vao; }
+	const vao &triangle_vao() const { return buffers.get().triangle_vao; }
+
+	static const shapes &instance()
 	{
-		static auto &s = construct_and_attach<shapes>();
+		static shapes s;
 		return s;
 	}
 
 private:
 	shapes();
 
-	template <typename T, typename... Args>
-	friend T construct_fun(Args&&... args);
+	struct shape_buffers
+	{	
+		template <typename T, typename... Args>
+		friend T construct_fun(Args&&... args);
 
-	vbo square_vbo;
-	vbo triangle_vbo;
-	vbo triangle_text_pos_vbo;
-	vbo square_text_pos_vbo;
+		shape_buffers();
+
+		vao square_vao;
+		vao triangle_vao;
+
+		vbo square_vbo;
+		vbo triangle_vbo;
+		vbo triangle_text_pos_vbo;
+		vbo square_text_pos_vbo;
+	};
+
+	gl_controlled_data<shape_buffers> &buffers;
 };
 
 class game
@@ -48,9 +59,7 @@ public:
 	static constexpr int map_width = 15;
 	static constexpr int map_height = 9;
 
-	// pass in directory to level_location to load multiple levels, or a single level to load one level
-	// the levels in a directory must be of the format "levelName_*level_number*.lvl". level numbers are sorted by *level_number*
-	game(int target_width, int target_height, const std::filesystem::path &level_location = {});
+	game(int target_width, int target_height, std::vector<level> &&_levels);
 
 	// assumes ortho has been set and text has been set
 	void draw() const;

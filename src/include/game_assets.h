@@ -7,7 +7,6 @@
 #include "blue_jump.h"
 #include "blue_spike.h"
 #include "blue_spike_fade.h"
-#include "end_anchor.h"
 #include "neutral_cube.h"
 #include "neutral_jump.h"
 #include "neutral_spike.h"
@@ -17,7 +16,10 @@
 #include "red_jump.h"
 #include "red_spike.h"
 #include "red_spike_fade.h"
+
 #include "spawn_anchor.h"
+#include "end_anchor.h"
+
 
 #include "gl_instance.h"
 

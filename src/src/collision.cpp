@@ -1,10 +1,17 @@
 #include "collision.h"
 
+glm::vec2 calc_normal(glm::vec2 first, glm::vec2 second)
+{
+	glm::vec2 perp{first.y - second.y, second.x - first.x};
+	return glm::normalize(perp);
+}
+		
+
 bool project_onto(const polygon_view &a, const polygon_view &b, float &min_intersection, collision &res)
 {
 	for (std::size_t a_edge = 0; a_edge < a.poly->size(); ++a_edge)
 	{
-		glm::vec2 normal = rotate(a.poly->normal(a_edge), a.angle);
+		glm::vec2 normal = calc_normal(a.point(a_edge), a.point((a_edge + 1) % a.poly->size()));
 
 		float amin = std::numeric_limits<float>::infinity();
 		float amax = -std::numeric_limits<float>::infinity();

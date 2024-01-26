@@ -5,6 +5,10 @@
 
 #include <string>
 #include <iostream>
+#include <limits>
+#include <thread>
+
+#include <nfd.h>
 
 void mouse_pos_interp(glm::dvec2 window_min, glm::dvec2 window_max, glm::dvec2 target_min, glm::dvec2 target_max, glm::dvec2 &mouse_pos)
 {
@@ -16,7 +20,7 @@ void mouse_pos_interp(glm::dvec2 window_min, glm::dvec2 window_max, glm::dvec2 t
 // loc is location on target screen
 auto find_block(level &l, glm::vec2 loc)
 {
-	polygon_view poly(shapes::instance().get().square, loc, {1, 1}, 0);
+	polygon_view poly(shapes::instance().square, loc, {1, 1}, 0);
 	auto it = l.blocks.begin();
 	for (; it < l.blocks.end(); ++it)
 		if (collides(poly, it->poly))
@@ -24,28 +28,214 @@ auto find_block(level &l, glm::vec2 loc)
 	return it;
 }
 
-void run_level_editor(level &l, bool reset);
+bool yes_no(const std::string &prompt)
+{
+	int final_choice = -1;
+	while (final_choice == -1)
+	{
+		std::cout << prompt << " (y/n)? ";
+		char choice;
+		std::cin >> choice;
+
+		if (choice == 'y' || choice == 'Y')
+			final_choice = 1;
+		else if (choice == 'n' || choice == 'N')
+			final_choice = 0;
+		else
+			std::cout << "Invalid input.\n";
+
+		std::cin.clear();
+		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+	}
+	return final_choice;
+}
+
+void run_level_editor(level &l, bool &has_spawn, bool &has_end);
 
 int main()
 {
+	std::string cwd = std::filesystem::current_path().string();
 	while (true)
 	{
-		std::cout << "Create level (y/n)? ";
-		char answer;
-		std::cin >> answer;
-		if (answer == 'y' || answer == 'Y')
+		std::cout << "Options:\n"
+					 "  1. Create New Level\n"
+					 "  2. Load Level\n"
+					 "  3. Instructions\n"
+					 "  4. Play level\n"
+					 "  5. Quit\n"
+					 "Input a Selection: ";
+		unsigned int option;
+		while (true)
 		{
-			level new_level;
-			run_level_editor(new_level, true);
+			std::cin >> option;
+			std::cin.clear();
+			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+			if (std::cin.fail() || option > 5 || option == 0)
+				std::cout << "Invalid option.\n";
+			else
+				break;
 		}
-		else if (answer == 'n' || answer == 'N')
+
+
+		std::filesystem::path filename;
+		level l;
+
+		switch (option)
 		{
-			// load level prompt
-		}
-		else
+		case 1:
 		{
-			std::cout << "Invalid answer.\n";
+			l.construct_default();
+			break;
 		}
+		case 2:
+		case 4:
+		{
+			std::cout << "Select file...\n";
+
+			nfdchar_t *tmp = nullptr;
+			nfdresult_t result = NFD_OpenDialog("lvl", cwd.c_str(), &tmp);
+			if (result != NFD_OKAY)
+				continue;
+			filename = tmp;
+
+			if (!std::filesystem::exists(filename))
+				std::cout << "File not found.\n";
+			else if (filename.extension() != ".lvl")
+				std::cout << "Wrong file type.\n";
+			else
+			{
+				try
+				{
+					l.read_level(filename);
+					break;
+				}
+				catch (const std::runtime_error &e)
+				{
+					std::cout << e.what() << '\n';
+				}
+			}
+			break;
+		}
+		case 3:
+			std::cout << "\nLevel Editor Instructions\n"
+						 "--------------------------------------\n"
+						 "  Left Click: Place Block\n"
+						 "  Right Click: Remove Block\n"
+						 "  P/Middle Click: Pick Block\n"
+						 "  Scroll/Space: Scroll Block Type\n"
+						 "  W/Up: Scroll Color Up\n"
+						 "  S/Down: Scroll Color Down\n"
+						 "  A/Left: Rotate CCW\n"
+						 "  D/Right: Rotate CW\n"
+						 "Tips\n"
+						 "--------------------------------------\n"
+						 "  You can place multiple spikes in the same block.\n"
+						 "  Use pick block to speed up the process.\n"
+						 "  Use the Spawn Anchor (green with anchor) to set spawn location (Required).\n"
+						 "  Use End Anchor (red with anchor) to set level end location (Required).\n"
+						 "  Load level option will automatically save the level at the end.\n"
+						 "  For levels to work with the game, keep the outside wall and add an opening that will lead into another level.\n"
+						 "  Level exits can be anywhere on the edge, just make sure that it matches the opening to the next level.\n"
+						 "  Consecutive levels' names should end with _*number* where number is in order for it to work with the game.\n"
+						 "Press enter to continue...\n";
+			{
+				std::string dummy;
+				std::getline(std::cin, dummy);	
+			}
+			continue;
+		case 5:
+			return 0;
+		}
+
+		// play level
+		if (option == 4)
+		{
+			run_game(std::vector<level>{l});
+			std::cout << '\n';
+			continue;
+		}
+
+		bool has_spawn = true;
+		bool has_end = true;
+
+		while (true)
+		{
+			run_level_editor(l, has_spawn, has_end);
+			if (!has_spawn || !has_end)
+			{
+				std::cout << '\n';
+				if (!has_spawn)
+					std::cout << "Spawn anchor is not set!\n";
+				if (!has_end)
+					std::cout << "End anchor is not set!\n";
+				std::cout << "Press enter to re-open level...\n";
+				std::string dummy;
+				std::getline(std::cin, dummy);
+			}
+			else
+				break;
+		}
+
+		while (yes_no("Play level"))
+		{
+			run_game(std::vector<level>{l});
+
+			if (yes_no("Continue editing"))
+				run_level_editor(l, has_spawn, has_end);
+			else
+				break;
+		}
+
+		if (!yes_no("Save level"))
+			continue;
+
+		bool save = true;
+
+		// if they created a level
+		if (option == 1)
+		{
+			nfdchar_t *tmp = nullptr;
+			while (true)
+			{
+				nfdresult_t result = NFD_SaveDialog("lvl", cwd.c_str(), &tmp);
+				if (result != NFD_OKAY)
+				{
+					if (!yes_no("Try again"))
+					{
+						save = false;
+						break;
+					}
+				}
+				else
+					break;
+			}
+			filename = tmp;
+			filename.replace_extension(".lvl");
+		}
+
+		if (save)
+			while (true)
+			{
+				try
+				{
+					l.write_level(filename);
+					std::cout << "Successfully saved level " << filename << "\n";
+					break;
+				}
+				catch(const std::exception& e)
+				{
+					std::cout << "Failed to save level " << filename << ": " << e.what() << '\n';
+					if (yes_no("Try again"))
+					{
+						using namespace std::chrono_literals;
+						std::cout << "Waiting 10 seconds...\n";
+						std::this_thread::sleep_for(10s);
+						continue;
+					}
+					else
+						break;
+				}
+			}
 	}
 }
 
@@ -53,11 +243,13 @@ block::type current_type;
 
 void scroll_callback(GLFWwindow *window, double xoffset, double yoffset)
 {
-	int next = (static_cast<char>(current_type) + static_cast<int>(yoffset)) % 3;
+	int next = (static_cast<char>(current_type) + static_cast<int>(yoffset)) % 5;
+	if (next < 0)
+		next += 5;
 	current_type = static_cast<block::type>(next);
 }
 
-void run_level_editor(level &l, bool reset)
+void run_level_editor(level &l, bool &has_spawn, bool &has_end)
 {
 	auto ortho = glm::ortho<float>(0, (float)target_width, 0, (float)target_height, -1, 1);
 
@@ -67,36 +259,40 @@ void run_level_editor(level &l, bool reset)
 
 	glfwSetScrollCallback(win.handle, scroll_callback);
 
-	if (reset)
-		l.construct_default();
-
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	color current_color = color::neutral;
-	direction current_dir = direction::right;
-	current_type = block::type::spike;
+	direction current_dir = direction::up;
+	current_type = block::type::normal;
+
+	block spawn_anchor(l.start, block::type::spawn_anchor, {}, {});
+	block end_anchor(l.end, block::type::end_anchor, {}, {});
 
 	key left_click;
 	key right_click;
+	key pick_block;
 	key color_up;
 	key color_down;
 	key angle_right;
 	key angle_left;
+	key type_up;
 
 	while (!glfwWindowShouldClose(win.handle))
 	{
 		glfwWaitEvents();
 
-		if (glfwGetKey(win.handle, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+		if (glfwGetKey(win.handle, GLFW_KEY_ESCAPE))
 			glfwSetWindowShouldClose(win.handle, GLFW_TRUE);
 
-		left_click.update(glfwGetMouseButton(win.handle, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS);
-		right_click.update(glfwGetMouseButton(win.handle, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS);
-		color_up.update(glfwGetKey(win.handle, GLFW_KEY_W) == GLFW_PRESS || glfwGetKey(win.handle, GLFW_KEY_UP) == GLFW_PRESS);
-		color_down.update(glfwGetKey(win.handle, GLFW_KEY_S) == GLFW_PRESS || glfwGetKey(win.handle, GLFW_KEY_DOWN) == GLFW_PRESS);
-		angle_right.update(glfwGetKey(win.handle, GLFW_KEY_D) == GLFW_PRESS || glfwGetKey(win.handle, GLFW_KEY_RIGHT) == GLFW_PRESS);
-		angle_left.update(glfwGetKey(win.handle, GLFW_KEY_A) == GLFW_PRESS || glfwGetKey(win.handle, GLFW_KEY_LEFT) == GLFW_PRESS);
+		left_click.update(glfwGetMouseButton(win.handle, GLFW_MOUSE_BUTTON_LEFT));
+		right_click.update(glfwGetMouseButton(win.handle, GLFW_MOUSE_BUTTON_RIGHT));
+		pick_block.update(glfwGetMouseButton(win.handle, GLFW_MOUSE_BUTTON_MIDDLE) || glfwGetKey(win.handle, GLFW_KEY_P));
+		type_up.update(glfwGetKey(win.handle, GLFW_KEY_SPACE));
+		color_up.update(glfwGetKey(win.handle, GLFW_KEY_W) || glfwGetKey(win.handle, GLFW_KEY_UP));
+		color_down.update(glfwGetKey(win.handle, GLFW_KEY_S) || glfwGetKey(win.handle, GLFW_KEY_DOWN));
+		angle_right.update(glfwGetKey(win.handle, GLFW_KEY_D) || glfwGetKey(win.handle, GLFW_KEY_RIGHT));
+		angle_left.update(glfwGetKey(win.handle, GLFW_KEY_A) || glfwGetKey(win.handle, GLFW_KEY_LEFT));
 
 		glm::dvec2 mouse_pos;
 		glfwGetCursorPos(win.handle, &mouse_pos.x, &mouse_pos.y);
@@ -108,15 +304,67 @@ void run_level_editor(level &l, bool reset)
 
 		if (left_click.is_initial_press())
 		{
-			auto it = find_block(l, current_block.poly.offset);
-			if (it != l.blocks.end())
-				l.blocks.erase(it);
-			l.blocks.push_back(current_block);
+			if (grid_pos == l.start)
+				has_spawn = false;
+			else if (grid_pos == l.end)
+				has_end = false;
+			else
+			{
+				auto it = find_block(l, current_block.poly.offset);
+				if (it != l.blocks.end())
+					l.blocks.erase(it);
+			}
+
+			if (current_type == block::type::spawn_anchor)
+			{
+				l.start = grid_pos;
+				has_spawn = true;
+				spawn_anchor = block(l.start, block::type::spawn_anchor, {}, {});
+			}
+			else if (current_type == block::type::end_anchor)
+			{
+				l.end = grid_pos;
+				has_end = true;
+				end_anchor = block(l.end, block::type::end_anchor, {}, {});
+			}
+			else
+				l.blocks.push_back(current_block);
 		}
 
 		if (right_click.is_initial_press())
-			if (auto it = find_block(l, mouse_pos); it != l.blocks.end())
+		{
+			if (grid_pos == l.start)
+				has_spawn = false;
+			else if (grid_pos == l.end)
+				has_end = false;
+			else if (auto it = find_block(l, current_block.poly.offset); it != l.blocks.end())
 				l.blocks.erase(it);
+		}
+		
+		if (pick_block.is_initial_press())
+		{
+			if (grid_pos == l.start)
+			{
+				current_type = block::type::spawn_anchor;
+				current_block = block(grid_pos, block::type::spawn_anchor, {}, {});
+				current_color = color::neutral;
+			}
+			else if (grid_pos == l.end)
+			{
+				current_type = block::type::end_anchor;
+				current_block = block(grid_pos, block::type::end_anchor, {}, {});
+				current_color = color::neutral;
+			}
+			else if (auto it = find_block(l, mouse_pos); it != l.blocks.end())
+			{
+				current_dir = it->dir();
+				current_color = it->block_color;
+				current_type = it->block_type;
+			}
+		}
+
+		if (type_up.is_initial_press())
+			current_type = static_cast<block::type>((static_cast<int>(current_type) + 1) % 5);
 
 		if (color_up.is_initial_press())
 			current_color = static_cast<color>((static_cast<char>(current_color) + 1) % 3);
@@ -139,6 +387,10 @@ void run_level_editor(level &l, bool reset)
 		glUniform1i(glGetUniformLocation(program.id, "text"), 0);
 
 		l.draw(color::no_color);
+		if (has_spawn)
+			spawn_anchor.draw(color::no_color);
+		if (has_end)
+			end_anchor.draw(color::no_color);
 		current_block.draw(color::no_color);
 
 		glfwSwapBuffers(win.handle);

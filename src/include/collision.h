@@ -64,7 +64,6 @@ public:
 		
 		std::size_t size = std::distance(first, last);
 		m_pts.reserve(size);
-		m_normals.resize(size);
 
 		m_center += *first;
 		m_pts.push_back(*(first++));
@@ -72,24 +71,15 @@ public:
 		{
 			m_center += *first;
 			m_pts.push_back(*first);
-
-			// update the edge normals
-			set_normal(m_pts.size() - 2, m_pts.size() - 1);
 		}
 
 		m_center /= m_pts.size();
-
-		// update the normal of the last point
-		auto *last_pt = &m_pts.back();
-		set_normal(m_pts.size() - 1, 0);
 	}
 
 	template <typename T>
 	inline void assign(std::initializer_list<glm::vec<2, T>> pts) {	assign(pts.begin(), pts.end()); }
 
 	glm::vec2 point(std::size_t i) const { return m_pts[i]; }
-
-	glm::vec2 normal(std::size_t i) const { return m_normals[i]; }
 
 	glm::vec2 center() const { return m_center; }
 
@@ -100,14 +90,7 @@ public:
 
 private:
 	std::vector<glm::vec2> m_pts;
-	std::vector<glm::vec2> m_normals;
 	glm::vec2 m_center;
-
-	inline void set_normal(std::size_t first, std::size_t second)
-	{
-		glm::vec2 perp{m_pts[first].y - m_pts[second].y, m_pts[second].x - m_pts[first].x};
-		m_normals[first] = glm::normalize(perp);
-	}
 };
 
 struct polygon_view
@@ -128,11 +111,6 @@ struct polygon_view
 	glm::vec2 point(std::size_t i) const
 	{
 		return transform(poly->point(i));
-	}
-
-	glm::vec2 normal(std::size_t i) const
-	{
-		return rotate(poly->normal(i), angle);
 	}
 
 	glm::vec2 center() const
