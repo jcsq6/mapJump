@@ -213,12 +213,12 @@ struct buffer
 
 struct texture
 {
-	texture()
+	texture() : width{}, height{}
 	{
 		glGenTextures(1, &id);
 	}
 
-	texture(GLenum target_format, const void *data, GLsizei width, GLsizei height, int channel_count)
+	texture(GLenum target_format, const void *data, GLsizei _width, GLsizei _height, int channel_count, bool flip = false) : width{_width}, height{_height}
 	{
 		GLenum pixel_format;
 
@@ -241,6 +241,22 @@ struct texture
 			return;
 		}
 
+		if (flip)
+		{
+			int w = width * channel_count;
+
+			const unsigned char *old_data = reinterpret_cast<const unsigned char *>(data);
+			unsigned char *new_data = new unsigned char[height * w];
+
+			for (int y = 0; y < height; ++y)
+			{
+				auto *in = old_data + (height - y - 1) * w;
+				std::copy(in, in + w, new_data + y * w);
+			}
+
+			data = new_data;
+		}
+
 		glGenTextures(1, &id);
 		glBindTexture(GL_TEXTURE_2D, id);
 		glTexImage2D(GL_TEXTURE_2D, 0, target_format, width, height, 0, pixel_format, GL_UNSIGNED_BYTE, data);
@@ -251,20 +267,25 @@ struct texture
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
 		static float border_col[4]{0, 0, 0, 0};
 		glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, border_col);
+
+		if (flip)
+			delete[] reinterpret_cast<const unsigned char *>(data);
 	}
 
 	~texture()
 	{
 		glDeleteTextures(1, &id);
+		width = height = 0;
 		id = 0;
 	}
 
 	texture(const texture &) = delete;
 	texture &operator=(const texture &) = delete;
 
-	texture(texture &&other) : id{ other.id }
+	texture(texture &&other) : id{ other.id }, width{other.width}, height{other.height}
 	{
 		other.id = 0;
+		other.width = other.height = 0;
 	}
 
 	texture &operator=(texture &&other)
@@ -273,10 +294,16 @@ struct texture
 		id = other.id;
 		other.id = 0;
 
+		width = other.width;
+		height = other.height;
+
+		other.width = other.height = 0;
+
 		return *this;
 	}
 
 	GLuint id;
+	GLsizei width, height;
 };
 
 using vbo = buffer;

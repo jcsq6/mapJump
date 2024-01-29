@@ -304,9 +304,9 @@ std::vector<level> get_levels(const std::filesystem::path &location)
 		{
 			new_level.read_level(location);
 		}
-		catch(const std::exception& e)
+		catch(const std::exception&)
 		{
-			std::cout << "Couldn't read level " << location << ": " << e.what() << '\n';
+			// std::cout << "Couldn't read level " << location << ": " << e.what() << '\n';
 			new_level.construct_default();
 		}
 		levels.push_back(std::move(new_level));
@@ -333,14 +333,14 @@ std::vector<level> get_levels(const std::filesystem::path &location)
 				}
 				catch(...)
 				{
-					std::cout << '"' << path << "\": Incorrect file name format\n";
+					// std::cout << '"' << path << "\": Incorrect file name format\n";
 					continue;
 				}
 				
 			}
 			else
 			{
-				std::cout << '"' << path << "\": Incorrect file name format\n";
+				// std::cout << '"' << path << "\": Incorrect file name format\n";
 				continue;
 			}
 
@@ -349,9 +349,9 @@ std::vector<level> get_levels(const std::filesystem::path &location)
 			{
 				new_level.read_level(path);
 			}
-			catch(const std::exception& e)
+			catch(const std::exception&)
 			{
-				std::cout << "Couldn't read level " << location << ": " << e.what() << '\n';
+				// std::cout << "Couldn't read level " << location << ": " << e.what() << '\n';
 				continue;
 			}
 

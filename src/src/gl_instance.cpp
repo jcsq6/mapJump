@@ -59,7 +59,7 @@ shapes::shapes() : m_buffers{}
 {
 }
 
-static constexpr const char *vertex_shader =
+static constexpr const char *texture_vert =
 	"#version 330 core\n" // vertex shader
 	"layout (location = 0) in vec2 pos;"
 	"layout (location = 1) in vec2 tex_coord;"
@@ -71,7 +71,7 @@ static constexpr const char *vertex_shader =
 	"	texture_coord = tex_coord;"
 	"}";
 
-static constexpr const char *fragment_shader =
+static constexpr const char *texture_frag =
 	"#version 330 core\n" // fragment shader
 	"uniform sampler2D text;"
 	"in vec2 texture_coord;"
@@ -80,9 +80,56 @@ static constexpr const char *fragment_shader =
 	"	frag_color = texture(text, texture_coord);"
 	"}";
 
-gl_instance::gl_instance(int width, int height, const char *title) : m_glfw(), m_window(width, height, title), m_shapes(), m_texture_program(vertex_shader, fragment_shader), m_assets(), m_min{}, m_size{width, height}
+
+static constexpr const char *text_vert =
+	"#version 330 core\n" // vertex shader
+	"layout (location = 0) in vec2 pos;"
+	"layout (location = 1) in vec2 tex_coord;"
+	"uniform mat4 ortho;"
+	"uniform mat4 model;"
+	"out vec2 texture_coord;"
+	"void main() {"
+	"	gl_Position = ortho * model * vec4(pos, 0.0, 1.0);"
+	"	texture_coord = tex_coord;"
+	"}";
+static constexpr const char *text_frag =
+	"#version 330 core\n" // fragment shader
+	"uniform sampler2D text;"
+	"uniform vec4 color;"
+	"in vec2 texture_coord;"
+	"out vec4 frag_color;"
+	"void main() {"
+	"	frag_color = vec4(color.xyz, color.w * texture(text, texture_coord).r);"
+	"}";
+
+
+static constexpr const char *shape_vert =
+	"#version 330 core\n" // vertex shader
+	"layout (location = 0) in vec2 pos;"
+	"uniform mat4 ortho;"
+	"uniform mat4 model;"
+	"void main(){"
+	"	gl_Position = ortho * model * vec4(pos, 0, 1);"
+	"}";
+
+static constexpr const char *shape_frag =
+	"#version 330 core\n" // fragment shader
+	"uniform vec4 color;"
+	"out vec4 frag_color;"
+	"void main(){\n"
+	"	frag_color = color;"
+	"}";
+
+gl_instance::gl_instance(int width, int height, const char *title) :
+	m_glfw(), m_window(width, height, title), m_shapes(),
+	m_texture_program(texture_vert, texture_frag), m_text_program(text_vert, text_frag), m_shape_program(shape_vert, shape_frag),
+	m_assets(),
+	m_ortho(glm::ortho<float>(0, (float)target_width, 0, (float)target_height, -1, 1)),
+	m_font(arial_data, sizeof(arial_data), 256),
+	m_min{}, m_size{width, height}
 {
 	glfwSetWindowUserPointer(m_window.handle, this);
+	glfwSetFramebufferSizeCallback(m_window.handle, framebuffer_size_callback);
 }
 
 void gl_instance::framebuffer_size_callback(GLFWwindow* window, int width, int height)
@@ -132,4 +179,22 @@ const polygon &triangle()
 {
 	static const polygon res(std::begin(triangle_pts), std::end(triangle_pts));
 	return res;
+}
+
+void mouse_pos_interp(glm::dvec2 window_min, glm::dvec2 window_max, glm::dvec2 target_min, glm::dvec2 target_max, glm::dvec2 &mouse_pos)
+{
+	mouse_pos.x = (target_max.x - target_min.x) / (window_max.x - window_min.x) * (mouse_pos.x - window_min.x) + target_min.x;
+	mouse_pos.y = (target_max.y - target_min.y) / (window_max.y - window_min.y) * (mouse_pos.y - window_min.y) + target_min.y;
+}
+
+glm::dvec2 get_mouse_pos(gl_instance &gl)
+{
+	glm::dvec2 mouse_pos;
+	glfwGetCursorPos(gl.get_window().handle, &mouse_pos.x, &mouse_pos.y);
+		
+	glm::ivec2 min = gl.viewport_min();
+	glm::ivec2 size = gl.viewport_size();
+	mouse_pos_interp({min.x, min.y + size.y}, {min.x + size.x, min.y}, {0, 0}, {target_width, target_height}, mouse_pos);
+
+	return mouse_pos;
 }

@@ -4,5 +4,13 @@
 
 int main()
 {
-	return run_game(get_levels("levels"));
+	gl_instance gl(target_width, target_height, "Map Jumper");
+	return run_game(gl, get_levels("levels"));
 }
+
+#ifdef _WIN32
+int WinMain()
+{
+	return main();
+}
+#endif

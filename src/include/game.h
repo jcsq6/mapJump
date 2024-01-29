@@ -70,7 +70,6 @@ private:
 
 	player_data player;
 
-	glm::mat4 ortho;
 	glm::vec2 target_scale;
 
 	bool is_blue;
