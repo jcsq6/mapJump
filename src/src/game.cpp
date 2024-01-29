@@ -32,6 +32,7 @@ void game::draw(const gl_instance &gl) const
 	auto m = glm::scale(glm::translate(glm::mat4(1.f), {target_scale / 2.f, 0}), {target_scale, 0});
 	glUniformMatrix4fv(glGetUniformLocation(program.id, "model"), 1, GL_FALSE, &m[0][0]);
 
+	// glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, assets.background.id);
 
 	glBindVertexArray(_shapes.square_vao().id);

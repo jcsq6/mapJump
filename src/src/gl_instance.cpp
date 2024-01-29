@@ -164,10 +164,14 @@ void gl_instance::framebuffer_size_callback(GLFWwindow* window, int width, int h
 	gl_instance *owner = static_cast<gl_instance *>(glfwGetWindowUserPointer(window));
 	if (owner->m_draw)
 		owner->m_draw();
-	owner->m_min.x = leftover_width / 2;
-	owner->m_min.y = leftover_height / 2;
-	owner->m_size.x = new_width;
-	owner->m_size.y = new_height;
+	
+	float xscale, yscale;
+	glfwGetWindowContentScale(window, &xscale, &yscale);
+
+	owner->m_min.x = static_cast<int>(leftover_width / xscale / 2);
+	owner->m_min.y = static_cast<int>(leftover_height / yscale / 2);
+	owner->m_size.x = static_cast<int>(new_width / xscale);
+	owner->m_size.y = static_cast<int>(new_height / yscale);
 }
 
 const polygon &square()
@@ -194,6 +198,7 @@ glm::dvec2 get_mouse_pos(gl_instance &gl)
 		
 	glm::ivec2 min = gl.viewport_min();
 	glm::ivec2 size = gl.viewport_size();
+
 	mouse_pos_interp({min.x, min.y + size.y}, {min.x + size.x, min.y}, {0, 0}, {target_width, target_height}, mouse_pos);
 
 	return mouse_pos;

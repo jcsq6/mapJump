@@ -5,7 +5,7 @@
 
 #include "button.h"
 
-#include "messages.h"
+#include "menu.h"
 
 #include <string>
 #include <iostream>
@@ -25,77 +25,51 @@ int main()
 	gl_instance gl(target_width, target_height, "Level Editor");
 	const window &win = gl.get_window();
 
-	float window_button_usable_height = target_height * .8f;
-	float button_start = (target_height - window_button_usable_height) / 2.f;
-	float button_gap = window_button_usable_height * .025f;
-	glm::vec2 button_dims{target_width * .25f, (window_button_usable_height - button_gap / 4) / 5};
-	float button_diff = button_dims.y + button_gap;
-	const button buttons[5] = 
+	// float window_button_usable_height = target_height * .8f;
+	// float button_start = (target_height - window_button_usable_height) / 2.f;
+	// float button_gap = window_button_usable_height * .025f;
+	// glm::vec2 button_dims{target_width * .25f, (window_button_usable_height - button_gap / 4) / 5};
+	// float button_diff = button_dims.y + button_gap;
+	// const button buttons[5] = 
+	// {
+	// 	{gl.get_font(), {target_width / 2.f, button_start + 4 * button_diff + button_dims.y / 2}, button_dims, "Create New Level"},
+	// 	{gl.get_font(), {target_width / 2.f, button_start + 3 * button_diff + button_dims.y / 2}, button_dims, "Load Level"},
+	// 	{gl.get_font(), {target_width / 2.f, button_start + 2 * button_diff + button_dims.y / 2}, button_dims, "Play Level"},
+	// 	{gl.get_font(), {target_width / 2.f, button_start + 1 * button_diff + button_dims.y / 2}, button_dims, "Instructions"},
+	// 	{gl.get_font(), {target_width / 2.f, button_start + 0 * button_diff + button_dims.y / 2}, button_dims, "Quit"},
+	// };
+
+	menu main_menu(gl, {{target_width * .2, target_height * .1}, {target_width * .6, target_height * .8}}, {"Create New Level", "Load Level", "Play Level", "Instructions", "Quit"});
+
+	enum option_type
 	{
-		{gl.get_font(), {target_width / 2.f, button_start + 4 * button_diff + button_dims.y / 2}, button_dims, "Create New Level"},
-		{gl.get_font(), {target_width / 2.f, button_start + 3 * button_diff + button_dims.y / 2}, button_dims, "Load Level"},
-		{gl.get_font(), {target_width / 2.f, button_start + 2 * button_diff + button_dims.y / 2}, button_dims, "Play Level"},
-		{gl.get_font(), {target_width / 2.f, button_start + 1 * button_diff + button_dims.y / 2}, button_dims, "Instructions"},
-		{gl.get_font(), {target_width / 2.f, button_start + 0 * button_diff + button_dims.y / 2}, button_dims, "Quit"},
-	};
-
-	std::size_t option;
-
-	auto draw = [&]()
-	{
-		glm::dvec2 mouse_pos = get_mouse_pos(gl);
-
-		glClearColor(1, 1, 1, 1);
-		glClear(GL_COLOR_BUFFER_BIT);
-
-		option = std::size(buttons);
-		for (std::size_t i = 0; i < std::size(buttons); ++i)
-		{
-			glm::vec4 color;
-			if (buttons[i].in_button(mouse_pos))
-			{
-				if (gl.get_left_click().is_initial_press())
-					option = i;
-				color = {.2, .2, .2, .2};
-			}
-			else
-				color = {.1, .1, .1, .1};
-			
-			buttons[i].draw(gl, color);
-		}
-
-		glfwSwapBuffers(win.handle);
+		create_level = 0,
+		load_level = 1,
+		play_level = 2,
+		instructions = 3,
+		quit = 4,
 	};
 
 	while (!glfwWindowShouldClose(win.handle))
 	{
-		gl.register_draw_function(draw);
+		std::size_t option = main_menu.run(gl);
 
-		glfwWaitEvents();
-
-		gl.get_escape_key().update(glfwGetKey(win.handle, GLFW_KEY_ESCAPE));
-		if (gl.get_escape_key().is_initial_press())
-			glfwSetWindowShouldClose(win.handle, GLFW_TRUE);
-		
-		gl.get_left_click().update(glfwGetMouseButton(win.handle, GLFW_MOUSE_BUTTON_LEFT));
-
-		draw();
-
-		if (option >= std::size(buttons))
-			continue;
+		// escape pressed
+		if (option >= main_menu.size())
+			break;
 
 		std::filesystem::path filename;
 		level l;
 
-		switch (option)
+		switch ((option_type)option)
 		{
-		case 0:
+		case create_level:
 		{
 			l.construct_default();
 			break;
 		}
-		case 1:
-		case 2:
+		case load_level:
+		case play_level:
 		{
 			const char *path = tinyfd_openFileDialog("Select Level", cwd.c_str(), 1, &filter, "Level file", 0);
 			if (!path)
@@ -122,34 +96,34 @@ int main()
 
 			continue; // if it got here, it failed
 		}
-		case 3:
+		case instructions:
 			message(gl, "Level Editor Instructions\n"
 						"--------------------------------------\n"
-						"  Left Click: Place Block\n"
-						"  Right Click: Remove Block\n"
-						"  P/Middle Click: Pick Block\n"
-						"  Scroll/Space: Scroll Block Type\n"
-						"  W/Up: Scroll Color Up\n"
-						"  S/Down: Scroll Color Down\n"
-						"  A/Left: Rotate CCW\n"
-						"  D/Right: Rotate CW\n"
+						"Left Click: Place Block\n"
+						"Right Click: Remove Block\n"
+						"P/Middle Click: Pick Block\n"
+						"Scroll/Space: Scroll Block Type\n"
+						"W/Up: Scroll Color Up\n"
+						"S/Down: Scroll Color Down\n"
+						"A/Left: Rotate CCW\n"
+						"D/Right: Rotate CW\n"
 						"Tips\n"
 						"--------------------------------------\n"
-						"  You can place multiple spikes in the same block.\n"
-						"  Use pick block to speed up the process.\n"
-						"  Use the Spawn Anchor (green with anchor) to set spawn location (Required).\n"
-						"  Use End Anchor (red with anchor) to set level end location (Required).\n"
-						"  Load level option will automatically save the level at the end.\n"
-						"  For levels to work with the game, keep the outside wall and add an opening that will lead into another level.\n"
-						"  Level exits can be anywhere on the edge, just make sure that it matches the opening to the next level.\n"
-						"  Consecutive levels' names should end with _*number* where number is in order for it to work with the game.\n");
+						"You can place multiple spikes in the same block.\n"
+						"Use pick block to speed up the process.\n"
+						"Use the Spawn Anchor (green with anchor) to set spawn location (Required).\n"
+						"Use End Anchor (red with anchor) to set level end location (Required).\n"
+						"Load level option will automatically save the level at the end.\n"
+						"For levels to work with the game, keep the outside wall and add an opening that will lead into another level.\n"
+						"Level exits can be anywhere on the edge, just make sure that it matches the opening to the next level.\n"
+						"Consecutive levels' names should end with _*number* where number is in order for it to work with the game.\n");
 			continue;
-		case 4:
+		case quit:
 			return 0;
 		}
 
 		// play level
-		if (option == 2)
+		if (option == play_level)
 		{
 			run_game(gl, std::vector<level>{l});
 			continue;
@@ -162,9 +136,7 @@ int main()
 		{
 			run_level_editor(gl, l, has_spawn, has_end);
 			if (!has_spawn || !has_end)
-			{
 				message(gl, "Spawn or end anchor is not set!");
-			}
 			else
 				break;
 		}
@@ -217,7 +189,7 @@ int main()
 				}
 				catch(const std::exception& e)
 				{
-					if (yes_no(gl, "Failed to save level " + filename.filename().string() + ": " + e.what() + "\nTry again?"))
+					if (yes_no(gl, "Failed to save level " + filename.filename().string() + "\nError: " + e.what() + "\nTry again?"))
 					{
 						using namespace std::chrono_literals;
 						std::this_thread::sleep_for(5s);
@@ -258,23 +230,13 @@ void scroll_callback(GLFWwindow *window, double xoffset, double yoffset)
 	current_type = static_cast<block::type>(next);
 }
 
-glm::ivec2 window_size;
-
-void window_size_callback(GLFWwindow* window, int width, int height)
-{
-	window_size.x = width;
-	window_size.y = height;
-}
-
 void run_level_editor(gl_instance &gl, level &l, bool &has_spawn, bool &has_end)
 {
 	const auto &win = gl.get_window();
 
 	glfwSetScrollCallback(win.handle, scroll_callback);
-	glfwSetWindowSizeCallback(win.handle, window_size_callback);
 
-	glfwGetWindowSize(win.handle, &window_size.x, &window_size.y);
-
+	// enable transparency
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
@@ -297,9 +259,6 @@ void run_level_editor(gl_instance &gl, level &l, bool &has_spawn, bool &has_end)
 		// set uniforms
 		glUseProgram(program.id);
 		glUniformMatrix4fv(glGetUniformLocation(program.id, "ortho"), 1, GL_FALSE, &gl.get_ortho()[0][0]);
-
-		glActiveTexture(GL_TEXTURE0);
-		glUniform1i(glGetUniformLocation(program.id, "text"), 0);
 
 		l.draw(color::no_color, gl);
 		if (has_spawn)
@@ -343,7 +302,8 @@ void run_level_editor(gl_instance &gl, level &l, bool &has_spawn, bool &has_end)
 		glm::ivec2 grid_pos{mouse_pos / (double)game::block_size};
 
 		current_block = block(grid_pos, current_type, current_color, current_dir);
-
+		
+		// place block (if in bounds)
 		if (gl.get_left_click().is_initial_press() && grid_pos.x >= 0 && grid_pos.x < game::map_width && grid_pos.y >= 0 && grid_pos.y < game::map_height)
 		{
 			if (grid_pos == l.start)
@@ -352,6 +312,7 @@ void run_level_editor(gl_instance &gl, level &l, bool &has_spawn, bool &has_end)
 				has_end = false;
 			else
 			{
+				// erase any blocks that were there before
 				while (true)
 				{
 					auto it = find_block(l, current_block.poly.offset);
@@ -378,6 +339,7 @@ void run_level_editor(gl_instance &gl, level &l, bool &has_spawn, bool &has_end)
 				l.blocks.push_back(current_block);
 		}
 
+		// remove block
 		if (right_click.is_initial_press())
 		{
 			if (grid_pos == l.start)
@@ -386,6 +348,7 @@ void run_level_editor(gl_instance &gl, level &l, bool &has_spawn, bool &has_end)
 				has_end = false;
 			else
 			{
+				// erase all blocks at current location
 				while (true)
 				{
 					auto it = find_block(l, current_block.poly.offset);
@@ -397,6 +360,7 @@ void run_level_editor(gl_instance &gl, level &l, bool &has_spawn, bool &has_end)
 			}
 		}
 		
+		// pick block
 		if (pick_block.is_initial_press())
 		{
 			if (grid_pos == l.start)
@@ -434,4 +398,6 @@ void run_level_editor(gl_instance &gl, level &l, bool &has_spawn, bool &has_end)
 
 		draw();
 	}
+
+	glfwSetScrollCallback(win.handle, nullptr);
 }

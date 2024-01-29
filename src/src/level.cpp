@@ -141,6 +141,7 @@ void block::draw(color active_color, const gl_instance &gl) const
 	auto m = model(poly.offset, poly.scale, poly.angle);
 	glUniformMatrix4fv(glGetUniformLocation(gl.get_texture_program().id, "model"), 1, GL_FALSE, &m[0][0]);
 
+	// glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, text->id);
 
 	glBindVertexArray(buff->id);

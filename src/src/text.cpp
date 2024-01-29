@@ -180,8 +180,8 @@ void text::draw(gl_instance &gl) const
 	glUseProgram(program.id);
 	glUniformMatrix4fv(glGetUniformLocation(program.id, "ortho"), 1, GL_FALSE, &gl.get_ortho()[0][0]);
 
-	glActiveTexture(GL_TEXTURE0);
-	glUniform1i(glGetUniformLocation(program.id, "text"), 0);
+	// glActiveTexture(GL_TEXTURE0);
+	// glUniform1i(glGetUniformLocation(program.id, "text"), 0);
 
 	glUniform4f(glGetUniformLocation(program.id, "color"), 0, 0, 0, 1);
 
@@ -195,18 +195,23 @@ void text::draw(gl_instance &gl) const
 	for (auto c : m_data)
 	{
 		cur = m_font->at(c);
-		glm::vec2 sz{cur->text.width, cur->text.height};
-		glm::vec2 cur_loc = {origin.x + (cur->offset.x * m_scale.x), origin.y + (cur->offset.y - sz.y) * m_scale.y};
+		
+		if (c != ' ')
+		{
+			glm::vec2 sz{cur->text.width, cur->text.height};
+			glm::vec2 cur_loc = {origin.x + (cur->offset.x * m_scale.x), origin.y + (cur->offset.y - sz.y) * m_scale.y};
+		
+			glm::vec2 scale = m_scale * sz;
+
+			// cur_loc + scale / 2.f because square vao is centered at origin
+			auto model = glm::scale(glm::translate(glm::mat4(1.f), {cur_loc + scale / 2.f, 0}), {scale, 0});
+			glUniformMatrix4fv(glGetUniformLocation(program.id, "model"), 1, GL_FALSE, &model[0][0]);
+
+			glBindTexture(GL_TEXTURE_2D, cur->text.id);
+			glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+		}
+
 		origin.x += (cur->advance >> 6) * m_scale.x;
-
-		glm::vec2 scale = m_scale * sz;
-
-		// cur_loc + scale / 2.f because square vao is centered at origin
-		auto model = glm::scale(glm::translate(glm::mat4(1.f), {cur_loc + scale / 2.f, 0}), {scale, 0});
-		glUniformMatrix4fv(glGetUniformLocation(program.id, "model"), 1, GL_FALSE, &model[0][0]);
-
-		glBindTexture(GL_TEXTURE_2D, cur->text.id);
-		glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
 	}
 
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 4);

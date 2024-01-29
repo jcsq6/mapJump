@@ -73,7 +73,9 @@ public:
     key &get_escape_key() { return m_escape; }
     key &get_left_click() { return m_left_click; }
 
+    // adjusted for dpi
     glm::ivec2 viewport_min() const { return m_min; }
+    // adjusted for dpi
     glm::ivec2 viewport_size() const { return m_size; }
 
     // for continuous drawing while resizing window
