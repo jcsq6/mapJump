@@ -52,7 +52,7 @@ block::block(glm::ivec2 grid_loc, type _block_type, color _block_color, directio
 	poly.offset = glm::vec2(grid_loc) * (float)game::block_size + poly_trans;
 }
 
-void block::draw(color active_color, const gl_instance &gl) const
+void block::draw(color active_color, const gl_instance &gl, float transparency) const
 {
 	const auto &assets = gl.get_assets();
 
@@ -140,8 +140,8 @@ void block::draw(color active_color, const gl_instance &gl) const
 
 	auto m = model(poly.offset, poly.scale, poly.angle);
 	glUniformMatrix4fv(glGetUniformLocation(gl.get_texture_program().id, "model"), 1, GL_FALSE, &m[0][0]);
+	glUniform1f(glGetUniformLocation(gl.get_texture_program().id, "transparency"), transparency);
 
-	// glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, text->id);
 
 	glBindVertexArray(buff->id);

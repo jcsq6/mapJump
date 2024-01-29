@@ -74,10 +74,12 @@ static constexpr const char *texture_vert =
 static constexpr const char *texture_frag =
 	"#version 330 core\n" // fragment shader
 	"uniform sampler2D text;"
+	"uniform float transparency = 1.0;"
 	"in vec2 texture_coord;"
 	"out vec4 frag_color;"
 	"void main(){\n"
-	"	frag_color = texture(text, texture_coord);"
+	"	vec4 text_col = texture(text, texture_coord);"
+	"	frag_color = vec4(text_col.xyz, text_col.w * transparency);"
 	"}";
 
 
@@ -181,7 +183,9 @@ const polygon &square()
 }
 const polygon &triangle()
 {
-	static const polygon res(std::begin(triangle_pts), std::end(triangle_pts));
+	// adjust to make hitbox slightly smaller
+	static const glm::vec2 adjusted_pts[] = {{-.4f, -.5f}, {.4f, -.5f}, {0, .5f}};
+	static const polygon res(std::begin(adjusted_pts), std::end(adjusted_pts));
 	return res;
 }
 

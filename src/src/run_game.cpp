@@ -25,8 +25,6 @@ int run_game(gl_instance &gl, std::vector<level> &&levels)
 		glUseProgram(program.id);
 		glUniformMatrix4fv(glGetUniformLocation(program.id, "ortho"), 1, GL_FALSE, &gl.get_ortho()[0][0]);
 
-		// glActiveTexture(GL_TEXTURE0);
-		// glUniform1i(glGetUniformLocation(program.id, "text"), 0);
 		my_game.draw(gl);
 
 		glfwSwapBuffers(win.handle);

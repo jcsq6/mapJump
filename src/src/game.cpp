@@ -273,6 +273,12 @@ void game::update(float dt)
 			}
 		}
 	}
+
+	if (glm::ivec2(player.poly.offset / (float)game::block_size) == levels[cur_level].end)
+	{
+		if (cur_level != levels.size() - 1)
+			load_level(cur_level + 1);
+	}
 }
 
 void game::switch_colors()

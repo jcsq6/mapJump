@@ -41,7 +41,7 @@ struct block
 	block(glm::ivec2 grid_loc, type _block_type, color _block_color, direction dir);
 
 	// assumes ortho has been set and text has been set
-	void draw(color active_color, const gl_instance &gl) const;
+	void draw(color active_color, const gl_instance &gl, float transparency = 1) const;
 
 	direction dir() const;
 

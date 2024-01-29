@@ -25,20 +25,6 @@ int main()
 	gl_instance gl(target_width, target_height, "Level Editor");
 	const window &win = gl.get_window();
 
-	// float window_button_usable_height = target_height * .8f;
-	// float button_start = (target_height - window_button_usable_height) / 2.f;
-	// float button_gap = window_button_usable_height * .025f;
-	// glm::vec2 button_dims{target_width * .25f, (window_button_usable_height - button_gap / 4) / 5};
-	// float button_diff = button_dims.y + button_gap;
-	// const button buttons[5] = 
-	// {
-	// 	{gl.get_font(), {target_width / 2.f, button_start + 4 * button_diff + button_dims.y / 2}, button_dims, "Create New Level"},
-	// 	{gl.get_font(), {target_width / 2.f, button_start + 3 * button_diff + button_dims.y / 2}, button_dims, "Load Level"},
-	// 	{gl.get_font(), {target_width / 2.f, button_start + 2 * button_diff + button_dims.y / 2}, button_dims, "Play Level"},
-	// 	{gl.get_font(), {target_width / 2.f, button_start + 1 * button_diff + button_dims.y / 2}, button_dims, "Instructions"},
-	// 	{gl.get_font(), {target_width / 2.f, button_start + 0 * button_diff + button_dims.y / 2}, button_dims, "Quit"},
-	// };
-
 	menu main_menu(gl, {{target_width * .2, target_height * .1}, {target_width * .6, target_height * .8}}, {"Create New Level", "Load Level", "Play Level", "Instructions", "Quit"});
 
 	enum option_type
@@ -265,7 +251,7 @@ void run_level_editor(gl_instance &gl, level &l, bool &has_spawn, bool &has_end)
 			spawn_anchor.draw(color::no_color, gl);
 		if (has_end)
 			end_anchor.draw(color::no_color, gl);
-		current_block.draw(color::no_color, gl);
+		current_block.draw(color::no_color, gl, .75f);
 
 		glfwSwapBuffers(win.handle);
 	};
@@ -340,7 +326,7 @@ void run_level_editor(gl_instance &gl, level &l, bool &has_spawn, bool &has_end)
 		}
 
 		// remove block
-		if (right_click.is_initial_press())
+		if (right_click.is_pressed())
 		{
 			if (grid_pos == l.start)
 				has_spawn = false;
