@@ -97,11 +97,11 @@ int main()
 						"--------------------------------------\n"
 						"You can place multiple spikes in the same block.\n"
 						"Use pick block to speed up the process.\n"
+						"You can click and drag place block and erase block for quicker editing.\n"
 						"Use the Spawn Anchor (green with anchor) to set spawn location (Required).\n"
 						"Use End Anchor (red with anchor) to set level end location (Required).\n"
 						"Load level option will automatically save the level at the end.\n"
 						"For levels to work with the game, keep the outside wall and add an opening that will lead into another level.\n"
-						"Level exits can be anywhere on the edge, just make sure that it matches the opening to the next level.\n"
 						"Consecutive levels' names should end with _*number* where number is in order for it to work with the game.\n");
 			continue;
 		case quit:
@@ -143,7 +143,7 @@ int main()
 		bool save = true;
 
 		// if they created a level
-		if (option == 0)
+		if (option == create_level)
 		{
 			const char *tmp;
 			while (true)
@@ -290,7 +290,7 @@ void run_level_editor(gl_instance &gl, level &l, bool &has_spawn, bool &has_end)
 		current_block = block(grid_pos, current_type, current_color, current_dir);
 		
 		// place block (if in bounds)
-		if (gl.get_left_click().is_initial_press() && grid_pos.x >= 0 && grid_pos.x < game::map_width && grid_pos.y >= 0 && grid_pos.y < game::map_height)
+		if (gl.get_left_click().is_pressed() && grid_pos.x >= 0 && grid_pos.x < game::map_width && grid_pos.y >= 0 && grid_pos.y < game::map_height)
 		{
 			if (grid_pos == l.start)
 				has_spawn = false;

@@ -243,7 +243,7 @@ void game::update(float dt)
 			player.angle -= glm::pi<float>() / 2;
 	}
 	
-	static constexpr float jump_velocity = 500;
+	static constexpr float jump_velocity = 550;
 	static constexpr float wall_jump_velocity = 300;
 	static constexpr float jump_angular_velocity = 2 * glm::pi<float>();
 
