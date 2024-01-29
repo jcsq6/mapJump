@@ -167,17 +167,17 @@ void level::construct_default()
 	blue_starts = true;
 
 	// top and bottom wall
-	for (int i = 0; i < 15; ++i)
+	for (int i = 0; i < game::map_width; ++i)
 	{
 		blocks.emplace_back(glm::ivec2{i, 0}, block::type::normal, color::neutral, direction::up);
 		blocks.emplace_back(glm::ivec2{i, 8}, block::type::normal, color::neutral, direction::up);
 	}
 
 	// left and right wall
-	for (int i = 1; i < 8; ++i)
+	for (int i = 1; i < game::map_height - 1; ++i)
 	{
 		blocks.emplace_back(glm::ivec2{0, i}, block::type::normal, color::neutral, direction::up);
-		blocks.emplace_back(glm::ivec2{14, i}, block::type::normal, color::neutral, direction::up);
+		blocks.emplace_back(glm::ivec2{game::map_width - 1, i}, block::type::normal, color::neutral, direction::up);
 	}
 }
 

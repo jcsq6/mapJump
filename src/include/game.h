@@ -14,9 +14,9 @@ class game
 {
 public:
 	static constexpr float gravity = -1200;
-	static constexpr int block_size = 64;
+	static constexpr int block_size = 60;
 	static constexpr int player_size = 40;
-	static constexpr int map_width = 15;
+	static constexpr int map_width = 16;
 	static constexpr int map_height = 9;
 
 	game(int target_width, int target_height, std::vector<level> &&_levels);
