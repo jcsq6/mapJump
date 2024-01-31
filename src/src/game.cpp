@@ -9,18 +9,6 @@ game::player_data::player_data() :
 {
 }
 
-game::game(int target_width, int target_height, std::vector<level> &&_levels) : target_scale{target_width, target_height}, levels{std::move(_levels)}
-{
-	if (levels.empty())
-	{
-		level new_level;
-		new_level.construct_default();
-		levels.push_back(std::move(new_level));
-	}
-
-	load_level(0);
-}
-
 // assumes ortho has been set and text has been set
 void game::draw(const gl_instance &gl) const
 {

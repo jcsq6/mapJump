@@ -8,13 +8,12 @@
 #include "menu.h"
 
 #include <string>
-#include <iostream>
 #include <limits>
 #include <thread>
 
 #include <tinyfiledialogs.h>
 
-void run_level_editor(gl_instance &gl, level &l, bool &has_spawn, bool &has_end);
+void run_level_editor(gl_instance &gl, level &l);
 
 int main()
 {
@@ -98,9 +97,7 @@ int main()
 						"You can place multiple spikes in the same block.\n"
 						"Use pick block to speed up the process.\n"
 						"You can click and drag place block and erase block for quicker editing.\n"
-						"Use the Spawn Anchor (green with anchor) to set spawn location (Required).\n"
-						"Use End Anchor (red with anchor) to set level end location (Required).\n"
-						"Load level option will automatically save the level at the end.\n"
+						"After initial editing is finished, place spawn anchor (green), and end anchor (red).\n"
 						"For levels to work with the game, keep the outside wall and add an opening that will lead into another level.\n"
 						"Consecutive levels' names should end with _*number* where number is in order for it to work with the game.\n");
 			continue;
@@ -111,28 +108,18 @@ int main()
 		// play level
 		if (option == play_level)
 		{
-			run_game(gl, std::vector<level>{l});
+			run_game(gl, std::ranges::single_view{l});
 			continue;
 		}
 
-		bool has_spawn = true;
-		bool has_end = true;
-
-		while (true)
-		{
-			run_level_editor(gl, l, has_spawn, has_end);
-			if (!has_spawn || !has_end)
-				message(gl, "Spawn or end anchor is not set!");
-			else
-				break;
-		}
+		run_level_editor(gl, l);
 
 		while (yes_no(gl, "Play level?"))
 		{
-			run_game(gl, std::vector<level>{l});
+			run_game(gl, std::ranges::single_view{l});
 
 			if (yes_no(gl, "Continue editing?"))
-				run_level_editor(gl, l, has_spawn, has_end);
+				run_level_editor(gl, l);
 			else
 				break;
 		}
@@ -186,6 +173,8 @@ int main()
 				}
 			}
 	}
+
+	return 0;
 }
 
 #ifdef _WIN32
@@ -198,7 +187,7 @@ int WinMain()
 // loc is location on target screen
 auto find_block(level &l, glm::vec2 loc)
 {
-	polygon_view poly(square(), loc, {1, 1}, 0);
+	polygon_view poly(square(), loc, {10, 10}, 0);
 	auto it = l.blocks.begin();
 	for (; it < l.blocks.end(); ++it)
 		if (collides(poly, it->poly))
@@ -210,13 +199,28 @@ block::type current_type;
 
 void scroll_callback(GLFWwindow *window, double xoffset, double yoffset)
 {
-	int next = (static_cast<char>(current_type) + static_cast<int>(yoffset)) % 5;
+	int next = (static_cast<char>(current_type) + static_cast<int>(yoffset)) % 3;
 	if (next < 0)
-		next += 5;
+		next += 3;
 	current_type = static_cast<block::type>(next);
 }
 
-void run_level_editor(gl_instance &gl, level &l, bool &has_spawn, bool &has_end)
+enum class spawn_or_end
+{
+	spawn,
+	end,
+};
+
+spawn_or_end end_block_type;
+void spawn_end_scroll_callback(GLFWwindow *window, double xoffset, double yoffset)
+{
+	int next = (static_cast<char>(current_type) + static_cast<int>(yoffset)) % 2;
+	if (next < 0)
+		next += 2;
+	end_block_type = static_cast<spawn_or_end>(next);
+}
+
+void run_level_editor(gl_instance &gl, level &l)
 {
 	const auto &win = gl.get_window();
 
@@ -229,9 +233,6 @@ void run_level_editor(gl_instance &gl, level &l, bool &has_spawn, bool &has_end)
 	color current_color = color::neutral;
 	direction current_dir = direction::up;
 	current_type = block::type::normal;
-
-	block spawn_anchor(l.start, block::type::spawn_anchor, {}, {});
-	block end_anchor(l.end, block::type::end_anchor, {}, {});
 
 	block current_block;
 
@@ -247,10 +248,6 @@ void run_level_editor(gl_instance &gl, level &l, bool &has_spawn, bool &has_end)
 		glUniformMatrix4fv(glGetUniformLocation(program.id, "ortho"), 1, GL_FALSE, &gl.get_ortho()[0][0]);
 
 		l.draw(color::no_color, gl);
-		if (has_spawn)
-			spawn_anchor.draw(color::no_color, gl);
-		if (has_end)
-			end_anchor.draw(color::no_color, gl);
 		current_block.draw(color::no_color, gl, .75f);
 
 		glfwSwapBuffers(win.handle);
@@ -266,6 +263,12 @@ void run_level_editor(gl_instance &gl, level &l, bool &has_spawn, bool &has_end)
 	key angle_left;
 	key type_up;
 
+	bool has_spawn = true;
+	bool has_end = true;
+
+	// so that a block is not immediately placed when entering level editor
+	bool left_released = false;
+
 	while (!glfwWindowShouldClose(win.handle))
 	{
 		glfwWaitEvents();
@@ -275,6 +278,9 @@ void run_level_editor(gl_instance &gl, level &l, bool &has_spawn, bool &has_end)
 			break;
 		
 		gl.get_left_click().update(glfwGetMouseButton(win.handle, GLFW_MOUSE_BUTTON_LEFT));
+		if (!gl.get_left_click().is_pressed())
+			left_released = true;
+		
 		right_click.update(glfwGetMouseButton(win.handle, GLFW_MOUSE_BUTTON_RIGHT));
 		pick_block.update(glfwGetMouseButton(win.handle, GLFW_MOUSE_BUTTON_MIDDLE) || glfwGetKey(win.handle, GLFW_KEY_P));
 		type_up.update(glfwGetKey(win.handle, GLFW_KEY_SPACE));
@@ -290,78 +296,39 @@ void run_level_editor(gl_instance &gl, level &l, bool &has_spawn, bool &has_end)
 		current_block = block(grid_pos, current_type, current_color, current_dir);
 		
 		// place block (if in bounds)
-		if (gl.get_left_click().is_pressed() && grid_pos.x >= 0 && grid_pos.x < game::map_width && grid_pos.y >= 0 && grid_pos.y < game::map_height)
+		if (left_released && gl.get_left_click().is_pressed() && grid_pos.x >= 0 && grid_pos.x < game::map_width && grid_pos.y >= 0 && grid_pos.y < game::map_height)
 		{
-			if (grid_pos == l.start)
+			if (has_spawn && grid_pos == l.start)
 				has_spawn = false;
-			else if (grid_pos == l.end)
+			else if (has_end && grid_pos == l.end)
 				has_end = false;
-			else
+			// could be in an else but I'll leave it out for a failsafe
+			// erase any blocks that were there before
+			while (true)
 			{
-				// erase any blocks that were there before
-				while (true)
-				{
-					auto it = find_block(l, current_block.poly.offset);
-					if (it != l.blocks.end())
-						l.blocks.erase(it);
-					else
-						break;
-				}
+				auto it = find_block(l, current_block.poly.offset);
+				if (it != l.blocks.end())
+					l.blocks.erase(it);
+				else
+					break;
 			}
 
-			if (current_type == block::type::spawn_anchor)
-			{
-				l.start = grid_pos;
-				has_spawn = true;
-				spawn_anchor = block(l.start, block::type::spawn_anchor, {}, {});
-			}
-			else if (current_type == block::type::end_anchor)
-			{
-				l.end = grid_pos;
-				has_end = true;
-				end_anchor = block(l.end, block::type::end_anchor, {}, {});
-			}
-			else
-				l.blocks.push_back(current_block);
+			l.blocks.push_back(current_block);
 		}
 
 		// remove block
 		if (right_click.is_pressed())
 		{
-			if (grid_pos == l.start)
-				has_spawn = false;
-			else if (grid_pos == l.end)
-				has_end = false;
-			else
-			{
-				// erase all blocks at current location
-				while (true)
-				{
-					auto it = find_block(l, current_block.poly.offset);
-					if (it != l.blocks.end())
-						l.blocks.erase(it);
-					else
-						break;
-				}
-			}
+			// erase block at mouse pos
+			auto it = find_block(l, mouse_pos);
+			if (it != l.blocks.end())
+				l.blocks.erase(it);
 		}
 		
 		// pick block
 		if (pick_block.is_initial_press())
 		{
-			if (grid_pos == l.start)
-			{
-				current_type = block::type::spawn_anchor;
-				current_block = block(grid_pos, block::type::spawn_anchor, {}, {});
-				current_color = color::neutral;
-			}
-			else if (grid_pos == l.end)
-			{
-				current_type = block::type::end_anchor;
-				current_block = block(grid_pos, block::type::end_anchor, {}, {});
-				current_color = color::neutral;
-			}
-			else if (auto it = find_block(l, mouse_pos); it != l.blocks.end())
+			if (auto it = find_block(l, mouse_pos); it != l.blocks.end())
 			{
 				current_dir = it->dir();
 				current_color = it->block_color;
@@ -370,7 +337,7 @@ void run_level_editor(gl_instance &gl, level &l, bool &has_spawn, bool &has_end)
 		}
 
 		if (type_up.is_initial_press())
-			current_type = static_cast<block::type>((static_cast<int>(current_type) + 1) % 5);
+			current_type = static_cast<block::type>((static_cast<int>(current_type) + 1) % 3);
 
 		if (color_up.is_initial_press())
 			current_color = static_cast<color>((static_cast<char>(current_color) + 1) % 3);
@@ -383,6 +350,155 @@ void run_level_editor(gl_instance &gl, level &l, bool &has_spawn, bool &has_end)
 			current_dir = static_cast<direction>((static_cast<char>(current_dir) + 3) % 4);
 
 		draw();
+	}
+
+	left_released = false;
+
+	// true for placing spawn anchor, false for placing end anchor
+	end_block_type = spawn_or_end::spawn;
+
+	glm::ivec2 grid_pos;
+
+	auto draw_2 = [&]()
+	{
+		glClearColor(1, 1, 1, 1);
+		glClear(GL_COLOR_BUFFER_BIT);
+
+		const auto &program = gl.get_texture_program();
+
+		// set uniforms
+		glUseProgram(program.id);
+		glUniformMatrix4fv(glGetUniformLocation(program.id, "ortho"), 1, GL_FALSE, &gl.get_ortho()[0][0]);
+
+		l.draw(color::no_color, gl);
+		
+		glBindVertexArray(gl.get_shapes().square_vao().id);
+		
+		if (has_spawn)
+		{
+			glm::vec2 loc = l.start * game::block_size;
+			loc.x += game::block_size / 2;
+			loc.y += game::block_size / 2;
+
+			auto m = glm::scale(glm::translate(glm::mat4(1.f), {loc, 0}), {game::block_size, game::block_size, 0});
+			glUniformMatrix4fv(glGetUniformLocation(program.id, "model"), 1, GL_FALSE, &m[0][0]);
+
+			glBindTexture(GL_TEXTURE_2D, gl.get_assets().spawn_anchor.id);
+			glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+		}
+
+		if (has_end)
+		{
+			glm::vec2 loc = l.end * game::block_size;
+			loc.x += game::block_size / 2;
+			loc.y += game::block_size / 2;
+
+			auto m = glm::scale(glm::translate(glm::mat4(1.f), {loc, 0}), {game::block_size, game::block_size, 0});
+			glUniformMatrix4fv(glGetUniformLocation(program.id, "model"), 1, GL_FALSE, &m[0][0]);
+
+			glBindTexture(GL_TEXTURE_2D, gl.get_assets().end_anchor.id);
+			glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+		}
+
+		const texture *text = end_block_type == spawn_or_end::end ? &gl.get_assets().end_anchor : &gl.get_assets().spawn_anchor;
+		glm::vec2 loc = grid_pos * game::block_size;
+		loc.x += game::block_size / 2;
+		loc.y += game::block_size / 2;
+		auto m = glm::scale(glm::translate(glm::mat4(1.f), {loc, 0}), {game::block_size, game::block_size, 0});
+		glUniformMatrix4fv(glGetUniformLocation(program.id, "model"), 1, GL_FALSE, &m[0][0]);
+		glUniform1f(glGetUniformLocation(gl.get_texture_program().id, "transparency"), .75f);
+
+		glBindTexture(GL_TEXTURE_2D, text->id);
+		glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+
+		glfwSwapBuffers(win.handle);
+	};
+
+	gl.register_draw_function(draw_2);
+	glfwSetScrollCallback(win.handle, spawn_end_scroll_callback);
+
+	// place spawn and end anchor
+	while (true)
+	{
+		glfwWaitEvents();
+
+		if (glfwWindowShouldClose(win.handle))
+		{
+			if (!has_spawn || !has_end)
+			{
+				message(gl, "Must place spawn and end anchors!");
+				glfwSetWindowShouldClose(win.handle, false);
+				gl.register_draw_function(draw_2);
+			}
+			else
+				break;
+		}
+
+		gl.get_escape_key().update(glfwGetKey(win.handle, GLFW_KEY_ESCAPE));
+		if (gl.get_escape_key().is_initial_press())
+		{
+			if (!has_spawn || !has_end)
+			{
+				message(gl, "Must place spawn and end anchors!");
+				gl.register_draw_function(draw_2);
+			}
+			else
+				break;
+		}
+		
+		gl.get_left_click().update(glfwGetMouseButton(win.handle, GLFW_MOUSE_BUTTON_LEFT));
+		if (!gl.get_left_click().is_pressed())
+			left_released = true;
+
+		right_click.update(glfwGetMouseButton(win.handle, GLFW_MOUSE_BUTTON_RIGHT));
+
+		type_up.update(glfwGetKey(win.handle, GLFW_KEY_SPACE));
+		if (type_up.is_initial_press())
+			end_block_type = static_cast<spawn_or_end>((static_cast<char>(end_block_type) + 1) % 2);
+
+		glm::dvec2 mouse_pos = get_mouse_pos(gl);
+		grid_pos = {mouse_pos / (double)game::block_size};
+
+		if (left_released && gl.get_left_click().is_initial_press())
+		{
+			if (has_spawn && grid_pos == l.start)
+				has_spawn = false;
+			else if (has_end && grid_pos == l.end)
+				has_end = false;
+			else
+			{
+				// erase any blocks that were there before
+				while (true)
+				{
+					auto it = find_block(l, grid_pos * game::block_size + glm::ivec2(game::block_size, game::block_size) / 2);
+					if (it != l.blocks.end())
+						l.blocks.erase(it);
+					else
+						break;
+				}
+			}
+
+			if (end_block_type == spawn_or_end::spawn)
+			{
+				has_spawn = true;
+				l.start = grid_pos;
+			}
+			else
+			{
+				l.end = grid_pos;
+				has_end = true;
+			}
+		}
+
+		if (right_click.is_pressed())
+		{
+			if (has_spawn && l.start == grid_pos)
+				has_spawn = false;
+			else if (has_end && l.end == grid_pos)
+				has_end = false;
+		}
+
+		draw_2();
 	}
 
 	glfwSetScrollCallback(win.handle, nullptr);

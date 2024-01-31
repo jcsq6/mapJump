@@ -7,8 +7,8 @@ add_subdirectory(dep/tinyfiledialogs)
 
 file(GLOB_RECURSE ASSET_FILES "src/assets/*.cpp")
 
-add_executable(map_jumper WIN32 src/src/map_jump.cpp src/src/collision.cpp src/src/game.cpp src/src/level.cpp src/src/run_game.cpp src/src/gl_instance.cpp src/src/text.cpp src/src/menu.cpp ${ASSET_FILES})
-add_executable(level_editor WIN32 src/src/level_editor.cpp src/src/collision.cpp src/src/game.cpp src/src/level.cpp src/src/run_game.cpp src/src/gl_instance.cpp src/src/text.cpp src/src/menu.cpp ${ASSET_FILES})
+add_executable(map_jumper WIN32 src/src/map_jump.cpp src/src/collision.cpp src/src/game.cpp src/src/level.cpp src/src/gl_instance.cpp src/src/text.cpp src/src/menu.cpp ${ASSET_FILES})
+add_executable(level_editor WIN32 src/src/level_editor.cpp src/src/collision.cpp src/src/game.cpp src/src/level.cpp src/src/gl_instance.cpp src/src/text.cpp src/src/menu.cpp ${ASSET_FILES})
 
 target_include_directories(map_jumper PUBLIC src/include src/assets)
 target_include_directories(level_editor PUBLIC src/include src/assets dep/nativefiledialog/include)

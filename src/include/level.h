@@ -31,8 +31,6 @@ struct block
 		normal,
 		jump,
 		spike,
-		spawn_anchor,
-		end_anchor,
 	};
 
 	block() = default;

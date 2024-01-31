@@ -10,6 +10,8 @@
 #include <chrono>
 #include <filesystem>
 
+#include <ranges>
+
 class game
 {
 public:
@@ -19,7 +21,8 @@ public:
 	static constexpr int map_width = 16;
 	static constexpr int map_height = 9;
 
-	game(int target_width, int target_height, std::vector<level> &&_levels);
+	template <std::ranges::range LevelRange>
+	game(int target_width, int target_height, const LevelRange &_levels);
 
 	// assumes ortho has been set and text has been set
 	void draw(const gl_instance &gl) const;
@@ -74,5 +77,18 @@ private:
 
 	bool is_blue;
 };
+
+template <std::ranges::range LevelRange>
+game::game(int target_width, int target_height, const LevelRange &_levels) : target_scale{target_width, target_height}, levels{std::ranges::begin(_levels), std::ranges::end(_levels)}
+{
+	if (levels.empty())
+	{
+		level new_level;
+		new_level.construct_default();
+		levels.push_back(std::move(new_level));
+	}
+
+	load_level(0);
+}
 
 #endif

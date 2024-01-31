@@ -52,6 +52,8 @@ public:
 		return mouse_loc.x > m_box.min.x && mouse_loc.x < max.x &&
 			   mouse_loc.y > m_box.min.y && mouse_loc.y < max.y;
 	}
+
+	const auto &get_text() const { return m_text; }
 private:
 	text m_text;
 	rect m_box;

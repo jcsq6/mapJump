@@ -21,12 +21,6 @@ block::block(glm::ivec2 grid_loc, type _block_type, color _block_color, directio
 		poly.poly = &square();
 	}
 
-	if (_block_type == block::type::spawn_anchor || _block_type == block::type::end_anchor)
-	{
-		block_color = color::no_color;
-		dir = direction::up;
-	}
-
 	glm::vec2 poly_trans;
 
 	switch (dir)
@@ -126,14 +120,6 @@ void block::draw(color active_color, const gl_instance &gl, float transparency) 
 			text = &assets.neutral_cube;
 			break;
 		}
-		buff = &gl.get_shapes().square_vao();
-		break;
-	case block::type::spawn_anchor:
-		text = &assets.spawn_anchor;
-		buff = &gl.get_shapes().square_vao();
-		break;
-	case block::type::end_anchor:
-		text = &assets.end_anchor;
 		buff = &gl.get_shapes().square_vao();
 		break;
 	}
