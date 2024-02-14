@@ -176,102 +176,79 @@ void game::update(float dt)
 	glm::vec2 player_max = player.poly.offset + player.poly.scale / 2.f;
 	for (const auto [b, c] : collisions)
 	{
-
-		// if (b->block_type == block::type::spike)
-		// {
-		// 	glm::vec2 flat_normal = b->poly.normal(0);
-		// 	glm::vec2 diff = b->poly.center() - player.poly.center();
-
-		// 	float flat_normal_proj = glm::dot(flat_normal, diff);
-		// 	float norm1_proj = glm::dot(b->poly.normal(1), diff);
-		// 	float norm2_proj = glm::dot(b->poly.normal(2), diff);
-
-		// 	if (flat_normal.y != 0)
-		// 	{
-		// 		player.vel.y = 0;
-		// 		// if the edge normal is pointed up, it's on ground
-		// 		if (flat_normal.y > 0)
-		// 			player.on_ground = true;
-		// 	}
-		// 	else
-		// 		player.vel.x = 0;
-		// }
-		// else
+		bool is_spike = b->block_type == block::type::spike;
+		glm::vec2 block_min, block_max;
+		if (is_spike)
 		{
-			bool is_spike = b->block_type == block::type::spike;
-			glm::vec2 block_min, block_max;
+			block_min = b->poly.transform({-.5, -.5});
+			block_max = b->poly.transform({.5, .5});
+
+			if (block_min.x > block_max.x)
+				std::swap(block_min.x, block_max.x);
+			if (block_min.y > block_max.y)
+				std::swap(block_min.y, block_max.y);
+		}
+		else
+		{
+			block_min = b->poly.offset - b->poly.scale / 2.f;
+			block_max = b->poly.offset + b->poly.scale / 2.f;
+		}
+
+		// touching horizontally (if player right is > block left and block right is > player lefts)
+		bool touching_horizontally = player_max.x - block_min.x > epsilon && block_max.x - player_min.x > epsilon;
+		// if they're touching vertically (if the player top is > block bottom and block top is > player bottom)
+		bool touching_vertically = player_max.y - block_min.y > epsilon && block_max.y - player_min.y > epsilon;
+
+		if (touching_horizontally)
+		{
 			if (is_spike)
 			{
-				block_min = b->poly.transform({-.5, -.5});
-				block_max = b->poly.transform({.5, .5});
-
-				if (block_min.x > block_max.x)
-					std::swap(block_min.x, block_max.x);
-				if (block_min.y > block_max.y)
-					std::swap(block_min.y, block_max.y);
-			}
-			else
-			{
-				block_min = b->poly.offset - b->poly.scale / 2.f;
-				block_max = b->poly.offset + b->poly.scale / 2.f;
+				direction d = b->dir();
+				// if it's not touching the flat side of the spike
+				if ((d == direction::up || d == direction::down) && !same_dir(-c.normal, b->poly.normal(0)))
+				{
+					reset_level();
+					return;
+				}
 			}
 
-			// touching horizontally (if player right is > block left and block right is > player lefts)
-			bool touching_horizontally = player_max.x - block_min.x > epsilon && block_max.x - player_min.x > epsilon;
-			// if they're touching vertically (if the player top is > block bottom and block top is > player bottom)
-			bool touching_vertically = player_max.y - block_min.y > epsilon && block_max.y - player_min.y > epsilon;
-
-			if (touching_horizontally)
+			// if bottom of player is touching top of block
+			if (std::abs(player_min.y - block_max.y) < epsilon)
 			{
-				if (is_spike)
-				{
-					direction d = b->dir();
-					// if it's not touching the flat side of the spike
-					if ((d == direction::up || d == direction::down) && !same_dir(-c.normal, b->poly.normal(0)))
-					{
-						reset_level();
-						return;
-					}
-				}
+				player.on_ground = true;
+				player.vel.y = 0;
+			}
+			// if top of player is touching bottom of block
+			else if (std::abs(player_max.y - block_min.y) < epsilon)
+				player.vel.y = 0;
+		}
 
-				// if bottom of player is touching top of block
-				if (std::abs(player_min.y - block_max.y) < epsilon)
+		if (touching_vertically)
+		{
+			if (is_spike)
+			{
+				direction d = b->dir();
+				// if it's not touching the flat side of the spike
+				if ((d == direction::left || d == direction::right) && !same_dir(-c.normal, b->poly.normal(0)))
 				{
-					player.on_ground = true;
-					player.vel.y = 0;
+					reset_level();
+					return;
 				}
-				// if top of player is touching bottom of block
-				else if (std::abs(player_max.y - block_min.y) < epsilon)
-					player.vel.y = 0;
 			}
 
-			if (touching_vertically)
+			// if left of player is touching right of block
+			if (std::abs(player_min.x - block_max.x) < epsilon)
 			{
-				if (is_spike)
-				{
-					direction d = b->dir();
-					// if it's not touching the flat side of the spike
-					if ((d == direction::left || d == direction::right) && !same_dir(-c.normal, b->poly.normal(0)))
-					{
-						reset_level();
-						return;
-					}
-				}
-
-				// if left of player is touching right of block
-				if (std::abs(player_min.x - block_max.x) < epsilon)
-				{
-					player.vel.x = 0;
-					if (b->block_type == block::type::jump)
-						player.on_wall = -1;
-				}
-				// if right of player is touching left of block
-				else if (std::abs(player_max.x - block_min.x) < epsilon)
-				{
-					player.vel.x = 0;
-					if (b->block_type == block::type::jump)
-						player.on_wall = 1;
-				}
+				player.vel.x = 0;
+				if (b->block_type == block::type::jump)
+					player.on_wall = -1;
+			}
+			// if right of player is touching left of block
+			else if (std::abs(player_max.x - block_min.x) < epsilon)
+			{
+				player.vel.x = 0;
+				if (b->block_type == block::type::jump)
+					player.on_wall = 1;
 			}
 		}
 	}
