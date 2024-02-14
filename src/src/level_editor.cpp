@@ -97,6 +97,7 @@ int main()
 						"You can place multiple spikes in the same block.\n"
 						"Use pick block to speed up the process.\n"
 						"You can click and drag place block and erase block for quicker editing.\n"
+						"You can use the bottom of a spike as a floor or ceiling and the player won't die.\n"
 						"After initial editing is finished, place spawn anchor (green), and end anchor (red).\n"
 						"For levels to work with the game, keep the outside wall and add an opening that will lead into another level.\n"
 						"Consecutive levels' names should end with _*number* where number is in order for it to work with the game.\n");
@@ -247,6 +248,8 @@ void run_level_editor(gl_instance &gl, level &l)
 		glUseProgram(program.id);
 		glUniformMatrix4fv(glGetUniformLocation(program.id, "ortho"), 1, GL_FALSE, &gl.get_ortho()[0][0]);
 
+		print_background(gl);
+
 		l.draw(color::no_color, gl);
 		current_block.draw(color::no_color, gl, .75f);
 
@@ -369,6 +372,8 @@ void run_level_editor(gl_instance &gl, level &l)
 		// set uniforms
 		glUseProgram(program.id);
 		glUniformMatrix4fv(glGetUniformLocation(program.id, "ortho"), 1, GL_FALSE, &gl.get_ortho()[0][0]);
+
+		print_background(gl);
 
 		l.draw(color::no_color, gl);
 		

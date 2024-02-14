@@ -22,7 +22,7 @@ public:
 	static constexpr int map_height = 9;
 
 	template <std::ranges::range LevelRange>
-	game(int target_width, int target_height, const LevelRange &_levels);
+	game(const LevelRange &_levels);
 
 	// assumes ortho has been set and text has been set
 	void draw(const gl_instance &gl) const;
@@ -38,6 +38,8 @@ public:
 
 	void switch_colors();
 
+	std::size_t current_level() const { return cur_level; }
+
 private:
 	void load_level(std::size_t level);
 	void reset_level();
@@ -50,7 +52,7 @@ private:
 	std::vector<level> levels;
 	std::size_t cur_level;
 
-	std::vector<const block *> collisions;
+	std::vector<std::pair<const block *, collision>> collisions;
 
 	struct player_data
 	{
@@ -73,13 +75,11 @@ private:
 
 	player_data player;
 
-	glm::vec2 target_scale;
-
 	bool is_blue;
 };
 
 template <std::ranges::range LevelRange>
-game::game(int target_width, int target_height, const LevelRange &_levels) : target_scale{target_width, target_height}, levels{std::ranges::begin(_levels), std::ranges::end(_levels)}
+game::game(const LevelRange &_levels) : levels{std::ranges::begin(_levels), std::ranges::end(_levels)}
 {
 	if (levels.empty())
 	{

@@ -23,7 +23,7 @@ menu::menu(gl_instance &gl, const rect &space, const std::vector<std::string> &o
 	}
 }
 
-std::size_t menu::run(gl_instance &gl) const
+std::size_t menu::run(gl_instance &gl, std::function<void()> extra_draw) const
 {
 	const auto &win = gl.get_window();
 
@@ -35,6 +35,9 @@ std::size_t menu::run(gl_instance &gl) const
 
 		glClearColor(1, 1, 1, 1);
 		glClear(GL_COLOR_BUFFER_BIT);
+
+		if (extra_draw)
+			extra_draw();
 
 		for (std::size_t i = 0; i < m_options.size(); ++i)
 		{

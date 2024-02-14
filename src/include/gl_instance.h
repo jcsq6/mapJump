@@ -106,8 +106,11 @@ private:
 };
 
 glm::dvec2 get_mouse_pos(gl_instance &gl);
+// set ortho model in texture program before
+void print_background(const gl_instance &gl);
 
 const polygon &square();
+// constexpr float triangle_poly_width = .8f;
 const polygon &triangle();
 
 #endif

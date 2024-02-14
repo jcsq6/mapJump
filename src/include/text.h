@@ -96,14 +96,16 @@ public:
 						m_data{}
 	{
 	}
-	text(std::basic_string_view<char> txt, font &_font) : m_origin{},
+	template <typename CharT = char>
+	text(const std::basic_string<CharT> &txt, font &_font) : m_origin{},
 														  m_scale{1, 1},
 														  m_font{&_font},
 														  m_data{txt.begin(), txt.end()}
 	{
 	}
 
-	void set_string(std::basic_string_view<char> txt) { m_data.assign(txt.begin(), txt.end()); }
+	template <typename CharT = char>
+	void set_string(const std::basic_string<CharT> &txt) { m_data.assign(txt.begin(), txt.end()); }
 
 	const std::basic_string<uint32_t> &get_string() const { return m_data; }
 

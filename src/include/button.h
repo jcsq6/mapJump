@@ -7,7 +7,7 @@ class button
 public:
 	button(font &_font, glm::vec2 center, glm::vec2 dims, const std::string &text) : m_text(_font)
 	{
-		m_text.set_string(text);
+		m_text.set_string<char>(text);
 		auto cur_bounds = m_text.get_local_rect();
 		glm::vec2 scale_diff = dims / cur_bounds.dims;
 		if (scale_diff.x < scale_diff.y)

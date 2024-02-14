@@ -17,7 +17,7 @@ add_compile_definitions($<$<CONFIG:Debug>:MAPJUMP_DEBUG>)
 
 find_package(OpenGL REQUIRED)
 find_package(glfw3 REQUIRED)
-find_package(glew REQUIRED)
+find_package(GLEW REQUIRED)
 find_package(glm CONFIG REQUIRED)
 find_package(Freetype REQUIRED)
 

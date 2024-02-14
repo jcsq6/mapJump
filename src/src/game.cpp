@@ -16,19 +16,11 @@ void game::draw(const gl_instance &gl) const
 	const auto &program = gl.get_texture_program();
 	const auto &_shapes = gl.get_shapes();
 
-	// print background
-	auto m = glm::scale(glm::translate(glm::mat4(1.f), {target_scale / 2.f, 0}), {target_scale, 0});
-	glUniformMatrix4fv(glGetUniformLocation(program.id, "model"), 1, GL_FALSE, &m[0][0]);
-
-	// glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, assets.background.id);
-
-	glBindVertexArray(_shapes.square_vao().id);
-	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+	print_background(gl);
 
 	levels[cur_level].draw(is_blue ? color::blue : color::red, gl);
 
-	m = model(player.poly.offset, player.poly.scale, player.angle);
+	auto m = model(player.poly.offset, player.poly.scale, player.angle);
 	glUniformMatrix4fv(glGetUniformLocation(program.id, "model"), 1, GL_FALSE, &m[0][0]);
 
 	glBindTexture(GL_TEXTURE_2D, assets.player_text.id);
@@ -40,6 +32,18 @@ void game::draw(const gl_instance &gl) const
 #ifdef MAPJUMP_DEBUG
 #include <iostream>
 #endif
+
+bool same_dir(const glm::vec2 &a, const glm::vec2 &b)
+{
+	if (b.x == 0)
+		return (a.y >= 0) == (b.y >= 0); // if they're both positive 
+	else if (b.y == 0)
+		return (a.x >= 0) == (b.x >= 0); // if they're both positive
+	
+	float xscale = a.x / b.x;
+	float yscale = a.y / b.y;
+	return xscale == yscale;
+}
 
 void game::update(float dt)
 {
@@ -144,12 +148,6 @@ void game::update(float dt)
 		
 		if (collision c = collides(player.poly, b.poly))
 		{
-			if (b.block_type == block::type::spike)
-			{
-				reset_level();
-				return;
-			}
-
 			// if it's collided with a colored block, then don't make tangible
 			if (b.block_color != color::neutral)
 				clear_intangible = false;
@@ -157,7 +155,8 @@ void game::update(float dt)
 			if (!player.intangible || b.block_color == color::neutral)
 			{
 				player.poly.offset += c.mtv;
-				collisions.push_back(&b);
+
+				collisions.push_back({&b, c});
 			}
 		}
 	}
@@ -165,52 +164,114 @@ void game::update(float dt)
 	if (clear_intangible)
 		player.intangible = false;
 
-	static constexpr float epsilon = .1f;
+	static constexpr float epsilon = .05f;
 
 	bool was_on_ground = player.on_ground;
 	player.on_ground = false;
 	player.on_wall = 0;
 	// do a second pass to determine if the player is on any walls and which ones
 	// can't be done using mtv of collision resolution
-	for (const block *b : collisions)
+
+	glm::vec2 player_min = player.poly.offset - player.poly.scale / 2.f;
+	glm::vec2 player_max = player.poly.offset + player.poly.scale / 2.f;
+	for (const auto [b, c] : collisions)
 	{
-		glm::vec2 block_min = b->poly.offset - b->poly.scale / 2.f;
-		glm::vec2 block_max = b->poly.offset + b->poly.scale / 2.f;
-		glm::vec2 player_min = player.poly.offset - player.poly.scale / 2.f;
-		glm::vec2 player_max = player.poly.offset + player.poly.scale / 2.f;
 
-		// if they're touching horizontally (if player right is > block left and block right is > player lefts)
-		if (player_max.x > block_min.x && block_max.x > player_min.x)
-		{
-			// if bottom of player is touching top of block
-			if (std::abs(player_min.y - block_max.y) < epsilon)
-			{
-				player.on_ground = true;
-				player.vel.y = 0;
-			}
-			// if top of player is touching bottom of block
-			else if (std::abs(player_max.y - block_min.y) < epsilon)
-			{
-				player.vel.y = 0;
-			}
-		}
+		// if (b->block_type == block::type::spike)
+		// {
+		// 	glm::vec2 flat_normal = b->poly.normal(0);
+		// 	glm::vec2 diff = b->poly.center() - player.poly.center();
 
-		// if they're touching vertically (if the player top is > block bottom and block top is > player bottom)
-		if (player_max.y > player_min.y && block_max.y > player_min.y)
+		// 	float flat_normal_proj = glm::dot(flat_normal, diff);
+		// 	float norm1_proj = glm::dot(b->poly.normal(1), diff);
+		// 	float norm2_proj = glm::dot(b->poly.normal(2), diff);
+
+		// 	if (flat_normal.y != 0)
+		// 	{
+		// 		player.vel.y = 0;
+		// 		// if the edge normal is pointed up, it's on ground
+		// 		if (flat_normal.y > 0)
+		// 			player.on_ground = true;
+		// 	}
+		// 	else
+		// 		player.vel.x = 0;
+		// }
+		// else
 		{
-			// if left of player is touching right of block
-			if (std::abs(player_min.x - block_max.x) < epsilon)
+			bool is_spike = b->block_type == block::type::spike;
+			glm::vec2 block_min, block_max;
+			if (is_spike)
 			{
-				player.vel.x = 0;
-				if (b->block_type == block::type::jump)
-					player.on_wall = -1;
+				block_min = b->poly.transform({-.5, -.5});
+				block_max = b->poly.transform({.5, .5});
+
+				if (block_min.x > block_max.x)
+					std::swap(block_min.x, block_max.x);
+				if (block_min.y > block_max.y)
+					std::swap(block_min.y, block_max.y);
 			}
-			// if right of player is touching left of block
-			else if (std::abs(player_max.x - block_min.x) < epsilon)
+			else
 			{
-				player.vel.x = 0;
-				if (b->block_type == block::type::jump)
-					player.on_wall = 1;
+				block_min = b->poly.offset - b->poly.scale / 2.f;
+				block_max = b->poly.offset + b->poly.scale / 2.f;
+			}
+
+			// touching horizontally (if player right is > block left and block right is > player lefts)
+			bool touching_horizontally = player_max.x - block_min.x > epsilon && block_max.x - player_min.x > epsilon;
+			// if they're touching vertically (if the player top is > block bottom and block top is > player bottom)
+			bool touching_vertically = player_max.y - block_min.y > epsilon && block_max.y - player_min.y > epsilon;
+
+			if (touching_horizontally)
+			{
+				if (is_spike)
+				{
+					direction d = b->dir();
+					// if it's not touching the flat side of the spike
+					if ((d == direction::up || d == direction::down) && !same_dir(-c.normal, b->poly.normal(0)))
+					{
+						reset_level();
+						return;
+					}
+				}
+
+				// if bottom of player is touching top of block
+				if (std::abs(player_min.y - block_max.y) < epsilon)
+				{
+					player.on_ground = true;
+					player.vel.y = 0;
+				}
+				// if top of player is touching bottom of block
+				else if (std::abs(player_max.y - block_min.y) < epsilon)
+					player.vel.y = 0;
+			}
+
+			if (touching_vertically)
+			{
+				if (is_spike)
+				{
+					direction d = b->dir();
+					// if it's not touching the flat side of the spike
+					if ((d == direction::left || d == direction::right) && !same_dir(-c.normal, b->poly.normal(0)))
+					{
+						reset_level();
+						return;
+					}
+				}
+
+				// if left of player is touching right of block
+				if (std::abs(player_min.x - block_max.x) < epsilon)
+				{
+					player.vel.x = 0;
+					if (b->block_type == block::type::jump)
+						player.on_wall = -1;
+				}
+				// if right of player is touching left of block
+				else if (std::abs(player_max.x - block_min.x) < epsilon)
+				{
+					player.vel.x = 0;
+					if (b->block_type == block::type::jump)
+						player.on_wall = 1;
+				}
 			}
 		}
 	}

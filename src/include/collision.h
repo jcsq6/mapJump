@@ -113,10 +113,17 @@ struct polygon_view
 		return transform(poly->point(i));
 	}
 
+	glm::vec2 normal(std::size_t i) const
+	{
+		glm::vec2 first = point(i);
+		glm::vec2 second = point((i + 1) % poly->size());
+		glm::vec2 perp{first.y - second.y, second.x - first.x};
+		return glm::normalize(perp);
+	}
+
 	glm::vec2 center() const
 	{
-		// center doesn't change with rotation
-		return poly->center() * scale + offset;
+		return transform(poly->center());
 	}
 
 	glm::vec2 transform(glm::vec2 pt) const

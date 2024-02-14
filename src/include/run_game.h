@@ -5,8 +5,9 @@
 #include "game.h"
 #include "utility.h"
 
+// returns current level
 template <std::ranges::range LevelRange>
-int run_game(gl_instance &gl, const LevelRange &levels)
+std::size_t run_game(gl_instance &gl, const LevelRange &levels)
 {
 	constexpr int target_fps = 60;
 	constexpr auto target_frame_duration = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::duration<double>(1.0 / target_fps));
@@ -17,7 +18,7 @@ int run_game(gl_instance &gl, const LevelRange &levels)
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	game my_game(target_width, target_height, levels);
+	game my_game(levels);
 
 	auto draw = [&]()
 	{
@@ -73,7 +74,7 @@ int run_game(gl_instance &gl, const LevelRange &levels)
 		}
 	}
 
-    return 0;
+    return my_game.current_level();
 }
 
 #endif

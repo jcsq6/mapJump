@@ -176,6 +176,18 @@ void gl_instance::framebuffer_size_callback(GLFWwindow* window, int width, int h
 	owner->m_size.y = static_cast<int>(new_height / yscale);
 }
 
+void print_background(const gl_instance &gl)
+{
+	// print background
+	auto m = glm::scale(glm::translate(glm::mat4(1.f), {target_width / 2.f, target_height / 2.f, 0}), {target_width, target_height, 0});
+	glUniformMatrix4fv(glGetUniformLocation(gl.get_texture_program().id, "model"), 1, GL_FALSE, &m[0][0]);
+
+	glBindTexture(GL_TEXTURE_2D, gl.get_assets().background.id);
+
+	glBindVertexArray(gl.get_shapes().square_vao().id);
+	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+}
+
 const polygon &square()
 {
 	static const polygon res(std::begin(square_pts), std::end(square_pts));
@@ -184,7 +196,7 @@ const polygon &square()
 const polygon &triangle()
 {
 	// adjust to make hitbox slightly smaller
-	static const glm::vec2 adjusted_pts[] = {{-.4f, -.5f}, {.4f, -.5f}, {0, .5f}};
+	static const glm::vec2 adjusted_pts[] = {{-.5, -.5f}, {.5, -.5f}, {0, .5f}};
 	static const polygon res(std::begin(adjusted_pts), std::end(adjusted_pts));
 	return res;
 }
