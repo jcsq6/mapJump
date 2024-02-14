@@ -5,5 +5,6 @@
 - Freetype
 - stb_image
 - GLEW
+- tinyfiledialogs
 ## Building
 Built using CMake
